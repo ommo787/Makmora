@@ -4,7 +4,7 @@ Shared rewards the whole family earns together. They sit next to personal reward
 
 | | Idea | Where it shows |
 |---|---|---|
-| **Personal** | I finish my tasks → my balance grows → I get closer to my goal. | The child's Makmoura Card |
+| **Personal** | I finish my tasks → my balance grows → I get closer to my goal. | The child's Makmoura jar |
 | **Family** | We finish our responsibilities together → something nice happens for the family. | The Family Reward card, on child Home and parent Home |
 
 A family reward is never counted in coins and never goes into anyone's balance. It is a moment: pizza for lunch, a movie night, a trip to the park.
@@ -41,11 +41,11 @@ The parent picks one condition per surprise. Each option is a large visual row i
                       └──(day closes, not met)──► stays armed   └──(end of reward day)──► memory
 ```
 
-- **armed**: the parent has set up a surprise for a future day. If it's marked *secret* (the default), children see only a wrapped gift on the Family tab: «في مفاجأة للعيلة إذا خلّصنا مهامنا سوا». If it isn't secret, they see the reward itself.
+- **armed**: the parent has set up a surprise for a future day. If it's marked *secret* (the default), children see only a wrapped gift on the family sheet: «في مفاجأة للعيلة إذا خلّصنا مهامنا سوا». If it isn't secret, they see the reward itself.
 - **Evaluation**: runs when the family day closes (midnight in the family's time zone). Approvals given the next morning for yesterday's tasks still count: evaluation re-runs on each approval until the first child opens the app that day.
 - **earned**: the reward is live for the reward day.
-  - Each child sees a full-screen **reveal** the first time they open the app that day (large medallion, confetti, one button «يا سلام!»). It never shows twice to the same child.
-  - After that, the **Family Reward card** stays on child Home below *Today*, and on parent Home below the approvals.
+  - Each child sees a full-screen **reveal** the first time they open the app that day (large reward illustration, confetti, one button «يا سلام!»). It never shows twice to the same child.
+  - After that, the **Family Reward card** stays on child Home below the tasks, and on parent Home below the approvals.
 - **memory**: when the parent taps «تمّت المفاجأة» or the day ends, the card leaves Home and becomes a line in each child's history (أيامي): «أنجزناها سوا · بيتزا».
 - A missed day leaves the surprise armed for the next day. There is no failure state.
 
@@ -61,22 +61,23 @@ The parent picks one condition per surprise. Each option is a large visual row i
 It should read as a family moment, not a coupon: no dashed borders, no "redeem" button, no expiry timer, no price.
 
 ```
-        ( 🍕 )          ← large gold medallion, custom icon, 112pt
-      مفاجأة اليوم!      ← eyebrow, gold-deep, 15pt
- لأنكم أنجزتوا كل مهامكم مبارح   ← why, 15pt, ink-2
-   بيتزا على الغداء اليوم    ← the reward, 26pt bold
-   (س)(ل)(ج) أنجزناها سوا 🎉  ← every child's photo, overlapped
+     🎉          🎉
+        ( 🍕 )           ← large reward illustration on a soft gold glow, gently bobbing
+     مفاجأة اليوم!        ← 26pt, extra bold
+ لأنكم خلّصتوا كل مهامكم مبارح   ← why, 15pt, ink-2
+ [ بيتزا على الغدا اليوم ]     ← the reward, on a white chip, 22pt
+   (س)(ل)(ج) أنجزناها سوا      ← every child's photo, overlapped
 ```
 
-- Surface: warm gold wash on white, a few still confetti marks, `radius 32`.
+- Surface: warm gold wash fading to white, two party-popper illustrations in the top corners, radius 34.
 - Parent variant: same card, plus one quiet button «تمّت المفاجأة».
-- Reveal variant: the same content full-screen, with a 168pt medallion, a floating motion and one confetti burst. Reduced motion shows it still.
+- Reveal variant: the same content full-screen with a 210pt illustration, one confetti burst and one big button «يا سلام!». Reduced motion shows it still.
 
 ## Reward catalogue (starter set)
 
 Each reward has an icon, a short label for the builder grid, and the full line shown on the card.
 
-| Icon | Builder label | Card line |
+| Illustration | Builder label | Card line |
 |---|---|---|
 | pizza | بيتزا | بيتزا على الغداء اليوم |
 | ice-cream-cone | آيس كريم | آيس كريم بعد العشا |

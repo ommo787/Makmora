@@ -1,6 +1,6 @@
 # Makmoura Design
 
-Makmoura is a family product. It should feel calm and premium to parents, and obvious to a six-year-old. The interactive prototype in [`prototype/index.html`](prototype/index.html) is the reference for everything below. Open it in a browser and switch between each child and the parent view.
+Makmoura is a family product. It should feel calm and premium to parents, and obvious to a six-year-old. The interactive prototype in [`prototype/index.html`](prototype/index.html) is the reference for everything below. Open it in a browser. The side panel switches between a child's screen and the parent's screen and walks through the core loop in three steps.
 
 Feature specs:
 - [Family Rewards](docs/family-rewards.md)
@@ -26,114 +26,109 @@ Every screen has to pass its test before it ships.
 
 ## Child experience: icon first
 
-Information priority for children is **icon → visual → number → text**. A child should recognise «هذا أنا», «هاي مهمتي», «هذا هدفي» and «هاي مكمورتي» before reading a word.
+Information priority for children is **icon → visual → number → text**. Children see colourful illustrations, never thin line icons. A child should recognise «هذا أنا», «هاي مهمتي», «هذا هدفي» and «هاي مكمورتي» before reading a word.
 
-- Touch targets are at least **64pt** (task tiles are about 170×148pt).
+- Touch targets are at least **64pt** (task tiles are about 170×156pt, with 84pt illustrations).
 - No small checkboxes, no swipe-only actions, no long-press, no hidden gestures. Every action is a visible tap.
 - Labels are one word where possible: أسناني، سريري، صلاتي، شنطتي.
 - Task states are shown by shape and colour, not words:
 
 | State | Tile | Badge |
 |---|---|---|
-| To do | White, full-colour icon, `+2` coins in the corner | none |
-| Done by child, waiting for a parent | Warm gold wash with a gold outline | ⏳ hourglass (turns slowly) |
-| Approved | Faded, icon dimmed | ✓ green |
+| To do | White tile, full-colour illustration | none |
+| Done by child, waiting for a parent | Warm gold wash with a gold outline | ⏳ hourglass illustration (turns slowly) |
+| Approved | Faded, illustration desaturated | ✓ green check illustration |
 
 A child taps a tile to mark it done (it becomes ⏳ with a small confetti burst). Tapping a ⏳ tile again undoes it. Only a parent can move ⏳ to ✓, and the balance grows only then.
 
-### Child Home
+### Child Home: one screen, no tabs
 
-The child's own space, not a dashboard. It has three tabs, each with a large icon:
+The child has **one** screen. Nothing to navigate, nothing to learn.
 
-| Tab | Icon | Holds |
+1. **Me**: 58pt photo, first name at 30pt, a short greeting. On the other side, a round button with the siblings' faces opens *My family*.
+2. **The Makmoura**: the product's signature (see below). Tapping it opens *My goal*.
+3. **My tasks today**: large illustrated tiles, two per row (an odd last tile spans the full width). A row of small dots beside the title shows progress without numbers.
+4. **Family surprise**: only on a reward day, below the tasks.
+
+Everything else is one tap away, as a sheet over Home:
+
+| Sheet | Opened by | Holds |
 |---|---|---|
-| **بيتي** (Home) | house | 1. Identity · 2. Makmoura Card · 3. Today · 4. Family surprise (only when there is one) |
-| **عيلتي** (Family) | users | "Together today" ring, surprise teaser, sibling carousel |
-| **أيامي** (My days) | calendar | Today, yesterday, earlier days, family moments |
+| **هدفي** (My goal) | Tapping the Makmoura | Large goal illustration, `84 of 120`, a progress bar, «باقي 36 · تقريباً 4 أيام», and *My days* (today, yesterday, earlier; each day shows its task icons, coins earned and any family moment) |
+| **عيلتي** (My family) | The faces button | One collective bar «سوا اليوم 9 من 14», the surprise teaser, and a swipeable card per sibling |
 
-Goal detail (section 5) is one tap away: tap the Makmoura Card and a sheet shows a large ring with the goal icon, `84 of 120`, and roughly how many days are left.
+### The Makmoura (the jar)
 
-1. **Identity**: 64pt photo, first name at 32pt, a short greeting (صباح الخير / مسا الخير).
-2. **Makmoura Card**: the product's visual signature (see below).
-3. **Today**: two columns of large task tiles. When everything is done, one green line appears above them: «خلّصت كل مهامك!».
-4. **Family surprise**: the Family Reward card, only on a reward day.
+*Makmoura* is a savings jar, so the signature is a real jar: glass body, navy lid with a gold line, and gold coins that pile up inside. The height of the pile *is* the progress toward the goal: a full jar means the goal is reached. The balance sits on the jar's label.
 
-### Makmoura Card
+Next to the jar is the **goal**: a large illustration in a white circle with a gold halo (a bicycle, a box of colours, a camera), its name, and a pill «باقي 36 🪙».
 
-The recognisable signature of the product. A deep navy card with a faint gold ring motif and a soft gold glow, 32pt radius. It holds, top to bottom:
+A child reads it without text: *my jar → my bike*. When a parent approves a task, the next time the child opens the app the coins rise, the number counts up, and a small confetti burst plays over the jar.
 
-- the Makmoura mark (jar glyph + «مكمورة» in gold) and the child's photo with a gold ring
-- the balance: a gold coin and a 60pt number that counts up when it grows
-- the goal: goal icon, goal name, «باقي 36», and a gold progress bar with a slow sheen
-- today: one small circle per task, showing that task's icon (gold filled = approved, gold outline = waiting, faint = to do), and `3/5`
+It is deliberately light and warm, not a dark bank card: no card number, no chip, no logos.
 
-It is deliberately *not* a bank card: no card number, no chip, no brand logos, no credit-card aspect ratio.
+### Family sheet and siblings
 
-### Family tab and siblings
-
-- **Together today**: one ring for the whole family (all tasks, all children). Title changes from «سوا اليوم» to «أحسنتم يا أبطال!» when everyone is done.
+- **Together today**: one bar for the whole family (all tasks, all children). Title changes from «سوا اليوم» to «أحسنتم يا أبطال!» when everyone is done.
 - **Surprise teaser**: a wrapped gift when the parent has set a secret family surprise.
-- **Sibling carousel**: horizontal swipe with snap and a page indicator. The child's own card comes first, marked «أنا», then siblings in fixed family order. Each card shows the photo with a progress ring, first name, task icons with their state, and `3 / 5`.
-- **Sibling balances and goals are never shown** by default.
+- **Sibling cards**: horizontal swipe with snap and a page indicator. The child's own card comes first, marked «أنا», then siblings in fixed family order. Each shows the photo, first name, and the task illustrations with ✓ or ⏳.
+- **Sibling balances and goals are never shown.**
 
 ## Parent experience
 
 Calm, premium, efficient, trustworthy. Parent Home, top to bottom:
 
 1. **Date + «العيلة اليوم»**
-2. **The family at a glance**: each child's photo inside a progress ring with `3/5`. The ring turns green when the child is fully done.
-3. **The one primary action: «بانتظار موافقتك»**. The only elevated card on the screen, with a gold count badge. Each row shows the child's photo, the task icon and a large ✓, plus one «موافقة على الكل» button. When nothing is waiting it becomes a quiet line: «ما في شي بانتظارك · كل شي تمام».
+2. **The family at a glance**: each child's photo inside a progress ring with «3 من 5». When a child is done, the ring turns green and the line reads «خلّص كل شي».
+3. **The one primary action: «بانتظار موافقتك»**. The only elevated card, with a gold count badge. Each row shows the task illustration, the child's face and name, and a large ✓. One «وافق على الكل» button. When nothing is waiting it becomes a quiet line: «كل شي تمام · ما في شي بانتظارك».
 4. **Family Reward card** (on a reward day), with «تمّت المفاجأة».
-5. **Tomorrow's surprise**: one row with the reward icon, the condition in words, and a segmented progress bar. The parent can see progress; children can't see who is behind.
+5. **One row for the family surprise**: «جهّز مفاجأة للعيلة», or the one already prepared.
 
 ### Creating a family surprise
 
 One sheet, two visual choices, one button. No forms.
 
-1. **شو المفاجأة؟**: a 3-column grid of reward icons.
-2. **إمتى؟**: five large rows (everyone finished · task count · weekly target · selected tasks · surprise now). A count stepper or task-icon picker appears inline only when that row is chosen.
-3. **خليها سر**: on by default.
-4. **جاهز**, or **فاجئهم الآن** for an instant surprise.
+1. **شو المفاجأة؟**: a 3-column grid of reward illustrations.
+2. **إمتى بتطلع؟**: five large rows (everyone finished · task count · weekly target · selected tasks · surprise now). A count stepper or task picker appears inline only when that row is chosen.
+3. **جاهز**, or **فاجئهم هلأ** for an instant surprise. Surprises are secret by default.
 
 ## Visual system
 
 ### Colour
 
-Warm light grounds. Photos, icons and progress bring the colour. Navy and gold are accents, and neither should be overused.
+Warm light grounds. Photos, illustrations and progress bring the colour. Navy and gold are accents, and neither should be overused.
 
 | Token | Value | Use |
 |---|---|---|
-| `navy` | `#0B1A32` | Makmoura Card, primary buttons, text |
-| `navy-2` | `#172B4F` | Card gradient |
+| `navy` | `#0B1A32` | Jar lid, primary buttons, text |
 | `gold` | `#ECAC4E` | Achievement: coins, progress, rewards, the ⏳ state |
-| `gold-deep` | `#9A6412` | Gold text on light surfaces (meets contrast) |
-| `gold-soft` / `gold-mist` | `#FCEFD8` / `#FFF8EC` | Reward and waiting surfaces |
-| `bg` | `#F5F1EA` | App background |
-| `surface` / `surface-2` | `#FFFFFF` / `#FAF7F2` | Cards / completed tiles |
-| `ink-2` / `ink-3` | `#4A5468` / `#8A92A3` | Secondary / tertiary text (navy-biased greys) |
-| `green` / `green-soft` | `#2E8A66` / `#E4F3EC` | Approved only |
-
-Each task has a soft tint pair (background + icon colour) so children can recognise it by colour as well as shape: أسناني blue, سريري lavender, صلاتي green, القراءة coral, شنطتي amber, ألعابي rose, المي teal.
+| `gold-deep` | `#9A6412` | Gold text on light surfaces |
+| `gold-soft` / `gold-mist` | `#FDEFD6` / `#FFF8EC` | Goal halo, reward and waiting surfaces |
+| `bg` | `#FBF7F0` | App background |
+| `surface` | `#FFFFFF` | Cards and tiles |
+| `ink-2` / `ink-3` | `#55607A` / `#98A0B0` | Secondary / tertiary text (navy-biased greys) |
+| `green` / `green-soft` | `#2E9E6E` / `#E3F5EC` | Approved only |
 
 ### Type
 
-- **Readex Pro**: display, names, numbers (tabular figures).
-- **IBM Plex Sans Arabic**: body and labels.
-- Scale: 60 (balance) · 32 (name) · 26 (reward) · 22 (section) · 18 (tile label) · 15 (body) · 13 (meta).
+- **Baloo Bhaijaan 2**: names, titles, numbers, buttons. Rounded and warm, so it reads friendly to children while staying tidy.
+- **IBM Plex Sans Arabic**: body text and small labels.
+- Scale: 36 (reveal) · 30 (name, balance) · 24 (section, goal) · 20 (tile label) · 15 (body) · 13 (meta).
 - Digits: Western digits in the prototype. Arabic-Indic digits should become a family setting.
 
 ### Shape, depth, motion
 
-- Radius: 32 (hero cards, sheets) · 24 (tiles) · 18 (rows) · pills for buttons.
-- Depth comes from two soft shadows only. Just the Makmoura Card and the approvals card use the stronger one.
-- Motion: spring on tile taps and badges, count-up on the balance, sheen on goal progress, a single confetti burst for completions and the reveal. Everything respects `prefers-reduced-motion`.
+- Radius: 34 (hero cards, sheets) · 28 (tiles) · 18–22 (rows) · pills for buttons.
+- Two soft shadows only. The Makmoura, the Family Reward card and the approvals card use the stronger one.
+- Motion: spring on tile taps and badges, coins rising in the jar with a count-up, a gentle bob on reward illustrations, one confetti burst for completions and the reveal. Everything respects `prefers-reduced-motion`.
 
-### Iconography
+### Illustration
 
-- Production uses one coherent outline set: [Lucide](https://lucide.dev) (24pt grid, 2pt stroke, round caps), plus custom Makmoura glyphs drawn on the same grid where Lucide has no match. The prototype already includes three: **toothbrush**, **mosque** (prayer) and **jar** (the Makmoura mark).
-- Emoji appear only in specs and demo copy, never in production UI.
-- Icon vocabulary: toothbrush = teeth · bed = bed · book-open = reading · backpack = school bag · mosque = prayer · toy-brick = tidy toys · droplet = water · target = goal · star = achievement · gift = reward · users = family · coins = virtual balance · check = approved · hourglass = waiting for a parent.
+- Children's UI uses **colourful 3D-style illustrations**, not line icons. They are large (84pt on task tiles, 124–210pt for rewards) and readable without text.
+- The prototype uses Microsoft Fluent Emoji 3D (MIT licence) as stand-in art. Production should commission one consistent custom Makmoura illustration set in the same spirit: soft 3D, warm light, rounded forms.
+- Line glyphs (✓, ✕, ‹, +) appear only on controls such as buttons and sheet close.
+- Vocabulary: toothbrush = teeth · bed = bed · books = reading · backpack = school bag · mosque = prayer · teddy bear = tidy toys · droplet = water · coin = balance · green check = approved · hourglass = waiting for a parent · wrapped gift = family surprise.
 
 ### Photography
 
-Child photos carry most of the warmth, so they're used large: identity (64pt), the Makmoura Card, sibling cards (96pt), and the overlapped faces on the Family Reward card. Without a photo, the app shows the child's initial on their own soft gradient. The prototype lets you upload photos from the side panel.
+Child photos carry most of the warmth: the top of Home, sibling cards (96pt), the parent's rings, and the overlapped faces on the Family Reward card. Without a photo, the app shows the child's initial on their own soft gradient.
