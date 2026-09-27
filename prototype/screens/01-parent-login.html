@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Makmoura Parent Sign-in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --navy:#0B1A32; --gold:#ECAC4E; --gold-deep:#9A6412; --gold-soft:#FDEFD6;
+  --bg:#FBF7F0; --surface:#FFFFFF; --ink:#0B1A32; --ink-2:#55607A; --ink-3:#98A0B0; --line:rgba(11,26,50,.10);
+  --green:#2E9E6E;
+  --f-display:"Baloo Bhaijaan 2", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --f-body:"IBM Plex Sans Arabic", system-ui, sans-serif;
+  --spring:cubic-bezier(.34,1.56,.64,1); --out:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#E9E2D6;color:var(--ink);font-family:var(--f-body);-webkit-font-smoothing:antialiased;padding-inline:16px}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+
+/* ---------- desktop: phone on a quiet table ---------- */
+.stage{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding-block:24px}
+.label{display:flex;flex-direction:column;align-items:center;gap:10px}
+.label b{font-family:var(--f-display);font-size:22px;font-weight:700}
+.steps{display:flex;gap:6px}
+.steps button{height:34px;padding:2px 14px 0;border-radius:99px;background:rgba(255,255,255,.55);font-size:13px;font-weight:500;color:var(--ink-2)}
+.steps button[aria-current="step"]{background:var(--navy);color:#fff}
+.phone{position:relative;width:390px;height:min(844px, calc(100dvh - 120px));min-height:640px;border-radius:54px;overflow:hidden;background:var(--bg);
+  box-shadow:0 0 0 11px #0B1A32, 0 0 0 12px #34435f, 0 40px 90px rgba(11,26,50,.28)}
+
+/* ---------- phone-sized screens: the page IS the app ---------- */
+@media (max-width: 520px){
+  body{padding-inline:0;background:var(--bg)}
+  .stage{padding-block:0;gap:0}
+  .label{display:none}
+  .phone{width:100%;height:100vh;height:100dvh;min-height:560px;border-radius:0;box-shadow:none}
+}
+
+/* ---------- screens ---------- */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:64px 24px 36px;transition:transform .5s var(--out), opacity .4s}
+.screen[data-pos="right"]{transform:translateX(-100%);opacity:0;pointer-events:none}
+.screen[data-pos="left"]{transform:translateX(100%);opacity:0;pointer-events:none}
+@media (max-width:520px){.screen{padding-top:calc(40px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}}
+
+/* welcome */
+.welcome{background:radial-gradient(120% 60% at 50% 18%, #FFEBC4 0%, #FFF6E6 45%, var(--bg) 80%)}
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.jar{width:170px;height:204px;overflow:visible;animation:float 4s ease-in-out 2s infinite}
+.jar .coins{transform:translateY(136px);animation:fill 1.8s var(--out) .4s forwards}
+@keyframes fill{to{transform:translateY(58px)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.name{font-family:var(--f-display);font-weight:800;font-size:52px;line-height:1;margin-top:28px;letter-spacing:-.01em}
+.tag{font-size:18px;color:var(--ink-2);margin-top:12px}
+.actions{display:flex;flex-direction:column;gap:14px;align-items:center}
+.btn{width:100%;height:60px;border-radius:20px;display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:19px;padding-top:3px;transition:transform .15s, opacity .2s}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--navy);color:#fff;box-shadow:0 10px 24px -10px rgba(11,26,50,.6)}
+.btn[disabled]{opacity:.28;box-shadow:none;cursor:default}
+.btn svg{width:22px;height:22px;margin-top:-3px}
+.link{font-size:15px;color:var(--ink-2);font-weight:500;padding:8px}
+.link b{color:var(--gold-deep);font-weight:600}
+.legal{font-size:12px;color:var(--ink-3);text-align:center;line-height:1.6}
+
+/* form screens */
+.back{width:44px;height:44px;border-radius:50%;background:rgba(11,26,50,.06);display:grid;place-items:center;margin-inline-start:-4px}
+.back svg{width:22px;height:22px}
+.form h1{margin:28px 0 0;font-family:var(--f-display);font-size:34px;font-weight:800;line-height:1.15}
+.form .sub{margin-top:8px;font-size:16px;color:var(--ink-2);line-height:1.6}
+.form .sub b{color:var(--ink);font-weight:600;direction:ltr;unicode-bidi:isolate}
+.form .sub button{color:var(--gold-deep);font-weight:600;font-size:15px;margin-inline-start:6px}
+.field{margin-top:36px;display:flex;direction:ltr;align-items:center;height:72px;border-radius:22px;background:var(--surface);box-shadow:0 0 0 1.5px var(--line), 0 6px 20px rgba(11,26,50,.05);transition:box-shadow .2s}
+.field:focus-within{box-shadow:0 0 0 2.5px var(--navy), 0 6px 20px rgba(11,26,50,.08)}
+.cc{height:100%;display:flex;align-items:center;gap:6px;padding:0 12px 0 18px;border-right:1.5px solid var(--line);font-family:var(--f-display);font-size:20px;font-weight:600;padding-top:3px}
+.cc svg{width:16px;height:16px;color:var(--ink-3);margin-top:-3px}
+.field input{flex:1;min-width:0;height:100%;border:0;background:none;padding:4px 14px 0;font-family:var(--f-display);font-size:25px;font-weight:600;color:var(--ink);outline:none}
+.field input::placeholder{color:#CBD0DA}
+.spacer{flex:1}
+.otp{position:relative;margin-top:40px;display:flex;direction:ltr;justify-content:center;gap:12px}
+.otp .box{width:66px;height:78px;border-radius:20px;background:var(--surface);box-shadow:0 0 0 1.5px var(--line);display:grid;place-items:center;font-family:var(--f-display);font-size:36px;font-weight:700;padding-top:4px;transition:box-shadow .2s, transform .3s var(--spring)}
+.otp .box.cur{box-shadow:0 0 0 2.5px var(--navy)}
+.otp .box.cur::after{content:"";width:2px;height:32px;background:var(--navy);border-radius:2px;animation:blink 1s steps(1) infinite;margin-top:-4px}
+.otp .box.filled{transform:scale(1.04)}
+@keyframes blink{50%{opacity:0}}
+.otp input{position:absolute;inset:0;opacity:0;font-size:16px;width:100%;height:100%;cursor:pointer}
+.otp.ok .box{box-shadow:0 0 0 2.5px var(--green);color:var(--green)}
+.resend{margin-top:24px;text-align:center;font-size:15px;color:var(--ink-3)}
+.resend button{color:var(--gold-deep);font-weight:600}
+
+/* done */
+.done{align-items:center;justify-content:center;text-align:center;background:radial-gradient(120% 60% at 50% 40%, #FFEBC4 0%, var(--bg) 70%)}
+.tick{width:108px;height:108px;border-radius:50%;background:var(--green);display:grid;place-items:center;box-shadow:0 0 0 12px rgba(46,158,110,.12);transform:scale(0);transition:transform .6s var(--spring) .1s}
+.tick svg{width:52px;height:52px;color:#fff;stroke-dasharray:30;stroke-dashoffset:30;transition:stroke-dashoffset .5s ease .5s}
+.screen.done[data-pos="center"] .tick{transform:none}
+.screen.done[data-pos="center"] .tick svg{stroke-dashoffset:0}
+.done h1{margin:30px 0 0;font-family:var(--f-display);font-size:36px;font-weight:800}
+.done p{margin:8px 0 0;font-size:17px;color:var(--ink-2)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}.jar .coins{transform:translateY(58px)}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="label"><b>الشاشة ١ · دخول الأهل</b>
+    <nav class="steps" id="steps" aria-label="مراحل الشاشة"></nav></div>
+
+  <main class="phone" id="phone">
+    <!-- 1. Welcome -->
+    <section class="screen welcome" data-s="welcome">
+      <div class="hero">
+        <svg class="jar" viewBox="0 0 150 180" aria-hidden="true" id="jar"></svg>
+        <div class="name">مكمورة</div>
+        <div class="tag">مهام صغيرة… وأحلام كبيرة</div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" data-go="phone">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>
+          الدخول برقم الموبايل</button>
+        <button class="link">جهاز طفل؟ <b>ادخل برمز العيلة</b></button>
+        <div class="legal">بالمتابعة بتوافق على الشروط وسياسة الخصوصية</div>
+      </div>
+    </section>
+
+    <!-- 2. Phone number -->
+    <section class="screen form" data-s="phone" data-pos="right">
+      <button class="back" data-go="welcome" aria-label="رجوع"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      <h1>شو رقم موبايلك؟</h1>
+      <div class="sub">رح نبعتلك رمز صغير لتأكيده.</div>
+      <label class="field">
+        <span class="cc">+963<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></span>
+        <input id="tel" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="9XX XXX XXX" aria-label="رقم الموبايل" maxlength="11">
+      </label>
+      <div class="spacer"></div>
+      <button class="btn primary" id="sendBtn" disabled>إرسال الرمز</button>
+    </section>
+
+    <!-- 3. Code -->
+    <section class="screen form" data-s="code" data-pos="right">
+      <button class="back" data-go="phone" aria-label="رجوع"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      <h1>اكتب الرمز</h1>
+      <div class="sub">بعتناه على <b id="shownTel">+963</b><button data-go="phone">تعديل</button></div>
+      <div class="otp" id="otp">
+        <span class="box"></span><span class="box"></span><span class="box"></span><span class="box"></span>
+        <input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="4" aria-label="رمز التأكيد">
+      </div>
+      <div class="resend" id="resend"></div>
+    </section>
+
+    <!-- 4. Signed in -->
+    <section class="screen done" data-s="done" data-pos="right">
+      <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <h1>أهلاً فيك!</h1>
+      <p>خلّينا نعرّف عيلتك…</p>
+    </section>
+  </main>
+</div>
+
+<script>
+const ORDER=['welcome','phone','code','done'];
+const NAMES={welcome:'الترحيب',phone:'الرقم',code:'الرمز',done:'تم الدخول'};
+const $=s=>document.querySelector(s);
+let cur='welcome', timer;
+
+/* the Makmoura jar: coins rise into it when the app opens */
+(function drawJar(){
+  const body='M44 34h62v6c0 7 22 11 22 30v82a22 22 0 0 1-22 22H44a22 22 0 0 1-22-22V70c0-19 22-23 22-30z';
+  let coins='';
+  for(let r=0;r<13;r++){const y=162-r*10.5,off=r%2?9:0;for(let x=24+off;x<=126;x+=18)coins+=`<ellipse cx="${x}" cy="${y}" rx="10" ry="6" fill="url(#cf)" stroke="#C98A2E" stroke-width="1.2"/><ellipse cx="${x}" cy="${y-1.2}" rx="6" ry="3" fill="none" stroke="#FFF1CF" stroke-opacity=".7"/>`}
+  $('#jar').innerHTML=`<defs><linearGradient id="cf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBD892"/><stop offset="1" stop-color="#E9A443"/></linearGradient><clipPath id="jc"><path d="${body}"/></clipPath></defs>
+    <ellipse cx="75" cy="177" rx="52" ry="5" fill="#0B1A32" opacity=".08"/>
+    <path d="${body}" fill="#F6F9FB"/>
+    <g clip-path="url(#jc)"><g class="coins">${coins}</g></g>
+    <path d="${body}" fill="none" stroke="#C9D6E0" stroke-width="3"/>
+    <path d="M34 78c-4 22-4 48 0 70" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none" opacity=".85"/>
+    <rect x="38" y="8" width="74" height="22" rx="8" fill="#0B1A32"/><rect x="34" y="26" width="82" height="10" rx="5" fill="#1D3157"/><rect x="48" y="14" width="30" height="4" rx="2" fill="#ECAC4E"/>`;
+})();
+
+function go(to){
+  const i=ORDER.indexOf(to);
+  document.querySelectorAll('.screen').forEach(s=>{const j=ORDER.indexOf(s.dataset.s);s.dataset.pos=j<i?'left':j>i?'right':'center'});
+  cur=to; steps();
+  if(to==='phone') setTimeout(()=>$('#tel').focus({preventScroll:true}),450);
+  if(to==='code'){ $('#code').value=''; paintOtp(); startResend(); setTimeout(()=>$('#code').focus({preventScroll:true}),450) }
+}
+function steps(){ $('#steps').innerHTML=ORDER.map(s=>`<button data-go="${s}" ${s===cur?'aria-current="step"':''}>${NAMES[s]}</button>`).join('') }
+
+/* phone number: digits only, grouped 3-3-3, button wakes up when it looks complete */
+$('#tel').addEventListener('input',e=>{
+  const d=e.target.value.replace(/\D/g,'').slice(0,9);
+  e.target.value=d.replace(/^(\d{0,3})(\d{0,3})(\d{0,3}).*/,(m,a,b,c)=>[a,b,c].filter(Boolean).join(' '));
+  $('#sendBtn').disabled=d.length<9;
+});
+$('#sendBtn').addEventListener('click',()=>{ $('#shownTel').textContent='+963 '+$('#tel').value; go('code') });
+
+/* code: one real input behind four boxes, so SMS autofill works; any 4 digits sign in */
+function paintOtp(){
+  const v=$('#code').value, boxes=document.querySelectorAll('.otp .box');
+  boxes.forEach((b,i)=>{b.textContent=v[i]||'';b.classList.toggle('filled',!!v[i]);b.classList.toggle('cur',i===v.length && document.activeElement===$('#code'))});
+}
+$('#code').addEventListener('input',e=>{
+  e.target.value=e.target.value.replace(/\D/g,'').slice(0,4); paintOtp();
+  if(e.target.value.length===4){ $('#otp').classList.add('ok'); e.target.blur(); setTimeout(()=>{ $('#otp').classList.remove('ok'); go('done') },600) }
+});
+['focus','blur'].forEach(ev=>$('#code').addEventListener(ev,paintOtp));
+function startResend(){
+  clearInterval(timer); let t=45;
+  const draw=()=>{ $('#resend').innerHTML = t>0 ? `إعادة الإرسال بعد 0:${String(t).padStart(2,'0')}` : `ما وصلك؟ <button id="again">ابعتلي مرة تانية</button>` };
+  draw(); timer=setInterval(()=>{t--;draw();if(t<=0)clearInterval(timer)},1000);
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]'); if(g){go(g.dataset.go);return}
+  if(e.target.id==='again') startResend();
+});
+steps();
+</script>
+</body>
+</html>
