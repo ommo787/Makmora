@@ -102,6 +102,30 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .forgot[hidden]{display:none}
 .emailbtn{margin-top:14px}
 
+/* about you */
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.roles button{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0 14px;border-radius:16px;background:#fff;font-size:17px;font-weight:600;box-shadow:inset 0 0 0 2px transparent;transition:box-shadow .2s}
+.roles button[aria-pressed="true"]{box-shadow:inset 0 0 0 2.5px var(--blue)}
+.roles .re{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;color:#fff}
+.roles .re svg{width:28px;height:28px}
+/* passcode */
+.pin{text-align:center}
+.pin .nav{align-self:stretch}
+.lock{width:64px;height:64px;border-radius:18px;background:var(--blue);color:#fff;display:grid;place-items:center;margin:10px auto 0}
+.lock svg{width:32px;height:32px}
+.pin h1{margin-top:18px;font-size:28px}
+.pin .sub{max-width:290px;margin-inline:auto}
+.dots{display:flex;justify-content:center;gap:20px;margin-top:34px;direction:ltr}
+.dots i{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--label);transition:background .15s}
+.dots i.on{background:var(--label)}
+.dots.bad{animation:shake .4s}
+.dots.good i{background:var(--green);box-shadow:none}
+@keyframes shake{20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+.pad{display:grid;grid-template-columns:repeat(3,76px);justify-content:center;gap:14px 26px;direction:ltr}
+.pad button{width:76px;height:76px;border-radius:50%;background:rgba(118,118,128,.14);font-size:32px;font-weight:400;display:grid;place-items:center;transition:background .1s}
+.pad button:active{background:rgba(118,118,128,.35)}
+.pad button.ghost{background:none;font-size:16px;color:var(--blue)}
+.pad button.ghost svg{width:28px;height:28px;color:var(--label)}
 /* family */
 .foot{font-size:13px;color:var(--label-2);padding:8px 16px 0;line-height:1.45}
 .kids{margin-top:24px}
@@ -246,7 +270,6 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
       </div>
             <form id="emailForm" novalidate style="display:contents">
         <div class="group" id="emailFields" hidden>
-          <div class="row name-only" id="nameRow"><label for="a-name">الاسم</label><input id="a-name" autocomplete="name" placeholder="أم سليم"></div>
           <div class="row"><label for="a-email">البريد</label><input id="a-email" type="email" dir="ltr" autocomplete="email" placeholder="name@email.com"></div>
           <div class="row"><label for="a-pass">كلمة السر</label><input id="a-pass" type="password" dir="ltr" autocomplete="new-password" placeholder="8 أحرف على الأقل"></div>
         </div>
@@ -258,9 +281,36 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
       <div class="legal">بالمتابعة بتوافق على الشروط وسياسة الخصوصية</div>
     </section>
 
-    <!-- 3. Family: parents add their children before seeing any price -->
-    <section class="screen form" data-s="family" data-pos="right">
+    <!-- 3. About you: name comes from Apple/Google, the rest only the parent can tell us -->
+    <section class="screen form" data-s="me" data-pos="right">
       <div class="nav"><button class="back" data-go="auth"><svg><use href="#chev"/></svg>رجوع</button></div>
+      <h1>عرّفنا عليك</h1>
+      <div class="sub" id="meSub">جبنا اسمك من حسابك، فيك تعدّله.</div>
+      <label class="photo" style="margin-top:22px"><span class="ph" id="meAv" style="--kc:#8E8E93"></span><span class="pl">إضافة صورة</span><input type="file" accept="image/*" id="mePhoto"></label>
+      <div class="group" style="margin-top:20px"><div class="row"><label for="meName">الاسم</label><input id="meName" autocomplete="name" placeholder="اسمك"></div></div>
+      <div class="kslabel">الأولاد بينادوك</div>
+      <div class="roles" role="radiogroup" aria-label="الأولاد بينادوك">
+        <button role="radio" aria-pressed="false" data-role="بابا"><span class="re" style="background:#007AFF"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4 21a8 8 0 0 1 16 0z"/></svg></span>بابا</button>
+        <button role="radio" aria-pressed="false" data-role="ماما"><span class="re" style="background:#FF2D55"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4 21a8 8 0 0 1 16 0z"/></svg></span>ماما</button>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn filled" id="meNext" disabled>التالي</button>
+    </section>
+
+    <!-- 4. Parent passcode: children share the device, the parent area stays locked -->
+    <section class="screen form pin" data-s="pin" data-pos="right">
+      <div class="nav"><button class="back" data-go="me"><svg><use href="#chev"/></svg>رجوع</button></div>
+      <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+      <h1 id="pinTitle">رمز الأهل</h1>
+      <div class="sub" id="pinSub">رح نطلبه قبل الموافقات والإعدادات، لتضل إلك وحدك.</div>
+      <div class="dots" id="pinDots"><i></i><i></i><i></i><i></i></div>
+      <div class="spacer"></div>
+      <div class="pad" id="pad"></div>
+    </section>
+
+    <!-- 5. Family: parents add their children before seeing any price -->
+    <section class="screen form" data-s="family" data-pos="right">
+      <div class="nav"><button class="back" data-go="pin"><svg><use href="#chev"/></svg>رجوع</button></div>
       <h1>عيلتك</h1>
       <div class="sub">ضيف أولادك، ومنجهّزلهم مهامهم.</div>
       <div class="group kids" id="kidsList"></div>
@@ -269,7 +319,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
       <button class="btn filled" id="familyNext" disabled>التالي</button>
     </section>
 
-    <!-- 4. Free trial: the plan, what happens when, and cancel anytime -->
+    <!-- 6. Free trial: the plan, what happens when, and cancel anytime -->
     <section class="screen paywall" data-s="trial" data-pos="right">
       <svg class="icon sm" aria-hidden="true"><use href="#app"/></svg>
       <h1>جرّب مكمورة مجاناً</h1>
@@ -297,7 +347,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
       <div class="links"><button>استرجاع المشتريات</button><button>الشروط</button><button>الخصوصية</button></div>
     </section>
 
-    <!-- 5. Done -->
+    <!-- 7. Done -->
     <section class="screen done" data-s="done" data-pos="right">
       <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
       <h1 id="doneTitle">تجربتك بلّشت!</h1>
@@ -332,8 +382,8 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 <script>
 const TRIAL_DAYS = 14, REMIND_DAY = TRIAL_DAYS - 2;           // agreed trial length; reminder 2 days before it ends
 const PLANS = {year:{name:'اشتراك سنوي', price:'$39.99 بالسنة'}, month:{name:'اشتراك شهري', price:'$4.99 بالشهر'}}; // example prices
-const ORDER=['welcome','auth','family','trial','done'];
-const NAMES={welcome:'الترحيب',auth:'الحساب',family:'العيلة',trial:'التجربة',done:'تم'};
+const ORDER=['welcome','auth','me','pin','family','trial','done'];
+const NAMES={welcome:'الترحيب',auth:'الحساب',me:'عنك',pin:'رمز الأهل',family:'العيلة',trial:'التجربة',done:'تم'};
 const $=s=>document.querySelector(s);
 let cur='welcome', mode='signup', plan='year';
 document.querySelectorAll('.days').forEach(e=>e.textContent=TRIAL_DAYS);
@@ -347,16 +397,50 @@ function go(to){
     const login = mode==='login';
     $('#authTitle').textContent = login ? 'تسجيل الدخول' : 'أنشئ حسابك';
     $('#authSub').textContent = login ? 'أهلاً من جديد.' : 'بثواني، وبدون ما تتذكّر كلمة سر.';
-    $('#nameRow').hidden = login; $('#forgot').hidden = !login;
+    $('#forgot').hidden = !login;
     $('#a-pass').placeholder = login ? 'مطلوبة' : '8 أحرف على الأقل';
     showEmail(false);
     $('#a-pass').autocomplete = login ? 'current-password' : 'new-password';
     check();
   }
   if(to==='trial') fine();
+  if(to==='pin') pinReset();
+  if(to==='me') paintMe();
 }
-function showEmail(on){ $('#emailFields').hidden=!on; $('#emailOpen').hidden=on; $('#emailBtn').hidden=!on; if(on) setTimeout(()=>$(mode==='login'?'#a-email':'#a-name').focus(),50) }
+function showEmail(on){ $('#emailFields').hidden=!on; $('#emailOpen').hidden=on; $('#emailBtn').hidden=!on; if(on) setTimeout(()=>$('#a-email').focus(),50) }
 $('#emailOpen').addEventListener('click',()=>showEmail(true));
+
+
+/* ---------- about you ---------- */
+const me={name:'',role:null,photo:null};
+function paintMe(){
+  const n=$('#meName').value.trim(); me.name=n;
+  $('#meAv').innerHTML = me.photo?`<img src="${me.photo}" alt="">` : n ? n[0] : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+  $('#meAv').style.setProperty('--kc', me.role==='ماما'?'#FF2D55':me.role==='بابا'?'#007AFF':'#8E8E93');
+  document.querySelectorAll('[data-role]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.role===me.role));
+  $('#meNext').disabled=!(n && me.role);
+}
+$('#meName').addEventListener('input',paintMe);
+$('#mePhoto').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{me.photo=r.result;paintMe()};r.readAsDataURL(f)});
+$('#meNext').addEventListener('click',()=>go('pin'));
+document.addEventListener('keydown',e=>{ if(cur!=='pin') return; if(/^[0-9]$/.test(e.key)) key(e.key); else if(e.key==='Backspace') key('del') });
+
+/* ---------- parent passcode: choose, then confirm ---------- */
+let pin='', first=null;
+$('#pad').innerHTML=[1,2,3,4,5,6,7,8,9].map(n=>`<button data-k="${n}">${n}</button>`).join('')
+  +'<span></span><button data-k="0">0</button><button class="ghost" data-k="del" aria-label="مسح"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1z"/><path d="m16 9-5 6M11 9l5 6"/></svg></button>';
+function pinReset(){ pin=''; first=null; $('#pinTitle').textContent='رمز الأهل'; $('#pinSub').textContent='رح نطلبه قبل الموافقات والإعدادات، لتضل إلك وحدك.'; dots() }
+function dots(){ document.querySelectorAll('#pinDots i').forEach((d,i)=>d.classList.toggle('on',i<pin.length)) }
+function key(k){
+  if(k==='del'){pin=pin.slice(0,-1);dots();return}
+  if(pin.length>=4) return;
+  pin+=k; dots(); if(pin.length<4) return;
+  setTimeout(()=>{
+    if(first===null){ first=pin; pin=''; dots(); $('#pinTitle').textContent='أكّد الرمز'; $('#pinSub').textContent='اكتبه مرة تانية.' }
+    else if(pin===first){ $('#pinDots').classList.add('good'); setTimeout(()=>{ $('#pinDots').classList.remove('good'); go('family') },500) }
+    else { const d=$('#pinDots'); d.classList.add('bad'); $('#pinSub').textContent='الرمزين مش متل بعض، جرّب من جديد.'; setTimeout(()=>{d.classList.remove('bad');pin='';first=null;$('#pinTitle').textContent='رمز الأهل';dots()},450) }
+  },150);
+}
 
 /* ---------- family: add children (name, age, favourite colour, optional photo) ---------- */
 const COLORS=['#FF9500','#34C759','#007AFF','#FF2D55','#AF52DE','#30B0C7'];
@@ -386,6 +470,8 @@ $('#kidAdd').addEventListener('click',()=>{kids.push(draft);kidSheet(false);rend
 $('#familyNext').addEventListener('click',()=>go('trial'));
 document.addEventListener('click',e=>{
   if(e.target.closest('#addKid')) return kidSheet(true);
+  const r=e.target.closest('[data-role]'); if(r){me.role=r.dataset.role;paintMe();return}
+  const k=e.target.closest('[data-k]'); if(k){key(k.dataset.k);return}
   const d=e.target.closest('[data-del]'); if(d){kids.splice(+d.dataset.del,1);renderKids();return}
   const a=e.target.closest('[data-age]'); if(a){draft.age=+a.dataset.age;paintDraft();return}
   const c=e.target.closest('[data-color]'); if(c){draft.color=c.dataset.color;paintDraft();return}
@@ -396,17 +482,19 @@ function steps(){ $('#steps').innerHTML=ORDER.map(s=>`<button data-go="${s}" ${s
 function fine(){ $('#fine').textContent=`مجاناً ${TRIAL_DAYS} يوم، بعدها ${PLANS[plan].price}. بتلغي بأي وقت من إعدادات الآيفون.` }
 
 /* signed in: new parents go to the trial, returning parents go straight in */
-function signedIn(){
+function signedIn(via){
+  me.name = via==='email' ? '' : 'أحمد';   // Apple/Google share the name; email sign-up asks for it
+  $('#meName').value=me.name; $('#meSub').textContent = me.name ? 'جبنا اسمك من حسابك، فيك تعدّله.' : 'شو اسمك؟'; paintMe();
   if(mode==='login'){ $('#doneTitle').textContent='أهلاً من جديد!'; $('#doneSub').textContent='عم نفتح عيلتك…'; go('done') }
-  else go('family');
+  else go('me');
 }
 const okEmail=v=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim());
 function check(){
   const login=mode==='login';
-  $('#emailBtn').disabled = !( (login || $('#a-name').value.trim()) && okEmail($('#a-email').value) && $('#a-pass').value.length >= (login?1:8) );
+  $('#emailBtn').disabled = !( okEmail($('#a-email').value) && $('#a-pass').value.length >= (login?1:8) );
 }
 document.addEventListener('input',check);
-$('#emailForm').addEventListener('submit',e=>{e.preventDefault(); if(!$('#emailBtn').disabled) signedIn()});
+$('#emailForm').addEventListener('submit',e=>{e.preventDefault(); if(!$('#emailBtn').disabled) signedIn('email')});
 
 /* trial → App Store sheet → Face ID → done */
 function sheet(open){ $('#scrim').classList.toggle('show',open); $('#sheet').classList.toggle('show',open); if(!open) $('#sheet').classList.remove('paying') }
@@ -422,7 +510,7 @@ $('#confirmBtn').addEventListener('click',()=>{
 document.addEventListener('click',e=>{
   const p=e.target.closest('[data-plan]');
   if(p){plan=p.dataset.plan;document.querySelectorAll('[data-plan]').forEach(b=>b.setAttribute('aria-pressed',b===p));fine();return}
-  if(e.target.closest('[data-auth]')){signedIn();return}
+  if(e.target.closest('[data-auth]')){signedIn('provider');return}
   const g=e.target.closest('[data-go]'); if(!g) return;
   if(g.dataset.mode) mode=g.dataset.mode;
   go(g.dataset.go);
