@@ -27,10 +27,10 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .stage{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding-block:24px}
 .label{display:flex;flex-direction:column;align-items:center;gap:10px}
 .label b{font-size:17px;font-weight:600}
-.seg{display:flex;background:rgba(118,118,128,.12);border-radius:9px;padding:2px}
+.seg{display:flex;flex-wrap:wrap;justify-content:center;background:rgba(118,118,128,.12);border-radius:9px;padding:2px}
 .seg button{height:30px;padding:0 14px;border-radius:7px;font-size:13px;font-weight:500}
 .seg button[aria-current="step"]{background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.12), 0 3px 1px rgba(0,0,0,.04);font-weight:600}
-.phone{position:relative;width:390px;height:min(844px, calc(100dvh - 110px));min-height:640px;border-radius:55px;overflow:hidden;background:var(--bg);
+.phone{position:relative;width:390px;height:min(844px, calc(100dvh - 110px));min-height:660px;border-radius:55px;overflow:hidden;background:var(--bg);
   box-shadow:0 0 0 12px #1C1C1E, 0 0 0 13px #3A3A3C, 0 30px 80px rgba(0,0,0,.25)}
 
 /* ---------- on a phone the page IS the app ---------- */
@@ -42,7 +42,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 }
 
 /* ---------- screens slide like a navigation stack ---------- */
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:0 20px 34px;transition:transform .45s var(--out), opacity .35s;overflow-y:auto}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:0 20px 34px;transition:transform .45s var(--out), opacity .35s;overflow-y:auto;scrollbar-width:none}
 .screen[data-pos="right"]{transform:translateX(-100%);opacity:0;pointer-events:none}
 .screen[data-pos="left"]{transform:translateX(30%);opacity:0;pointer-events:none}
 @media (max-width:520px){.screen{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}}
@@ -50,26 +50,31 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 /* welcome */
 .welcome{padding-top:84px}
 .icon{width:104px;height:104px;border-radius:24px;margin:0 auto;display:block;flex:none;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+.icon.sm{width:64px;height:64px;border-radius:15px;box-shadow:0 6px 18px rgba(0,0,0,.10)}
 .welcome h1{margin:22px 0 0;text-align:center;font-size:34px;font-weight:800;letter-spacing:-.01em}
-.welcome .tag{margin-top:6px;text-align:center;font-size:17px;color:var(--label-2)}
+.tag{margin-top:6px;text-align:center;font-size:17px;color:var(--label-2)}
 .features{list-style:none;margin:40px 8px 0;padding:0;display:flex;flex-direction:column;gap:22px}
 .features li{display:flex;align-items:center;gap:16px}
-.features .sym{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;color:#fff}
-.features .sym svg{width:24px;height:24px}
+.sym{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;color:#fff}
+.sym svg{width:24px;height:24px}
 .features b{display:block;font-size:16px;font-weight:600}
-.features span{display:block;font-size:14px;color:var(--label-2);margin-top:1px;line-height:1.4}
+.features div > span{display:block;font-size:14px;color:var(--label-2);margin-top:1px;line-height:1.4}
 .spacer{flex:1;min-height:24px}
 .actions{display:flex;flex-direction:column;gap:10px}
 
 /* iOS buttons */
-.btn{width:100%;height:52px;flex:none;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;transition:opacity .15s}
+.btn{width:100%;height:52px;flex:none;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:17px;font-weight:600;transition:opacity .15s}
 .btn:active{opacity:.7}
+.btn svg{width:20px;height:20px;flex:none}
 .btn.filled{background:var(--blue);color:#fff}
 .btn.tinted{background:rgba(0,122,255,.12);color:var(--blue)}
+.btn.apple{background:#000;color:#fff}
+.btn.google{background:#fff;color:#000;box-shadow:inset 0 0 0 1px rgba(60,60,67,.25)}
+.btn.gray{background:rgba(118,118,128,.12);color:#000}
 .btn[disabled]{background:rgba(118,118,128,.12);color:var(--label-3);cursor:default}
 .textbtn{color:var(--blue);font-size:17px;padding:10px;align-self:center}
 .textbtn:active{opacity:.5}
-.legal{font-size:12px;color:var(--label-2);text-align:center;line-height:1.5}
+.legal{font-size:12px;color:var(--label-2);text-align:center;line-height:1.55}
 
 /* nav bar */
 .nav{height:52px;margin-top:44px;display:flex;align-items:center;flex:none}
@@ -77,12 +82,13 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .back svg{width:22px;height:22px}
 .form{background:var(--grouped)}
 .form h1{margin:4px 0 0;font-size:34px;font-weight:800;letter-spacing:-.01em}
-.pill{align-self:flex-start;margin-top:10px;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:99px;background:rgba(52,199,89,.14);color:#248A3D;font-size:13px;font-weight:600}
-.pill svg{width:15px;height:15px}
-.pill[hidden]{display:none}
+.form .sub{margin-top:6px;font-size:16px;color:var(--label-2)}
+.providers{display:flex;flex-direction:column;gap:10px;margin-top:28px}
+.or{display:flex;align-items:center;gap:12px;color:var(--label-2);font-size:13px;margin:18px 0 0}
+.or::before,.or::after{content:"";flex:1;height:.5px;background:var(--sep)}
 
 /* grouped inset list */
-.group{margin-top:28px;background:var(--cell);border-radius:12px;overflow:hidden;flex:none}
+.group{margin-top:18px;background:var(--cell);border-radius:12px;overflow:hidden;flex:none}
 .row{display:flex;align-items:center;min-height:52px;padding-inline:16px;position:relative}
 .row + .row::before{content:"";position:absolute;top:0;inset-inline-start:16px;inset-inline-end:0;height:.5px;background:var(--sep)}
 .row label{width:96px;flex:none;font-size:17px}
@@ -90,11 +96,57 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .row input::placeholder{color:var(--label-3)}
 .row input[dir="ltr"]{text-align:right}
 .row input[dir="ltr"]:not(:placeholder-shown){text-align:left}
-.eye{width:36px;height:36px;display:grid;place-items:center;color:var(--label-3);flex:none;margin-inline-end:-8px}
-.eye svg{width:20px;height:20px}
-.eye[aria-pressed="true"]{color:var(--blue)}
-.foot{font-size:13px;color:var(--label-2);padding:8px 16px 0;line-height:1.45}
+.row .name-only[hidden]{display:none}
 .forgot{color:var(--blue);font-size:15px;padding:12px 16px 0;align-self:flex-start}
+.forgot[hidden]{display:none}
+.emailbtn{margin-top:14px}
+
+/* paywall */
+.paywall{padding-top:56px}
+.paywall h1{margin:16px 0 0;text-align:center;font-size:28px;font-weight:800;letter-spacing:-.01em}
+.timeline{list-style:none;margin:28px 4px 0;padding:0;position:relative}
+.timeline::before{content:"";position:absolute;top:22px;bottom:22px;right:21px;width:3px;border-radius:3px;background:linear-gradient(var(--green),var(--orange),var(--blue))}
+.timeline li{display:flex;gap:14px;align-items:flex-start;position:relative;padding-bottom:18px}
+.timeline li:last-child{padding-bottom:0}
+.timeline .sym{width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 4px #fff}
+.timeline .sym svg{width:20px;height:20px}
+.timeline b{display:block;font-size:16px;font-weight:700;padding-top:2px}
+.timeline div > span{display:block;font-size:14px;color:var(--label-2);margin-top:1px;line-height:1.45}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:26px}
+.plan{position:relative;border-radius:16px;padding:16px 14px 14px;text-align:start;background:var(--grouped);box-shadow:inset 0 0 0 2px transparent;transition:box-shadow .2s, background .2s}
+.plan[aria-pressed="true"]{background:#fff;box-shadow:inset 0 0 0 2.5px var(--blue)}
+.plan b{display:block;font-size:15px;font-weight:600}
+.plan .p{display:block;font-size:20px;font-weight:800;margin-top:6px;direction:ltr;text-align:right}
+.plan .pm{display:block;font-size:13px;color:var(--label-2);margin-top:2px}
+.plan .save{position:absolute;top:-10px;left:12px;background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px}
+.plan .tick{position:absolute;top:14px;left:14px;width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--label-3);display:grid;place-items:center}
+.plan[aria-pressed="true"] .tick{background:var(--blue);box-shadow:none}
+.plan .tick svg{width:14px;height:14px;color:#fff;opacity:0}
+.plan[aria-pressed="true"] .tick svg{opacity:1}
+.plan[aria-pressed="true"] .save{top:-10px}
+.fine{margin-top:12px;font-size:13px;color:var(--label-2);text-align:center;line-height:1.55}
+.links{display:flex;justify-content:center;gap:18px;margin-top:10px}
+.links button{font-size:13px;color:var(--label-2)}
+
+/* App Store confirmation sheet (system UI, shown for context) */
+.scrim{position:absolute;inset:0;background:rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .3s;z-index:20}
+.scrim.show{opacity:1;pointer-events:auto}
+.sheet{position:absolute;inset-inline:8px;bottom:8px;background:#fff;border-radius:34px;padding:20px 20px 24px;z-index:21;transform:translateY(110%);transition:transform .45s var(--out)}
+.sheet.show{transform:none}
+.sheet .hd{display:flex;align-items:center;justify-content:space-between;font-size:17px;font-weight:700;direction:ltr}
+.sheet .hd button{width:30px;height:30px;border-radius:50%;background:rgba(118,118,128,.12);display:grid;place-items:center;color:var(--label-2)}
+.sheet .hd button svg{width:14px;height:14px}
+.sheet .item{display:flex;align-items:center;gap:12px;margin-top:18px;padding-bottom:16px;border-bottom:.5px solid var(--sep)}
+.sheet .item b{display:block;font-size:16px}
+.sheet .item span{display:block;font-size:13px;color:var(--label-2);margin-top:2px}
+.sheet .kv{display:flex;justify-content:space-between;font-size:14px;padding:12px 0;border-bottom:.5px solid var(--sep)}
+.sheet .kv span:first-child{color:var(--label-2)}
+.sheet .note{font-size:12px;color:var(--label-2);margin-top:12px;line-height:1.5}
+.sheet .btn{margin-top:16px}
+.sheet .faceid{display:none;flex-direction:column;align-items:center;gap:10px;padding:18px 0 4px;color:var(--blue);font-size:15px}
+.sheet .faceid svg{width:56px;height:56px}
+.sheet.paying .faceid{display:flex}
+.sheet.paying .btn{display:none}
 
 /* done */
 .done{align-items:center;justify-content:center;text-align:center}
@@ -103,129 +155,180 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .screen.done[data-pos="center"] .check{transform:none;opacity:1}
 .screen.done[data-pos="center"] .check svg{stroke-dashoffset:0}
 .done h1{margin:24px 0 0;font-size:28px;font-weight:800}
-.done p{margin:6px 0 0;font-size:17px;color:var(--label-2)}
+.done p{margin:6px 0 0;font-size:17px;color:var(--label-2);line-height:1.5}
 @media (prefers-reduced-motion: reduce){*{transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="app" viewBox="0 0 104 104">
+    <defs><linearGradient id="ib" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F2F2F7"/></linearGradient></defs>
+    <rect width="104" height="104" rx="24" fill="url(#ib)"/>
+    <circle cx="37" cy="37" r="16" fill="#FF9500"/>
+    <rect x="53" y="21" width="31" height="31" rx="10" fill="#34C759"/>
+    <rect x="20" y="53" width="31" height="31" rx="10" fill="#007AFF"/>
+    <path d="M68.5 56.5l4.3 8.7 9.6 1.4-7 6.8 1.7 9.6-8.6-4.5-8.6 4.5 1.7-9.6-7-6.8 9.6-1.4z" fill="#FF2D55" stroke="#FF2D55" stroke-width="3" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="apple" viewBox="0 0 24 24"><path fill="currentColor" d="M16.37 1.43c0 1.14-.49 2.27-1.18 3.08-.74.9-1.99 1.57-2.99 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.57-2.27 1.21-2.98.8-.94 2.14-1.64 3.25-1.68.03.13.05.28.05.43zm4.56 15.71c-.03.07-.46 1.58-1.52 3.12-.94 1.34-1.94 2.71-3.43 2.71-1.52 0-1.9-.88-3.63-.88-1.7 0-2.3.91-3.67.91-1.38 0-2.33-1.26-3.43-2.8-1.29-1.82-2.32-4.63-2.32-7.28 0-4.28 2.8-6.55 5.55-6.55 1.45 0 2.68.95 3.6.95.87 0 2.22-1.01 3.9-1.01.61 0 2.89.06 4.37 2.19-.13.09-2.38 1.37-2.38 4.19 0 3.26 2.85 4.42 2.96 4.45z"/></symbol>
+  <symbol id="google" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.98-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></symbol>
+  <symbol id="chev" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="ok" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
 <div class="stage">
   <div class="label"><b>الشاشة ١ · دخول الأهل</b><nav class="seg" id="steps" aria-label="مراحل الشاشة"></nav></div>
 
   <main class="phone">
-    <!-- 1. Welcome -->
+    <!-- 1. Welcome: one action to start, one to come back -->
     <section class="screen welcome" data-s="welcome">
-      <svg class="icon" viewBox="0 0 104 104" role="img" aria-label="مكمورة">
-        <defs><linearGradient id="ib" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F2F2F7"/></linearGradient></defs>
-        <rect width="104" height="104" rx="24" fill="url(#ib)"/>
-        <!-- four playful shapes that fit together, like a family -->
-        <circle cx="37" cy="37" r="16" fill="#FF9500"/>
-        <rect x="53" y="21" width="31" height="31" rx="10" fill="#34C759"/>
-        <rect x="20" y="53" width="31" height="31" rx="10" fill="#007AFF"/>
-        <path d="M68.5 56.5l4.3 8.7 9.6 1.4-7 6.8 1.7 9.6-8.6-4.5-8.6 4.5 1.7-9.6-7-6.8 9.6-1.4z" fill="#FF2D55" stroke="#FF2D55" stroke-width="3" stroke-linejoin="round"/>
-      </svg>
+      <svg class="icon" role="img" aria-label="مكمورة"><use href="#app"/></svg>
       <h1>مكمورة</h1>
       <div class="tag">مهام صغيرة… وأحلام كبيرة</div>
-
       <ul class="features">
-        <li><span class="sym" style="background:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <li><span class="sym" style="background:var(--green)"><svg><use href="#ok"/></svg></span>
           <div><b>مهام يومية بسيطة</b><span>أولادك بيعرفوا شو عليهم اليوم بنظرة.</span></div></li>
         <li><span class="sym" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.3l-5.8 3.1 1.1-6.5L2.6 9.3l6.5-.9z"/></svg></span>
           <div><b>أهداف بيحلموا فيها</b><span>كل مهمة بتقرّبهم خطوة من هدفهم.</span></div></li>
         <li><span class="sym" style="background:var(--pink)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.8 4.5c2.2 0 3.7 1.2 5.2 3 1.5-1.8 3-3 5.2-3 3.8 0 5.9 3.8 4.4 7.2C19.5 16.4 12 21 12 21z"/></svg></span>
           <div><b>لحظات عائلية حلوة</b><span>مفاجآت للعيلة لما ينجزوا سوا.</span></div></li>
       </ul>
-
       <div class="spacer"></div>
       <div class="actions">
-        <button class="btn filled" data-go="signup" data-mode="trial"><span>جرّب مجاناً لمدة <span class="trial-days">14</span> يوم</span></button>
-        <button class="btn tinted" data-go="signup" data-mode="account">إنشاء حساب</button>
-        <button class="textbtn" data-go="login">عندي حساب، تسجيل الدخول</button>
+        <button class="btn filled" data-go="auth" data-mode="signup">ابدأ</button>
+        <button class="textbtn" data-go="auth" data-mode="login">عندي حساب</button>
       </div>
     </section>
 
-    <!-- 2. Sign up (full account, or free trial) -->
-    <section class="screen form" data-s="signup" data-pos="right">
-      <div class="nav"><button class="back" data-go="welcome"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>رجوع</button></div>
-      <h1 id="signupTitle">حساب جديد</h1>
-      <span class="pill" id="trialPill" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span id="trialText"></span></span>
-      <form id="signupForm" novalidate style="display:contents">
+    <!-- 2. Account: Apple, Google or email (same screen for new and returning parents) -->
+    <section class="screen form" data-s="auth" data-pos="right">
+      <div class="nav"><button class="back" data-go="welcome"><svg><use href="#chev"/></svg>رجوع</button></div>
+      <h1 id="authTitle">أنشئ حسابك</h1>
+      <div class="sub" id="authSub">بثواني، وبدون ما تتذكّر كلمة سر.</div>
+      <div class="providers">
+        <button class="btn apple" data-auth="apple"><svg><use href="#apple"/></svg>متابعة مع Apple</button>
+        <button class="btn google" data-auth="google"><svg><use href="#google"/></svg>متابعة مع Google</button>
+      </div>
+      <div class="or">أو</div>
+      <form id="emailForm" novalidate style="display:contents">
         <div class="group">
-          <div class="row"><label for="su-name">الاسم</label><input id="su-name" autocomplete="name" placeholder="أم سليم"></div>
-          <div class="row"><label for="su-email">البريد</label><input id="su-email" type="email" dir="ltr" autocomplete="email" placeholder="name@email.com"></div>
-          <div class="row"><label for="su-pass">كلمة السر</label><input id="su-pass" type="password" dir="ltr" autocomplete="new-password" placeholder="8 أحرف على الأقل"><button type="button" class="eye" data-eye aria-label="إظهار كلمة السر"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <div class="row name-only" id="nameRow"><label for="a-name">الاسم</label><input id="a-name" autocomplete="name" placeholder="أم سليم"></div>
+          <div class="row"><label for="a-email">البريد</label><input id="a-email" type="email" dir="ltr" autocomplete="email" placeholder="name@email.com"></div>
+          <div class="row"><label for="a-pass">كلمة السر</label><input id="a-pass" type="password" dir="ltr" autocomplete="new-password" placeholder="8 أحرف على الأقل"></div>
         </div>
-        <div class="foot">رح نستعمل البريد لتسجيل الدخول واسترجاع الحساب.</div>
-        <div class="spacer"></div>
-        <button class="btn filled" id="signupBtn" disabled>إنشاء الحساب</button>
-        <div class="legal" style="margin-top:12px">بالمتابعة بتوافق على الشروط وسياسة الخصوصية</div>
+        <button type="button" class="forgot" id="forgot" hidden>نسيت كلمة السر؟</button>
+        <button class="btn gray emailbtn" id="emailBtn" disabled>متابعة بالبريد</button>
       </form>
+      <div class="spacer"></div>
+      <div class="legal">بالمتابعة بتوافق على الشروط وسياسة الخصوصية</div>
     </section>
 
-    <!-- 3. Sign in -->
-    <section class="screen form" data-s="login" data-pos="right">
-      <div class="nav"><button class="back" data-go="welcome"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>رجوع</button></div>
-      <h1>تسجيل الدخول</h1>
-      <form id="loginForm" novalidate style="display:contents">
-        <div class="group">
-          <div class="row"><label for="li-email">البريد</label><input id="li-email" type="email" dir="ltr" autocomplete="username" placeholder="name@email.com"></div>
-          <div class="row"><label for="li-pass">كلمة السر</label><input id="li-pass" type="password" dir="ltr" autocomplete="current-password" placeholder="مطلوبة"><button type="button" class="eye" data-eye aria-label="إظهار كلمة السر"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
-        </div>
-        <button type="button" class="forgot">نسيت كلمة السر؟</button>
-        <div class="spacer"></div>
-        <button class="btn filled" id="loginBtn" disabled>تسجيل الدخول</button>
-        <button type="button" class="textbtn" data-go="signup" data-mode="account">ما عندي حساب</button>
-      </form>
+    <!-- 3. Free trial: the plan, what happens when, and cancel anytime -->
+    <section class="screen paywall" data-s="trial" data-pos="right">
+      <svg class="icon sm" aria-hidden="true"><use href="#app"/></svg>
+      <h1>جرّب مكمورة مجاناً</h1>
+      <div class="tag" style="font-size:16px"><span class="days">14</span> يوم كاملة، وبتلغي وقت ما بدك.</div>
+
+      <ol class="timeline">
+        <li><span class="sym" style="background:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.8-1.2"/></svg></span>
+          <div><b>اليوم</b><span>كل شي مفتوح لعيلتك، وما بتدفع شي.</span></div></li>
+        <li><span class="sym" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></span>
+          <div><b>بعد <span class="remind">12</span> يوم</b><span>منبعتلك تذكير قبل ما تخلص التجربة.</span></div></li>
+        <li><span class="sym" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.3l-5.8 3.1 1.1-6.5L2.6 9.3l6.5-.9z"/></svg></span>
+          <div><b>بعد <span class="days">14</span> يوم</b><span>بيبلّش الاشتراك، إلا إذا ألغيته قبلها.</span></div></li>
+      </ol>
+
+      <div class="plans" role="radiogroup" aria-label="الخطة">
+        <button class="plan" data-plan="year" aria-pressed="true" role="radio"><span class="save">وفّر 33%</span><span class="tick"><svg><use href="#ok"/></svg></span>
+          <b>سنوي</b><span class="p">$39.99</span><span class="pm">يعني $3.33 بالشهر</span></button>
+        <button class="plan" data-plan="month" aria-pressed="false" role="radio"><span class="tick"><svg><use href="#ok"/></svg></span>
+          <b>شهري</b><span class="p">$4.99</span><span class="pm">كل شهر</span></button>
+      </div>
+
+      <div class="spacer" style="min-height:20px"></div>
+      <button class="btn filled" id="startTrial">ابدأ التجربة المجانية</button>
+      <div class="fine" id="fine"></div>
+      <div class="links"><button>استرجاع المشتريات</button><button>الشروط</button><button>الخصوصية</button></div>
     </section>
 
-    <!-- 4. Signed in -->
+    <!-- 4. Done -->
     <section class="screen done" data-s="done" data-pos="right">
       <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-      <h1 id="doneTitle">أهلاً فيك!</h1>
-      <p id="doneSub">خلّينا نعرّف عيلتك…</p>
+      <h1 id="doneTitle">تجربتك بلّشت!</h1>
+      <p id="doneSub"></p>
     </section>
+
+    <!-- App Store confirmation (Apple's system sheet; shown so the flow is complete) -->
+    <div class="scrim" id="scrim"></div>
+    <div class="sheet" id="sheet" role="dialog" aria-label="تأكيد الاشتراك">
+      <div class="hd"><span>App Store</span><button id="sheetClose" aria-label="إلغاء"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+      <div class="item"><svg class="icon sm" style="width:52px;height:52px;margin:0" aria-hidden="true"><use href="#app"/></svg><div><b>مكمورة</b><span id="sheetPlan"></span></div></div>
+      <div class="kv"><span>التجربة المجانية</span><span><span class="days">14</span> يوم</span></div>
+      <div class="kv"><span>بعدها</span><span id="sheetPrice"></span></div>
+      <div class="note">ما رح ينسحب شي هلأ. فيك تلغي بأي وقت من الإعدادات، ولو ألغيت قبل يوم على الأقل من نهاية التجربة ما بتدفع أبداً.</div>
+      <button class="btn filled" id="confirmBtn">اشتراك</button>
+      <div class="faceid"><svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 16V10a6 6 0 0 1 6-6h6M40 4h6a6 6 0 0 1 6 6v6M52 40v6a6 6 0 0 1-6 6h-6M16 52h-6a6 6 0 0 1-6-6v-6"/><path d="M19 20v4M37 20v4M28 20v10h-3M20 38c4.5 4 11.5 4 16 0"/></svg>Face ID</div>
+    </div>
   </main>
 </div>
 
 <script>
-const TRIAL_DAYS = 14; // the agreed free-trial length
-const ORDER=['welcome','signup','login','done'];
-const NAMES={welcome:'الترحيب',signup:'حساب جديد',login:'تسجيل الدخول',done:'تم'};
+const TRIAL_DAYS = 14, REMIND_DAY = TRIAL_DAYS - 2;           // agreed trial length; reminder 2 days before it ends
+const PLANS = {year:{name:'اشتراك سنوي', price:'$39.99 بالسنة'}, month:{name:'اشتراك شهري', price:'$4.99 بالشهر'}}; // example prices
+const ORDER=['welcome','auth','trial','done'];
+const NAMES={welcome:'الترحيب',auth:'الحساب',trial:'التجربة',done:'تم'};
 const $=s=>document.querySelector(s);
-let cur='welcome', mode='account';
-document.querySelectorAll('.trial-days').forEach(e=>e.textContent=TRIAL_DAYS);
-$('#trialText').textContent=`${TRIAL_DAYS} يوم مجاناً · بدون بطاقة دفع`;
+let cur='welcome', mode='signup', plan='year';
+document.querySelectorAll('.days').forEach(e=>e.textContent=TRIAL_DAYS);
+document.querySelectorAll('.remind').forEach(e=>e.textContent=REMIND_DAY);
 
 function go(to){
-  const order = to==='login' ? ['welcome','login','signup','done'] : ORDER, i=order.indexOf(to);
-  document.querySelectorAll('.screen').forEach(s=>{const j=order.indexOf(s.dataset.s);s.dataset.pos=j<i?'left':j>i?'right':'center'});
+  const i=ORDER.indexOf(to);
+  document.querySelectorAll('.screen').forEach(s=>{const j=ORDER.indexOf(s.dataset.s);s.dataset.pos=j<i?'left':j>i?'right':'center'});
   cur=to; steps();
-  if(to==='signup'){
-    const trial = mode==='trial';
-    $('#trialPill').hidden=!trial;
-    $('#signupTitle').textContent = trial ? 'تجربة مجانية' : 'حساب جديد';
-    $('#signupBtn').textContent = trial ? 'ابدأ التجربة' : 'إنشاء الحساب';
+  if(to==='auth'){
+    const login = mode==='login';
+    $('#authTitle').textContent = login ? 'تسجيل الدخول' : 'أنشئ حسابك';
+    $('#authSub').textContent = login ? 'أهلاً من جديد.' : 'بثواني، وبدون ما تتذكّر كلمة سر.';
+    $('#nameRow').hidden = login; $('#forgot').hidden = !login;
+    $('#a-pass').placeholder = login ? 'مطلوبة' : '8 أحرف على الأقل';
+    $('#a-pass').autocomplete = login ? 'current-password' : 'new-password';
+    check();
   }
-  if(to==='done'){
-    $('#doneTitle').textContent = mode==='login' ? 'أهلاً من جديد!' : 'أهلاً فيك!';
-    $('#doneSub').textContent = mode==='trial' ? `تجربتك المجانية بلّشت: ${TRIAL_DAYS} يوم` : mode==='login' ? 'عم نفتح عيلتك…' : 'خلّينا نعرّف عيلتك…';
-  }
+  if(to==='trial') fine();
 }
 function steps(){ $('#steps').innerHTML=ORDER.map(s=>`<button data-go="${s}" ${s===cur?'aria-current="step"':''}>${NAMES[s]}</button>`).join('') }
+function fine(){ $('#fine').textContent=`مجاناً ${TRIAL_DAYS} يوم، بعدها ${PLANS[plan].price}. بتلغي بأي وقت من إعدادات الآيفون.` }
 
-/* the main button wakes up only when the form is complete */
+/* signed in: new parents go to the trial, returning parents go straight in */
+function signedIn(){
+  if(mode==='login'){ $('#doneTitle').textContent='أهلاً من جديد!'; $('#doneSub').textContent='عم نفتح عيلتك…'; go('done') }
+  else go('trial');
+}
 const okEmail=v=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim());
 function check(){
-  $('#signupBtn').disabled=!($('#su-name').value.trim() && okEmail($('#su-email').value) && $('#su-pass').value.length>=8);
-  $('#loginBtn').disabled=!(okEmail($('#li-email').value) && $('#li-pass').value.length>=1);
+  const login=mode==='login';
+  $('#emailBtn').disabled = !( (login || $('#a-name').value.trim()) && okEmail($('#a-email').value) && $('#a-pass').value.length >= (login?1:8) );
 }
 document.addEventListener('input',check);
-$('#signupForm').addEventListener('submit',e=>{e.preventDefault(); if(!$('#signupBtn').disabled) go('done')});
-$('#loginForm').addEventListener('submit',e=>{e.preventDefault(); if(!$('#loginBtn').disabled){mode='login';go('done')}});
+$('#emailForm').addEventListener('submit',e=>{e.preventDefault(); if(!$('#emailBtn').disabled) signedIn()});
+
+/* trial → App Store sheet → Face ID → done */
+function sheet(open){ $('#scrim').classList.toggle('show',open); $('#sheet').classList.toggle('show',open); if(!open) $('#sheet').classList.remove('paying') }
+$('#startTrial').addEventListener('click',()=>{ $('#sheetPlan').textContent=PLANS[plan].name; $('#sheetPrice').textContent=PLANS[plan].price; sheet(true) });
+$('#sheetClose').addEventListener('click',()=>sheet(false));
+$('#scrim').addEventListener('click',()=>sheet(false));
+$('#confirmBtn').addEventListener('click',()=>{
+  $('#sheet').classList.add('paying');
+  setTimeout(()=>{ sheet(false); $('#doneTitle').textContent='تجربتك بلّشت!';
+    $('#doneSub').innerHTML=`عندك ${TRIAL_DAYS} يوم مجاناً.<br>منذكّرك قبل ما تخلص بيومين.`; go('done') },1100);
+});
+
 document.addEventListener('click',e=>{
-  const eye=e.target.closest('[data-eye]');
-  if(eye){const inp=eye.parentElement.querySelector('input'),show=inp.type==='password';inp.type=show?'text':'password';eye.setAttribute('aria-pressed',show);return}
+  const p=e.target.closest('[data-plan]');
+  if(p){plan=p.dataset.plan;document.querySelectorAll('[data-plan]').forEach(b=>b.setAttribute('aria-pressed',b===p));fine();return}
+  if(e.target.closest('[data-auth]')){signedIn();return}
   const g=e.target.closest('[data-go]'); if(!g) return;
-  if(g.dataset.mode) mode=g.dataset.mode; else if(g.dataset.go==='login') mode='login';
+  if(g.dataset.mode) mode=g.dataset.mode;
   go(g.dataset.go);
 });
 steps();
