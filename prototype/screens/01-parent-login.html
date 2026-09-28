@@ -102,6 +102,11 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .forgot[hidden]{display:none}
 .emailbtn{margin-top:14px}
 
+/* family sections */
+.kslabel.sec{margin:26px 16px 8px}
+.kslabel.sec + .group{margin-top:0}
+.kids .you{font-size:12px;font-weight:600;color:var(--label-2);background:rgba(118,118,128,.12);padding:2px 8px;border-radius:99px;margin-inline-start:6px;vertical-align:2px}
+.kids .wait{color:var(--orange)}
 /* about you */
 .roles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .roles button{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0 14px;border-radius:16px;background:#fff;font-size:17px;font-weight:600;box-shadow:inset 0 0 0 2px transparent;transition:box-shadow .2s}
@@ -128,13 +133,13 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .pad button.ghost svg{width:28px;height:28px;color:var(--label)}
 /* family */
 .foot{font-size:13px;color:var(--label-2);padding:8px 16px 0;line-height:1.45}
-.kids{margin-top:24px}
+.kids{margin-top:8px}
 .kids .row{gap:12px;min-height:64px}
 .kav{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:19px;flex:none;overflow:hidden}
 .kav img{width:100%;height:100%;object-fit:cover}
 .kids .nm{flex:1}
 .kids .nm b{display:block;font-size:17px;font-weight:600}
-.kids .nm span{display:block;font-size:13px;color:var(--label-2)}
+.kids .nm > span{display:block;font-size:13px;color:var(--label-2)}
 .kids .del{color:var(--label-3);font-size:15px;padding:8px}
 .kids .addrow{color:var(--blue);font-size:17px;width:100%;gap:12px}
 .kids .addrow .kav{background:rgba(0,122,255,.12);color:var(--blue)}
@@ -312,7 +317,10 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
     <section class="screen form" data-s="family" data-pos="right">
       <div class="nav"><button class="back" data-go="pin"><svg><use href="#chev"/></svg>رجوع</button></div>
       <h1>عيلتك</h1>
-      <div class="sub">ضيف أولادك، ومنجهّزلهم مهامهم.</div>
+      <div class="sub">مين معك بالبيت؟</div>
+      <div class="kslabel sec">الأهل</div>
+      <div class="group kids" id="parentsList"></div>
+      <div class="kslabel sec">الأولاد</div>
       <div class="group kids" id="kidsList"></div>
       <div class="foot">فيك تضيف أو تعدّل بعدين من الإعدادات.</div>
       <div class="spacer"></div>
@@ -353,6 +361,17 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
       <h1 id="doneTitle">تجربتك بلّشت!</h1>
       <p id="doneSub"></p>
     </section>
+
+    <!-- Add the other parent: same pattern as adding a child, plus an invite -->
+    <div class="kidsheet" id="spSheet" role="dialog" aria-labelledby="spTitle">
+      <div class="ksbar"><button id="spCancel">إلغاء</button><b id="spTitle">إضافة الزوجة</b><button id="spAdd" disabled>إضافة</button></div>
+      <label class="photo"><span class="ph" id="spAv"></span><span class="pl">إضافة صورة</span><input type="file" accept="image/*" id="spPhoto"></label>
+      <div class="group" style="margin-top:22px">
+        <div class="row"><label for="spName">الاسم</label><input id="spName" autocomplete="off"></div>
+        <div class="row"><label for="spEmail">البريد</label><input id="spEmail" type="email" dir="ltr" placeholder="name@email.com" autocomplete="off"></div>
+      </div>
+      <div class="foot" id="spFoot"></div>
+    </div>
 
     <!-- Add a child -->
     <div class="kidsheet" id="kidSheet" role="dialog" aria-label="ولد جديد">
@@ -406,6 +425,7 @@ function go(to){
   if(to==='trial') fine();
   if(to==='pin') pinReset();
   if(to==='me') paintMe();
+  if(to==='family') renderParents();
 }
 function showEmail(on){ $('#emailFields').hidden=!on; $('#emailOpen').hidden=on; $('#emailBtn').hidden=!on; if(on) setTimeout(()=>$('#a-email').focus(),50) }
 $('#emailOpen').addEventListener('click',()=>showEmail(true));
@@ -435,9 +455,10 @@ function key(k){
   if(k==='del'){pin=pin.slice(0,-1);dots();return}
   if(pin.length>=4) return;
   pin+=k; dots(); if(pin.length<4) return;
+  // first entry done: move to "confirm" right away so no key press is lost
+  if(first===null){ first=pin; pin=''; dots(); $('#pinTitle').textContent='أكّد الرمز'; $('#pinSub').textContent='اكتبه مرة تانية.'; return }
   setTimeout(()=>{
-    if(first===null){ first=pin; pin=''; dots(); $('#pinTitle').textContent='أكّد الرمز'; $('#pinSub').textContent='اكتبه مرة تانية.' }
-    else if(pin===first){ $('#pinDots').classList.add('good'); setTimeout(()=>{ $('#pinDots').classList.remove('good'); go('family') },500) }
+    if(pin===first){ $('#pinDots').classList.add('good'); setTimeout(()=>{ $('#pinDots').classList.remove('good'); go('family') },500) }
     else { const d=$('#pinDots'); d.classList.add('bad'); $('#pinSub').textContent='الرمزين مش متل بعض، جرّب من جديد.'; setTimeout(()=>{d.classList.remove('bad');pin='';first=null;$('#pinTitle').textContent='رمز الأهل';dots()},450) }
   },150);
 }
@@ -446,6 +467,39 @@ function key(k){
 const COLORS=['#FF9500','#34C759','#007AFF','#FF2D55','#AF52DE','#30B0C7'];
 const kids=[]; let draft=null;
 function kidAv(k){return `<span class="kav" style="background:${k.color}">${k.photo?`<img src="${k.photo}" alt="">`:k.name.trim()[0]||''}</span>`}
+/* the account owner, plus at most one other parent */
+let spouse=null, spDraft=null;
+const other=()=>me.role==='ماما'?{role:'بابا',word:'الزوج',pron:'ه',color:'#007AFF'}:{role:'ماما',word:'الزوجة',pron:'ها',color:'#FF2D55'};
+function renderParents(){
+  const o=other(), meRole=me.role||'بابا';
+  let h=`<div class="row">${kidAv({name:me.name||'؟',color:meRole==='ماما'?'#FF2D55':'#007AFF',photo:me.photo})}<span class="nm"><b>${(me.name||'إنت').replace(/</g,'&lt;')}<span class="you">إنت</span></b><span>${meRole}</span></span></div>`;
+  h += spouse
+    ? `<div class="row">${kidAv(spouse)}<span class="nm"><b>${spouse.name.replace(/</g,'&lt;')}</b><span>${o.role} · <span class="wait">بعتنال${o.pron} دعوة</span></span></span><button class="del" data-delsp aria-label="حذف">حذف</button></div>`
+    : `<div class="row"><button class="addrow row" style="padding:0" id="addSp"><span class="kav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>إضافة ${o.word}</button></div>`;
+  $('#parentsList').innerHTML=h;
+}
+function spSheet(open){
+  if(open){
+    const o=other(); spDraft={name:'',email:'',color:o.color,photo:null};
+    $('#spTitle').textContent=`إضافة ${o.word}`; $('#spName').value=''; $('#spEmail').value='';
+    $('#spName').placeholder = o.role==='ماما'?'أم سليم':'أبو سليم';
+    $('#spFoot').textContent=`رح نبعتل${o.pron} رابط لتنزيل مكمورة والدخول على نفس العيلة، وبصير في${o.pron} ${o.role==='ماما'?'توافق':'يوافق'} على المهام متلك.`;
+    paintSp();
+  }
+  $('#scrim').classList.toggle('show',open); $('#spSheet').classList.toggle('show',open);
+  if(open) setTimeout(()=>$('#spName').focus(),350);
+}
+function paintSp(){
+  const a=$('#spAv'); a.style.setProperty('--kc',spDraft.color);
+  a.innerHTML = spDraft.photo?`<img src="${spDraft.photo}" alt="">` : spDraft.name.trim() ? spDraft.name.trim()[0] : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+  $('#spAdd').disabled=!(spDraft.name.trim() && okEmail(spDraft.email));
+}
+$('#spName').addEventListener('input',e=>{spDraft.name=e.target.value;paintSp()});
+$('#spEmail').addEventListener('input',e=>{spDraft.email=e.target.value;paintSp()});
+$('#spPhoto').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{spDraft.photo=r.result;paintSp()};r.readAsDataURL(f)});
+$('#spCancel').addEventListener('click',()=>spSheet(false));
+$('#spAdd').addEventListener('click',()=>{spouse=spDraft;spSheet(false);renderParents()});
+
 function renderKids(){
   $('#kidsList').innerHTML = kids.map((k,i)=>`<div class="row">${kidAv(k)}<span class="nm"><b>${k.name.replace(/</g,'&lt;')}</b><span>${k.age} ${k.age>10?'سنة':'سنين'}</span></span><button class="del" data-del="${i}" aria-label="حذف">حذف</button></div>`).join('')
     + `<div class="row"><button class="addrow row" style="padding:0" id="addKid"><span class="kav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>${kids.length?'إضافة ولد تاني':'إضافة ولد'}</button></div>`;
@@ -470,6 +524,8 @@ $('#kidAdd').addEventListener('click',()=>{kids.push(draft);kidSheet(false);rend
 $('#familyNext').addEventListener('click',()=>go('trial'));
 document.addEventListener('click',e=>{
   if(e.target.closest('#addKid')) return kidSheet(true);
+  if(e.target.closest('#addSp')) return spSheet(true);
+  if(e.target.closest('[data-delsp]')){spouse=null;renderParents();return}
   const r=e.target.closest('[data-role]'); if(r){me.role=r.dataset.role;paintMe();return}
   const k=e.target.closest('[data-k]'); if(k){key(k.dataset.k);return}
   const d=e.target.closest('[data-del]'); if(d){kids.splice(+d.dataset.del,1);renderKids();return}
@@ -500,7 +556,7 @@ $('#emailForm').addEventListener('submit',e=>{e.preventDefault(); if(!$('#emailB
 function sheet(open){ $('#scrim').classList.toggle('show',open); $('#sheet').classList.toggle('show',open); if(!open) $('#sheet').classList.remove('paying') }
 $('#startTrial').addEventListener('click',()=>{ $('#sheetPlan').textContent=PLANS[plan].name; $('#sheetPrice').textContent=PLANS[plan].price; sheet(true) });
 $('#sheetClose').addEventListener('click',()=>sheet(false));
-$('#scrim').addEventListener('click',()=>{sheet(false);kidSheet(false)});
+$('#scrim').addEventListener('click',()=>{sheet(false);kidSheet(false);spSheet(false)});
 $('#confirmBtn').addEventListener('click',()=>{
   $('#sheet').classList.add('paying');
   setTimeout(()=>{ sheet(false); $('#doneTitle').textContent='تجربتك بلّشت!';
