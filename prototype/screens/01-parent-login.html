@@ -18,6 +18,7 @@
   --out:cubic-bezier(.22,1,.36,1);
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{height:100%}
 body{margin:0;background:#E5E5EA;color:var(--label);font-family:var(--font);-webkit-font-smoothing:antialiased;padding-inline:16px}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent}
@@ -101,6 +102,41 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .forgot[hidden]{display:none}
 .emailbtn{margin-top:14px}
 
+/* family */
+.foot{font-size:13px;color:var(--label-2);padding:8px 16px 0;line-height:1.45}
+.kids{margin-top:24px}
+.kids .row{gap:12px;min-height:64px}
+.kav{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:19px;flex:none;overflow:hidden}
+.kav img{width:100%;height:100%;object-fit:cover}
+.kids .nm{flex:1}
+.kids .nm b{display:block;font-size:17px;font-weight:600}
+.kids .nm span{display:block;font-size:13px;color:var(--label-2)}
+.kids .del{color:var(--label-3);font-size:15px;padding:8px}
+.kids .addrow{color:var(--blue);font-size:17px;width:100%;gap:12px}
+.kids .addrow .kav{background:rgba(0,122,255,.12);color:var(--blue)}
+.kids .addrow .kav svg{width:22px;height:22px}
+.kids .row + .row::before{inset-inline-start:72px}
+.kidsheet{position:absolute;inset-inline:0;bottom:0;top:54px;background:var(--grouped);border-radius:14px 14px 0 0;z-index:21;padding:0 20px 24px;transform:translateY(105%);transition:transform .45s var(--out);overflow-y:auto}
+.kidsheet.show{transform:none}
+.ksbar{display:flex;align-items:center;justify-content:space-between;height:56px;font-size:17px}
+.ksbar b{font-weight:600}
+.ksbar button{color:var(--blue)}
+.ksbar #kidAdd{font-weight:600}
+.ksbar #kidAdd[disabled]{color:var(--label-3)}
+.photo{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:10px;cursor:pointer;position:relative}
+.photo .ph{width:104px;height:104px;border-radius:50%;background:var(--kc,#C7C7CC);color:#fff;display:grid;place-items:center;overflow:hidden;font-size:44px;font-weight:700;transition:background .25s}
+.photo .ph svg{width:40px;height:40px}
+.photo .ph img{width:100%;height:100%;object-fit:cover}
+.photo .pl{color:var(--blue);font-size:15px}
+.photo input{position:absolute;opacity:0;width:1px;height:1px}
+.kslabel{font-size:13px;color:var(--label-2);margin:22px 16px 8px}
+.ages{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px}
+.ages button{flex:none;width:48px;height:48px;border-radius:50%;background:#fff;font-size:17px;font-weight:600}
+.ages button[aria-pressed="true"]{background:var(--blue);color:#fff}
+.colors{display:flex;justify-content:space-between;padding:0 4px}
+.colors button{width:40px;height:40px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px var(--grouped)}
+.colors button[aria-pressed="true"]{box-shadow:0 0 0 3px var(--grouped), 0 0 0 5.5px var(--c)}
+
 /* paywall */
 .paywall{padding-top:56px}
 .paywall h1{margin:16px 0 0;text-align:center;font-size:28px;font-weight:800;letter-spacing:-.01em}
@@ -176,7 +212,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 </svg>
 
 <div class="stage">
-  <div class="label"><b>الشاشة ١ · دخول الأهل</b><nav class="seg" id="steps" aria-label="مراحل الشاشة"></nav></div>
+  <div class="label"><b>تسجيل الأهل</b><nav class="seg" id="steps" aria-label="مراحل الشاشة"></nav></div>
 
   <main class="phone">
     <!-- 1. Welcome: one action to start, one to come back -->
@@ -208,21 +244,32 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
         <button class="btn apple" data-auth="apple"><svg><use href="#apple"/></svg>متابعة مع Apple</button>
         <button class="btn google" data-auth="google"><svg><use href="#google"/></svg>متابعة مع Google</button>
       </div>
-      <div class="or">أو</div>
-      <form id="emailForm" novalidate style="display:contents">
-        <div class="group">
+            <form id="emailForm" novalidate style="display:contents">
+        <div class="group" id="emailFields" hidden>
           <div class="row name-only" id="nameRow"><label for="a-name">الاسم</label><input id="a-name" autocomplete="name" placeholder="أم سليم"></div>
           <div class="row"><label for="a-email">البريد</label><input id="a-email" type="email" dir="ltr" autocomplete="email" placeholder="name@email.com"></div>
           <div class="row"><label for="a-pass">كلمة السر</label><input id="a-pass" type="password" dir="ltr" autocomplete="new-password" placeholder="8 أحرف على الأقل"></div>
         </div>
         <button type="button" class="forgot" id="forgot" hidden>نسيت كلمة السر؟</button>
-        <button class="btn gray emailbtn" id="emailBtn" disabled>متابعة بالبريد</button>
+        <button type="button" class="btn gray emailbtn" id="emailOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>متابعة بالبريد</button>
+        <button class="btn filled emailbtn" id="emailBtn" disabled hidden>متابعة</button>
       </form>
       <div class="spacer"></div>
       <div class="legal">بالمتابعة بتوافق على الشروط وسياسة الخصوصية</div>
     </section>
 
-    <!-- 3. Free trial: the plan, what happens when, and cancel anytime -->
+    <!-- 3. Family: parents add their children before seeing any price -->
+    <section class="screen form" data-s="family" data-pos="right">
+      <div class="nav"><button class="back" data-go="auth"><svg><use href="#chev"/></svg>رجوع</button></div>
+      <h1>عيلتك</h1>
+      <div class="sub">ضيف أولادك، ومنجهّزلهم مهامهم.</div>
+      <div class="group kids" id="kidsList"></div>
+      <div class="foot">فيك تضيف أو تعدّل بعدين من الإعدادات.</div>
+      <div class="spacer"></div>
+      <button class="btn filled" id="familyNext" disabled>التالي</button>
+    </section>
+
+    <!-- 4. Free trial: the plan, what happens when, and cancel anytime -->
     <section class="screen paywall" data-s="trial" data-pos="right">
       <svg class="icon sm" aria-hidden="true"><use href="#app"/></svg>
       <h1>جرّب مكمورة مجاناً</h1>
@@ -250,12 +297,23 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
       <div class="links"><button>استرجاع المشتريات</button><button>الشروط</button><button>الخصوصية</button></div>
     </section>
 
-    <!-- 4. Done -->
+    <!-- 5. Done -->
     <section class="screen done" data-s="done" data-pos="right">
       <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
       <h1 id="doneTitle">تجربتك بلّشت!</h1>
       <p id="doneSub"></p>
     </section>
+
+    <!-- Add a child -->
+    <div class="kidsheet" id="kidSheet" role="dialog" aria-label="ولد جديد">
+      <div class="ksbar"><button id="kidCancel">إلغاء</button><b>ولد جديد</b><button id="kidAdd" disabled>إضافة</button></div>
+      <label class="photo" id="photoPick"><span class="ph" id="phPreview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg></span><span class="pl">إضافة صورة</span><input type="file" accept="image/*" id="kidPhoto"></label>
+      <div class="group" style="margin-top:22px"><div class="row"><label for="kidName">الاسم</label><input id="kidName" placeholder="سليم" autocomplete="off"></div></div>
+      <div class="kslabel">العمر</div>
+      <div class="ages" id="ages"></div>
+      <div class="kslabel">لونه المفضّل</div>
+      <div class="colors" id="colors"></div>
+    </div>
 
     <!-- App Store confirmation (Apple's system sheet; shown so the flow is complete) -->
     <div class="scrim" id="scrim"></div>
@@ -274,8 +332,8 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 <script>
 const TRIAL_DAYS = 14, REMIND_DAY = TRIAL_DAYS - 2;           // agreed trial length; reminder 2 days before it ends
 const PLANS = {year:{name:'اشتراك سنوي', price:'$39.99 بالسنة'}, month:{name:'اشتراك شهري', price:'$4.99 بالشهر'}}; // example prices
-const ORDER=['welcome','auth','trial','done'];
-const NAMES={welcome:'الترحيب',auth:'الحساب',trial:'التجربة',done:'تم'};
+const ORDER=['welcome','auth','family','trial','done'];
+const NAMES={welcome:'الترحيب',auth:'الحساب',family:'العيلة',trial:'التجربة',done:'تم'};
 const $=s=>document.querySelector(s);
 let cur='welcome', mode='signup', plan='year';
 document.querySelectorAll('.days').forEach(e=>e.textContent=TRIAL_DAYS);
@@ -291,18 +349,56 @@ function go(to){
     $('#authSub').textContent = login ? 'أهلاً من جديد.' : 'بثواني، وبدون ما تتذكّر كلمة سر.';
     $('#nameRow').hidden = login; $('#forgot').hidden = !login;
     $('#a-pass').placeholder = login ? 'مطلوبة' : '8 أحرف على الأقل';
+    showEmail(false);
     $('#a-pass').autocomplete = login ? 'current-password' : 'new-password';
     check();
   }
   if(to==='trial') fine();
 }
+function showEmail(on){ $('#emailFields').hidden=!on; $('#emailOpen').hidden=on; $('#emailBtn').hidden=!on; if(on) setTimeout(()=>$(mode==='login'?'#a-email':'#a-name').focus(),50) }
+$('#emailOpen').addEventListener('click',()=>showEmail(true));
+
+/* ---------- family: add children (name, age, favourite colour, optional photo) ---------- */
+const COLORS=['#FF9500','#34C759','#007AFF','#FF2D55','#AF52DE','#30B0C7'];
+const kids=[]; let draft=null;
+function kidAv(k){return `<span class="kav" style="background:${k.color}">${k.photo?`<img src="${k.photo}" alt="">`:k.name.trim()[0]||''}</span>`}
+function renderKids(){
+  $('#kidsList').innerHTML = kids.map((k,i)=>`<div class="row">${kidAv(k)}<span class="nm"><b>${k.name.replace(/</g,'&lt;')}</b><span>${k.age} ${k.age>10?'سنة':'سنين'}</span></span><button class="del" data-del="${i}" aria-label="حذف">حذف</button></div>`).join('')
+    + `<div class="row"><button class="addrow row" style="padding:0" id="addKid"><span class="kav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>${kids.length?'إضافة ولد تاني':'إضافة ولد'}</button></div>`;
+  $('#familyNext').disabled=!kids.length;
+}
+function kidSheet(open){
+  if(open){ draft={name:'',age:8,color:COLORS[kids.length%COLORS.length],photo:null}; $('#kidName').value=''; paintDraft() }
+  $('#scrim').classList.toggle('show',open); $('#kidSheet').classList.toggle('show',open);
+  if(open) setTimeout(()=>$('#kidName').focus(),350);
+}
+function paintDraft(){
+  const ph=$('#phPreview'); ph.style.setProperty('--kc',draft.color);
+  ph.innerHTML = draft.photo?`<img src="${draft.photo}" alt="">` : draft.name.trim() ? draft.name.trim()[0] : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+  $('#ages').innerHTML=Array.from({length:13},(_,n)=>n+3).map(a=>`<button aria-pressed="${a===draft.age}" data-age="${a}">${a}</button>`).join('');
+  $('#colors').innerHTML=COLORS.map(c=>`<button style="--c:${c}" aria-pressed="${c===draft.color}" data-color="${c}" aria-label="لون"></button>`).join('');
+  $('#kidAdd').disabled=!draft.name.trim();
+}
+$('#kidName').addEventListener('input',e=>{draft.name=e.target.value;paintDraft()});
+$('#kidPhoto').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{draft.photo=r.result;paintDraft()};r.readAsDataURL(f)});
+$('#kidCancel').addEventListener('click',()=>kidSheet(false));
+$('#kidAdd').addEventListener('click',()=>{kids.push(draft);kidSheet(false);renderKids()});
+$('#familyNext').addEventListener('click',()=>go('trial'));
+document.addEventListener('click',e=>{
+  if(e.target.closest('#addKid')) return kidSheet(true);
+  const d=e.target.closest('[data-del]'); if(d){kids.splice(+d.dataset.del,1);renderKids();return}
+  const a=e.target.closest('[data-age]'); if(a){draft.age=+a.dataset.age;paintDraft();return}
+  const c=e.target.closest('[data-color]'); if(c){draft.color=c.dataset.color;paintDraft();return}
+});
+renderKids();
+
 function steps(){ $('#steps').innerHTML=ORDER.map(s=>`<button data-go="${s}" ${s===cur?'aria-current="step"':''}>${NAMES[s]}</button>`).join('') }
 function fine(){ $('#fine').textContent=`مجاناً ${TRIAL_DAYS} يوم، بعدها ${PLANS[plan].price}. بتلغي بأي وقت من إعدادات الآيفون.` }
 
 /* signed in: new parents go to the trial, returning parents go straight in */
 function signedIn(){
   if(mode==='login'){ $('#doneTitle').textContent='أهلاً من جديد!'; $('#doneSub').textContent='عم نفتح عيلتك…'; go('done') }
-  else go('trial');
+  else go('family');
 }
 const okEmail=v=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim());
 function check(){
@@ -316,7 +412,7 @@ $('#emailForm').addEventListener('submit',e=>{e.preventDefault(); if(!$('#emailB
 function sheet(open){ $('#scrim').classList.toggle('show',open); $('#sheet').classList.toggle('show',open); if(!open) $('#sheet').classList.remove('paying') }
 $('#startTrial').addEventListener('click',()=>{ $('#sheetPlan').textContent=PLANS[plan].name; $('#sheetPrice').textContent=PLANS[plan].price; sheet(true) });
 $('#sheetClose').addEventListener('click',()=>sheet(false));
-$('#scrim').addEventListener('click',()=>sheet(false));
+$('#scrim').addEventListener('click',()=>{sheet(false);kidSheet(false)});
 $('#confirmBtn').addEventListener('click',()=>{
   $('#sheet').classList.add('paying');
   setTimeout(()=>{ sheet(false); $('#doneTitle').textContent='تجربتك بلّشت!';
