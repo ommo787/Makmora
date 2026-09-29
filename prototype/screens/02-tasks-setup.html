@@ -88,6 +88,20 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 .pick.new{background:transparent;box-shadow:inset 0 0 0 1.5px rgba(60,60,67,.18);color:var(--blue)}
 .pick.new .glyph{background:rgba(0,122,255,.12);color:var(--blue);box-shadow:none}
 
+/* task list with delete */
+.tlist .row{min-height:60px}
+.tlist .t b{font-size:17px;font-weight:500}
+.del{width:30px;height:30px;border-radius:50%;background:rgba(118,118,128,.14);color:var(--label-2);display:grid;place-items:center;flex:none;transition:transform .3s var(--spring)}
+.del:active{transform:scale(.85)}
+.del svg{width:14px;height:14px}
+.addrow{color:var(--blue);font-size:17px}
+.addrow .glyph{background:rgba(0,122,255,.12);color:var(--blue);box-shadow:none}
+.row.leaving{animation:leave .3s var(--out) forwards}
+@keyframes leave{to{opacity:0;transform:translateX(-30px)}}
+.empty{padding:22px 16px;text-align:center;color:var(--label-2);font-size:15px}
+.lib{grid-template-columns:repeat(3,1fr);margin-top:0}
+.lib .pick{background:#fff}
+.addbtn{height:44px;margin-top:12px}
 /* grouped list */
 .group{margin-top:22px;background:#fff;border-radius:26px;overflow:hidden;flex:none}
 .row{display:flex;align-items:center;gap:12px;min-height:64px;padding:8px 16px;position:relative;width:100%;text-align:start}
@@ -99,7 +113,10 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 .stepper button{width:40px;height:36px;display:grid;place-items:center;border-radius:99px}
 .stepper button:active{background:rgba(118,118,128,.2)}
 .stepper button svg{width:16px;height:16px}
-.stepper .v{min-width:44px;display:flex;align-items:center;justify-content:center;gap:4px;font-weight:600;font-size:16px;font-variant-numeric:tabular-nums}
+.stepper .v{min-width:56px;display:flex;align-items:center;justify-content:center;gap:3px}
+.stepper input{width:34px;border:0;background:none;outline:none;text-align:center;font:600 16px var(--font);font-variant-numeric:tabular-nums;padding:0;-moz-appearance:textfield}
+.stepper input:focus{background:#fff;border-radius:8px}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .coin{width:18px;height:18px;flex:none}
 .total{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;font-size:15px;color:var(--label-2)}
 .total b{color:var(--label);display:inline-flex;align-items:center;gap:4px}
@@ -109,7 +126,9 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 .amount{margin-top:22px;background:#fff;border-radius:26px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .amount .lbl{font-size:15px;color:var(--label-2)}
 .amount .big{display:flex;align-items:center;gap:18px;direction:ltr}
-.amount .big .n{font-size:44px;font-weight:700;min-width:110px;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;font-variant-numeric:tabular-nums}
+.amount .big .n{display:flex;align-items:center;justify-content:center;gap:6px}
+.amount .big input{width:120px;border:0;outline:none;background:none;text-align:center;font:700 44px var(--font);font-variant-numeric:tabular-nums;padding:0;border-radius:14px;-moz-appearance:textfield}
+.amount .big input:focus{background:var(--grouped)}
 .amount .big .n .coin{width:30px;height:30px}
 .amount .big button{width:44px;height:44px;border-radius:50%;background:rgba(118,118,128,.12);display:grid;place-items:center}
 .amount .big button svg{width:20px;height:20px}
@@ -117,6 +136,9 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 .amount .eta b{color:var(--green)}
 .namerow{margin-top:14px;background:#fff;border-radius:26px;display:flex;align-items:center;padding:0 16px;min-height:52px}
 .namerow label{width:80px;font-size:17px}
+.namerow .glyph{margin-inline-start:10px}
+.autonote{font-size:13px;color:var(--label-2);padding:8px 16px 0;display:flex;align-items:center;gap:6px}
+.autonote svg{width:14px;height:14px;color:var(--purple,#AF52DE)}
 .namerow input{flex:1;height:52px;border:0;outline:none;background:none;font:17px var(--font)}
 
 /* sheets */
@@ -190,7 +212,7 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 
 <script>
 /* ---------- icons: Lucide (ISC) outlines + two custom glyphs on the same grid ---------- */
-const IC = {"bed":"<path d=\"M2 4v16\" /><path d=\"M2 8h18a2 2 0 0 1 2 2v10\" /><path d=\"M2 17h20\" /><path d=\"M6 8v9\" />","book-open":"<path d=\"M12 7v14\" /><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\" />","backpack":"<path d=\"M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z\" /><path d=\"M8 10h8\" /><path d=\"M8 18h8\" /><path d=\"M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6\" /><path d=\"M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2\" />","droplets":"<path d=\"M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z\" /><path d=\"M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97\" />","shirt":"<path d=\"M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z\" />","trash-2":"<path d=\"M3 6h18\" /><path d=\"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6\" /><path d=\"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2\" /><line x1=\"10\" x2=\"10\" y1=\"11\" y2=\"17\" /><line x1=\"14\" x2=\"14\" y1=\"11\" y2=\"17\" />","moon":"<path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\" />","paw-print":"<circle cx=\"11\" cy=\"4\" r=\"2\" /><circle cx=\"18\" cy=\"8\" r=\"2\" /><circle cx=\"20\" cy=\"16\" r=\"2\" /><path d=\"M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z\" />","pencil":"<path d=\"M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z\" /><path d=\"m15 5 4 4\" />","utensils":"<path d=\"M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2\" /><path d=\"M7 2v20\" /><path d=\"M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7\" />","sprout":"<path d=\"M7 20h10\" /><path d=\"M10 20c5.5-2.5.8-6.4 3-10\" /><path d=\"M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z\" /><path d=\"M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z\" />","shower-head":"<path d=\"m4 4 2.5 2.5\" /><path d=\"M13.5 6.5a4.95 4.95 0 0 0-7 7\" /><path d=\"M15 5 5 15\" /><path d=\"M14 17v.01\" /><path d=\"M10 16v.01\" /><path d=\"M13 13v.01\" /><path d=\"M16 10v.01\" /><path d=\"M11 20v.01\" /><path d=\"M17 14v.01\" /><path d=\"M20 11v.01\" />","toy-brick":"<rect width=\"18\" height=\"12\" x=\"3\" y=\"8\" rx=\"1\" /><path d=\"M10 8V5c0-.6-.4-1-1-1H6a1 1 0 0 0-1 1v3\" /><path d=\"M19 8V5c0-.6-.4-1-1-1h-3a1 1 0 0 0-1 1v3\" />","bike":"<circle cx=\"18.5\" cy=\"17.5\" r=\"3.5\" /><circle cx=\"5.5\" cy=\"17.5\" r=\"3.5\" /><circle cx=\"15\" cy=\"5\" r=\"1\" /><path d=\"M12 17.5V14l-3-3 4-3 2 3h2\" />","gamepad-2":"<line x1=\"6\" x2=\"10\" y1=\"11\" y2=\"11\" /><line x1=\"8\" x2=\"8\" y1=\"9\" y2=\"13\" /><line x1=\"15\" x2=\"15.01\" y1=\"12\" y2=\"12\" /><line x1=\"18\" x2=\"18.01\" y1=\"10\" y2=\"10\" /><path d=\"M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z\" />","camera":"<path d=\"M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z\" /><circle cx=\"12\" cy=\"13\" r=\"3\" />","palette":"<circle cx=\"13.5\" cy=\"6.5\" r=\".5\" fill=\"currentColor\" /><circle cx=\"17.5\" cy=\"10.5\" r=\".5\" fill=\"currentColor\" /><circle cx=\"8.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\" /><circle cx=\"6.5\" cy=\"12.5\" r=\".5\" fill=\"currentColor\" /><path d=\"M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z\" />","gift":"<rect x=\"3\" y=\"8\" width=\"18\" height=\"4\" rx=\"1\" /><path d=\"M12 8v13\" /><path d=\"M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7\" /><path d=\"M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5\" />","plane":"<path d=\"M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z\" />","headphones":"<path d=\"M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3\" />","puzzle":"<path d=\"M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z\" />","volleyball":"<path d=\"M11.1 7.1a16.55 16.55 0 0 1 10.9 4\" /><path d=\"M12 12a12.6 12.6 0 0 1-8.7 5\" /><path d=\"M16.8 13.6a16.55 16.55 0 0 1-9 7.5\" /><path d=\"M20.7 17a12.8 12.8 0 0 0-8.7-5 13.3 13.3 0 0 1 0-10\" /><path d=\"M6.3 3.8a16.55 16.55 0 0 0 1.9 11.5\" /><circle cx=\"12\" cy=\"12\" r=\"10\" />","book":"<path d=\"M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20\" />","sparkles":"<path d=\"M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z\" /><path d=\"M20 3v4\" /><path d=\"M22 5h-4\" /><path d=\"M4 17v2\" /><path d=\"M5 18H3\" />","hand-heart":"<path d=\"M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16\" /><path d=\"m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9\" /><path d=\"m2 15 6 6\" /><path d=\"M19.5 8.5c.7-.7 1.5-1.6 1.5-2.7A2.73 2.73 0 0 0 16 4a2.78 2.78 0 0 0-5 1.8c0 1.2.8 2 1.5 2.8L16 12Z\" />"};
+const IC = {"bed":"<path d=\"M2 4v16\" /><path d=\"M2 8h18a2 2 0 0 1 2 2v10\" /><path d=\"M2 17h20\" /><path d=\"M6 8v9\" />","book-open":"<path d=\"M12 7v14\" /><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\" />","backpack":"<path d=\"M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z\" /><path d=\"M8 10h8\" /><path d=\"M8 18h8\" /><path d=\"M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6\" /><path d=\"M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2\" />","droplets":"<path d=\"M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z\" /><path d=\"M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97\" />","shirt":"<path d=\"M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z\" />","trash-2":"<path d=\"M3 6h18\" /><path d=\"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6\" /><path d=\"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2\" /><line x1=\"10\" x2=\"10\" y1=\"11\" y2=\"17\" /><line x1=\"14\" x2=\"14\" y1=\"11\" y2=\"17\" />","moon":"<path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\" />","paw-print":"<circle cx=\"11\" cy=\"4\" r=\"2\" /><circle cx=\"18\" cy=\"8\" r=\"2\" /><circle cx=\"20\" cy=\"16\" r=\"2\" /><path d=\"M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z\" />","pencil":"<path d=\"M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z\" /><path d=\"m15 5 4 4\" />","utensils":"<path d=\"M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2\" /><path d=\"M7 2v20\" /><path d=\"M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7\" />","sprout":"<path d=\"M7 20h10\" /><path d=\"M10 20c5.5-2.5.8-6.4 3-10\" /><path d=\"M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z\" /><path d=\"M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z\" />","shower-head":"<path d=\"m4 4 2.5 2.5\" /><path d=\"M13.5 6.5a4.95 4.95 0 0 0-7 7\" /><path d=\"M15 5 5 15\" /><path d=\"M14 17v.01\" /><path d=\"M10 16v.01\" /><path d=\"M13 13v.01\" /><path d=\"M16 10v.01\" /><path d=\"M11 20v.01\" /><path d=\"M17 14v.01\" /><path d=\"M20 11v.01\" />","toy-brick":"<rect width=\"18\" height=\"12\" x=\"3\" y=\"8\" rx=\"1\" /><path d=\"M10 8V5c0-.6-.4-1-1-1H6a1 1 0 0 0-1 1v3\" /><path d=\"M19 8V5c0-.6-.4-1-1-1h-3a1 1 0 0 0-1 1v3\" />","bike":"<circle cx=\"18.5\" cy=\"17.5\" r=\"3.5\" /><circle cx=\"5.5\" cy=\"17.5\" r=\"3.5\" /><circle cx=\"15\" cy=\"5\" r=\"1\" /><path d=\"M12 17.5V14l-3-3 4-3 2 3h2\" />","gamepad-2":"<line x1=\"6\" x2=\"10\" y1=\"11\" y2=\"11\" /><line x1=\"8\" x2=\"8\" y1=\"9\" y2=\"13\" /><line x1=\"15\" x2=\"15.01\" y1=\"12\" y2=\"12\" /><line x1=\"18\" x2=\"18.01\" y1=\"10\" y2=\"10\" /><path d=\"M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z\" />","camera":"<path d=\"M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z\" /><circle cx=\"12\" cy=\"13\" r=\"3\" />","palette":"<circle cx=\"13.5\" cy=\"6.5\" r=\".5\" fill=\"currentColor\" /><circle cx=\"17.5\" cy=\"10.5\" r=\".5\" fill=\"currentColor\" /><circle cx=\"8.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\" /><circle cx=\"6.5\" cy=\"12.5\" r=\".5\" fill=\"currentColor\" /><path d=\"M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z\" />","gift":"<rect x=\"3\" y=\"8\" width=\"18\" height=\"4\" rx=\"1\" /><path d=\"M12 8v13\" /><path d=\"M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7\" /><path d=\"M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5\" />","plane":"<path d=\"M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z\" />","headphones":"<path d=\"M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3\" />","puzzle":"<path d=\"M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z\" />","volleyball":"<path d=\"M11.1 7.1a16.55 16.55 0 0 1 10.9 4\" /><path d=\"M12 12a12.6 12.6 0 0 1-8.7 5\" /><path d=\"M16.8 13.6a16.55 16.55 0 0 1-9 7.5\" /><path d=\"M20.7 17a12.8 12.8 0 0 0-8.7-5 13.3 13.3 0 0 1 0-10\" /><path d=\"M6.3 3.8a16.55 16.55 0 0 0 1.9 11.5\" /><circle cx=\"12\" cy=\"12\" r=\"10\" />","book":"<path d=\"M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20\" />","sparkles":"<path d=\"M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z\" /><path d=\"M20 3v4\" /><path d=\"M22 5h-4\" /><path d=\"M4 17v2\" /><path d=\"M5 18H3\" />","hand-heart":"<path d=\"M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16\" /><path d=\"m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9\" /><path d=\"m2 15 6 6\" /><path d=\"M19.5 8.5c.7-.7 1.5-1.6 1.5-2.7A2.73 2.73 0 0 0 16 4a2.78 2.78 0 0 0-5 1.8c0 1.2.8 2 1.5 2.8L16 12Z\" />","smartphone":"<rect width=\"14\" height=\"20\" x=\"5\" y=\"2\" rx=\"2\" ry=\"2\" /><path d=\"M12 18h.01\" />","tablet":"<rect width=\"16\" height=\"20\" x=\"4\" y=\"2\" rx=\"2\" ry=\"2\" /><line x1=\"12\" x2=\"12.01\" y1=\"18\" y2=\"18\" />","watch":"<circle cx=\"12\" cy=\"12\" r=\"6\" /><polyline points=\"12 10 12 12 13 13\" /><path d=\"m16.13 7.66-.81-4.05a2 2 0 0 0-2-1.61h-2.68a2 2 0 0 0-2 1.61l-.78 4.05\" /><path d=\"m7.88 16.36.8 4a2 2 0 0 0 2 1.61h2.72a2 2 0 0 0 2-1.61l.81-4.05\" />","laptop":"<path d=\"M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16\" />","footprints":"<path d=\"M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z\" /><path d=\"M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z\" /><path d=\"M16 17h4\" /><path d=\"M4 13h4\" />","cake-slice":"<circle cx=\"9\" cy=\"7\" r=\"2\" /><path d=\"M7.2 7.9 3 11v9c0 .6.4 1 1 1h16c.6 0 1-.4 1-1v-9c0-2-3-6-7-8l-3.6 2.6\" /><path d=\"M16 13H3\" /><path d=\"M16 17H3\" />","cat":"<path d=\"M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.84 6.42-2.26 1.4.58-.42 7-.42 7 .57 1.07 1 2.24 1 3.44C21 17.9 16.97 21 12 21s-9-3-9-7.56c0-1.25.5-2.4 1-3.44 0 0-1.89-6.42-.5-7 1.39-.58 4.72.23 6.5 2.23A9.04 9.04 0 0 1 12 5Z\" /><path d=\"M8 14v.5\" /><path d=\"M16 14v.5\" /><path d=\"M11.25 16.25h1.5L12 17l-.75-.75Z\" />","dog":"<path d=\"M11.25 16.25h1.5L12 17z\" /><path d=\"M16 14v.5\" /><path d=\"M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309\" /><path d=\"M8 14v.5\" /><path d=\"M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5\" />","tent":"<path d=\"M3.5 21 14 3\" /><path d=\"M20.5 21 10 3\" /><path d=\"M15.5 21 12 15l-3.5 6\" /><path d=\"M2 21h20\" />","ferris-wheel":"<circle cx=\"12\" cy=\"12\" r=\"2\" /><path d=\"M12 2v4\" /><path d=\"m6.8 15-3.5 2\" /><path d=\"m20.7 7-3.5 2\" /><path d=\"M6.8 9 3.3 7\" /><path d=\"m20.7 17-3.5-2\" /><path d=\"m9 22 3-8 3 8\" /><path d=\"M8 22h8\" /><path d=\"M18 18.7a9 9 0 1 0-12 0\" />","shopping-bag":"<path d=\"M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z\" /><path d=\"M3 6h18\" /><path d=\"M16 10a4 4 0 0 1-8 0\" />"};
 IC.toothbrush='<rect x="2" y="15" width="20" height="4" rx="2"/><path d="M14 15v-3"/><path d="M17 15v-4"/><path d="M20 15v-3"/><path d="M6 17h4"/>';
 IC.mosque='<path d="M3 21h18"/><path d="M6 21v-6h12v6"/><path d="M6 15a6 6 0 0 1 12 0"/><path d="M12 9V6.5"/><path d="M12 4.5v.01"/><path d="M10.5 21v-2.5a1.5 1.5 0 0 1 3 0V21"/>';
 IC.check='<path d="M20 6 9 17l-5-5"/>'; IC.plus='<path d="M12 5v14M5 12h14"/>'; IC.minus='<path d="M5 12h14"/>';
@@ -226,6 +248,31 @@ const GOALS=[
   {id:'ball',  name:'طابة',        icon:'volleyball', c:C.orange, amount:50},
   {id:'book',  name:'قصص',         icon:'book',       c:C.green,  amount:30},
 ];
+/* a custom goal gets an icon from its name (in the real app: an on-device model) */
+const GOAL_WORDS=[
+  [/بلاي|بلايستيشن|playstation|ps\d|اكس ?بوكس|xbox|نينتندو|nintendo|سويتش|switch|لعب[ةه] ?(الكترونية|فيديو)/i,'gamepad-2',C.indigo],
+  [/ايباد|آيباد|ipad|تابلت|tablet/i,'tablet',C.blue],
+  [/موبايل|جوال|تلفون|ايفون|آيفون|iphone|phone/i,'smartphone',C.blue],
+  [/لابتوب|كمبيوتر|laptop|computer/i,'laptop',C.teal],
+  [/ساعة|watch/i,'watch',C.pink],
+  [/سماعات|سماعة|headphone|airpods/i,'headphones',C.purple],
+  [/كاميرا|camera/i,'camera',C.brown],
+  [/سفر|رحلة|طيارة|trip/i,'plane',C.teal],
+  [/مدينة ملاهي|ملاهي|ألعاب|العاب/i,'ferris-wheel',C.pink],
+  [/تخييم|خيمة|camp/i,'tent',C.green],
+  [/دراجة|بسكليت|سكوتر|bike|scooter/i,'bike',C.red],
+  [/طابة|كرة|فوتبول|ball/i,'volleyball',C.orange],
+  [/ليغو|lego|مكعبات/i,'toy-brick',C.yellow],
+  [/قصص|كتاب|كتب|book/i,'book',C.green],
+  [/ألوان|الوان|رسم|palette/i,'palette',C.pink],
+  [/بوط|حذاء|شوز|shoes/i,'footprints',C.orange],
+  [/قطة|بسة|cat/i,'cat',C.orange],
+  [/كلب|dog/i,'dog',C.brown],
+  [/كيك|حلو|cake/i,'cake-slice',C.pink],
+  [/لبس|ملابس|تيشيرت|فستان/i,'shirt',C.purple],
+  [/بازل|puzzle/i,'puzzle',C.green],
+];
+function iconFor(name){ for(const [re,icon,c] of GOAL_WORDS) if(re.test(name)) return {icon,c}; return {icon:'gift',c:C.purple}; }
 const CUSTOM_ICONS=['sparkles','hand-heart','paw-print','trash-2','shower-head','utensils','sprout','moon','shirt','pencil','book-open','droplets'];
 const CUSTOM_COLORS=[C.red,C.orange,C.yellow,C.green,C.teal,C.blue,C.purple,C.pink];
 const DAYS=['سبت','أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة'];
@@ -253,13 +300,14 @@ function nav(i,canBack=true){ const k=kids[i]; return `<div class="nav">${canBac
 
 /* ---------- screens ---------- */
 function tasksScreen(i){
-  const k=kids[i], chosen=new Set(k.tasks.map(t=>t.id));
-  const all=[...SUGGEST,...k.custom];
+  const k=kids[i];
   return `${nav(i,at>0)}
-    <h1>شو بدك ${esc(k.name)} يعمل كل يوم؟</h1>
-    <div class="sub">اخترنالك حسب عمره (${k.age} ${k.age>10?'سنة':'سنين'}). كبسة لتضيف أو تشيل.</div>
-    <div class="grid">${all.map(t=>`<button class="pick" aria-pressed="${chosen.has(t.id)}" data-task="${t.id}"><span class="ok">${ic('check',3.2)}</span>${glyph(t.icon,t.c)}${esc(t.name)}</button>`).join('')}
-      <button class="pick new" data-newtask>${glyph('plus',C.blue)}مهمة جديدة</button></div>
+    <h1>مهام ${esc(k.name)} اليومية</h1>
+    <div class="sub">جهّزنالك مهام حسب عمره (${k.age} ${k.age>10?'سنة':'سنين'}). احذف أو ضيف متل ما بدك.</div>
+    <div class="group tlist">${k.tasks.map((t,n)=>`<div class="row" data-row="${t.id}">${glyph(t.icon,t.c,'sm')}<span class="t"><b>${esc(t.name)}</b></span>
+      <button class="del" data-remove="${t.id}" aria-label="حذف ${esc(t.name)}">${ic('x',3)}</button></div>`).join('')}
+      ${k.tasks.length?'':'<div class="empty">ما في مهام لسا</div>'}
+      <button class="row addrow" data-addtasks>${glyph('plus',C.blue,'sm')}إضافة مهمة</button></div>
     <div class="bottom"><button class="btn filled" data-next ${k.tasks.length?'':'disabled'}>التالي</button>
       <div class="hint">${k.tasks.length} مهام · فيك تغيّرهم بعدين</div></div>`;
 }
@@ -270,23 +318,26 @@ function valuesScreen(i){
     <div class="sub">هدول النقاط يلي بتنزل بمكمورة ${esc(k.name)} لما توافق على المهمة.</div>
     <div class="group">${k.tasks.map((t,n)=>`<div class="row">${glyph(t.icon,t.c,'sm')}
       <button class="t" data-days="${n}" style="text-align:start"><b>${esc(t.name)}</b><span>${daysLabel(t.days)}</span></button>
-      <span class="stepper"><button data-val="${n}" data-d="-1" aria-label="أقل">${ic('minus',2.6)}</button><span class="v">${t.value}${coin()}</span><button data-val="${n}" data-d="1" aria-label="أكتر">${ic('plus',2.6)}</button></span></div>`).join('')}</div>
-    <div class="total">بيقدر يجمع لحد <b>${perDay(k)}${coin()}</b> باليوم</div>
+      <span class="stepper"><button data-val="${n}" data-d="-1" aria-label="أقل">${ic('minus',2.6)}</button><span class="v"><input type="number" inputmode="numeric" min="0" max="999" value="${t.value}" data-valin="${n}" aria-label="نقاط ${esc(t.name)}">${coin()}</span><button data-val="${n}" data-d="1" aria-label="أكتر">${ic('plus',2.6)}</button></span></div>`).join('')}</div>
+    <div class="total">بيقدر يجمع لحد <b id="perday">${perDay(k)}</b><b>${coin()}</b> باليوم</div>
     <div class="bottom"><button class="btn filled" data-next>التالي</button></div>`;
 }
 function goalScreen(i){
-  const k=kids[i], g=k.goal, days=g?Math.ceil(g.amount/Math.max(1,perDay(k))):0;
+  const k=kids[i], g=k.goal;
   return `${nav(i)}
     <h1>شو بيحلم ${esc(k.name)}؟</h1>
     <div class="sub">هدف يجمعله. اسأله، وخلّيه يختار معك.</div>
-    <div class="goals">${GOALS.map(o=>`<button class="pick" aria-pressed="${g&&g.id===o.id}" data-goal="${o.id}"><span class="ok">${ic('check',3.2)}</span>${glyph(o.icon,o.c)}${o.name}</button>`).join('')}</div>
-    ${g?`<div class="namerow"><label for="gname">الهدف</label><input id="gname" value="${esc(g.name)}" data-gname></div>
+    <div class="goals">${GOALS.map(o=>`<button class="pick" aria-pressed="${g&&g.id===o.id}" data-goal="${o.id}"><span class="ok">${ic('check',3.2)}</span>${glyph(o.icon,o.c)}${o.name}</button>`).join('')}
+      <button class="pick new" aria-pressed="${g&&g.id==='custom'}" data-goal="custom"><span class="ok">${ic('check',3.2)}</span>${glyph('plus',C.blue)}شي تاني</button></div>
+    ${g?`<div class="namerow"><label for="gname">الهدف</label><input id="gname" value="${esc(g.name)}" placeholder="مثلاً: بلاي ستيشن" data-gname autocomplete="off"><span id="gicon">${glyph(g.icon,g.c,'sm')}</span></div>
+      ${g.id==='custom'?`<div class="autonote">${ic('sparkles')}بنختار الأيقونة حسب الاسم</div>`:''}
       <div class="amount"><span class="lbl">بيحتاج يجمع</span>
-        <div class="big"><button data-amt="-10" aria-label="أقل">${ic('minus',2.6)}</button><span class="n">${g.amount}${coin()}</span><button data-amt="10" aria-label="أكتر">${ic('plus',2.6)}</button></div>
-        <span class="eta">إذا خلّص كل مهامه، بيوصل خلال <b>${days} ${days>2&&days<11?'أيام':'يوم'}</b> تقريباً</span></div>`:''}
-    <div class="bottom"><button class="btn filled" data-next>${!g?'تخطّى هلأ':i<kids.length-1?`التالي: ${esc(kids[i+1].name)}`:'خلصنا'}</button>
+        <div class="big"><button data-amt="-10" aria-label="أقل">${ic('minus',2.6)}</button><span class="n"><input type="number" inputmode="numeric" min="1" max="99999" value="${g.amount}" id="gamount" aria-label="قديش بيحتاج">${coin()}</span><button data-amt="10" aria-label="أكتر">${ic('plus',2.6)}</button></div>
+        <span class="eta" id="eta">${etaText(k)}</span></div>`:''}
+    <div class="bottom"><button class="btn filled" data-next ${g&&!g.name.trim()?'disabled':''}>${!g?'تخطّى هلأ':i<kids.length-1?`التالي: ${esc(kids[i+1].name)}`:'خلصنا'}</button>
       ${g?'':'<div class="hint">فيك تحدده بعدين مع '+esc(k.name)+'</div>'}</div>`;
 }
+function etaText(k){ const d=Math.ceil(k.goal.amount/Math.max(1,perDay(k))); return perDay(k)?`إذا خلّص كل مهامه، بيوصل خلال <b>${d} ${d>2&&d<11?'أيام':'يوم'}</b> تقريباً`:'ما في مهام عليها نقاط لسا'; }
 function readyScreen(){
   return `<div class="spacer"></div>
     <div class="burst">${ic('check',3)}</div>
@@ -317,19 +368,24 @@ function steps(){
 }
 
 /* ---------- sheets ---------- */
-function openSheet(html,short){ $('#sheets').innerHTML=`<div class="sheet ${short?'short':''}" role="dialog">${html}</div>`; requestAnimationFrame(()=>{ $('#scrim').classList.add('show'); $('#sheets .sheet').classList.add('show') }) }
+function openSheet(html,short){ const cur=$('#sheets .sheet.show'); if(cur){ const y=cur.scrollTop; cur.innerHTML=html; cur.scrollTop=y; return }
+  $('#sheets').innerHTML=`<div class="sheet ${short?'short':''}" role="dialog">${html}</div>`; requestAnimationFrame(()=>{ $('#scrim').classList.add('show'); $('#sheets .sheet').classList.add('show') }) }
 function closeSheet(){ const s=$('#sheets .sheet'); $('#scrim').classList.remove('show'); if(s){ s.classList.remove('show'); setTimeout(()=>{ if(!s.classList.contains('show')) s.remove() },450) } }
 
 let draft=null;
-function newTaskSheet(){
-  const d=draft;
-  openSheet(`<div class="ksbar"><button data-close>إلغاء</button><b>مهمة جديدة</b><button class="done" data-addtask ${d.name.trim()?'':'disabled'}>إضافة</button></div>
-    <div class="preview">${glyph(d.icon,d.c)}</div>
-    <div class="field"><label for="tname">الاسم</label><input id="tname" placeholder="مثلاً: إطعام القطة" value="${esc(d.name)}" autocomplete="off"></div>
+function addSheet(){
+  const k=kids[FLOW[at][1]], d=draft, have=new Set(k.tasks.map(t=>t.id));
+  const lib=[...SUGGEST,...k.custom].filter(t=>!have.has(t.id));
+  openSheet(`<div class="ksbar"><span></span><b>إضافة مهمة</b><button class="done" data-close>تم</button></div>
+    <div class="slabel" style="margin-top:4px">مهام جاهزة</div>
+    ${lib.length?`<div class="grid lib">${lib.map(t=>`<button class="pick" data-libadd="${t.id}">${glyph(t.icon,t.c)}${esc(t.name)}</button>`).join('')}</div>`:'<div class="empty" style="background:#fff;border-radius:26px">كل المهام الجاهزة مضافة</div>'}
+    <div class="slabel">أو اكتب مهمة جديدة</div>
+    <div class="field" style="margin-top:0"><span class="glyph sm" style="--c:${d.c};margin-inline-end:12px">${ic(d.icon,2.3)}</span><input id="tname" placeholder="مثلاً: إطعام القطة" value="${esc(d.name)}" autocomplete="off"></div>
     <div class="slabel">الأيقونة</div>
     <div class="icons" style="--c:${d.c}">${CUSTOM_ICONS.map(n=>`<button aria-pressed="${d.icon===n}" data-icon="${n}" aria-label="${n}">${ic(n)}</button>`).join('')}</div>
     <div class="slabel">اللون</div>
-    <div class="colors">${CUSTOM_COLORS.map(c=>`<button style="--c:${c}" aria-pressed="${d.c===c}" data-color="${c}" aria-label="لون"></button>`).join('')}</div>`);
+    <div class="colors">${CUSTOM_COLORS.map(c=>`<button style="--c:${c}" aria-pressed="${d.c===c}" data-color="${c}" aria-label="لون"></button>`).join('')}</div>
+    <button class="btn filled" data-addtask ${d.name.trim()?'':'disabled'}>إضافة «${esc(d.name.trim()||'المهمة')}»</button>`);
 }
 function daysSheet(n){
   const t=kids[FLOW[at][1]].tasks[n], d=t.days;
@@ -346,25 +402,33 @@ document.addEventListener('click',e=>{
   if(t.dataset.jump!=null){ const n=+t.dataset.jump; const d=n>at?1:-1; at=n; closeSheet(); render(d); return }
   if('next' in t.dataset){ if(t.disabled) return; at=Math.min(FLOW.length-1,at+1); render(1); return }
   if('back' in t.dataset){ at=Math.max(0,at-1); render(-1); return }
-  if('close' in t.dataset){ closeSheet(); if(FLOW[at][0]==='values') refresh(); return }
-  if(t.dataset.task){ const id=t.dataset.task, has=k.tasks.findIndex(x=>x.id===id);
-    if(has>=0) k.tasks.splice(has,1); else { const src=[...SUGGEST,...k.custom].find(x=>x.id===id); k.tasks.push({...src,value:2,days:[...EVERY]}) }
-    refresh(); return }
-  if('newtask' in t.dataset){ draft={name:'',icon:'sparkles',c:C.purple}; newTaskSheet(); return }
-  if(t.dataset.icon){ draft.icon=t.dataset.icon; newTaskSheet(); return }
-  if(t.dataset.color){ draft.c=t.dataset.color; newTaskSheet(); return }
-  if('addtask' in t.dataset){ if(t.disabled) return; const c={id:'c'+Date.now(),name:draft.name.trim(),icon:draft.icon,c:draft.c}; k.custom.push(c); k.tasks.push({...c,value:2,days:[...EVERY]}); closeSheet(); refresh(); return }
-  if(t.dataset.val!=null){ const x=k.tasks[+t.dataset.val]; x.value=Math.max(1,Math.min(20,x.value+(+t.dataset.d))); refresh(); return }
+  if('close' in t.dataset){ closeSheet(); refresh(); return }
+  if(t.dataset.remove){ const row=t.closest('.row'); row.classList.add('leaving'); setTimeout(()=>{ k.tasks=k.tasks.filter(x=>x.id!==t.dataset.remove); refresh() },260); return }
+  if('addtasks' in t.dataset){ draft={name:'',icon:'sparkles',c:C.purple}; addSheet(); return }
+  if(t.dataset.libadd){ const src=[...SUGGEST,...k.custom].find(x=>x.id===t.dataset.libadd); k.tasks.push({...src,value:2,days:[...EVERY]}); addSheet(); return }
+  if(t.dataset.icon){ draft.icon=t.dataset.icon; addSheet(); return }
+  if(t.dataset.color){ draft.c=t.dataset.color; addSheet(); return }
+  if('addtask' in t.dataset){ if(t.disabled) return; const c={id:'c'+Date.now(),name:draft.name.trim(),icon:draft.icon,c:draft.c}; k.custom.push(c); k.tasks.push({...c,value:2,days:[...EVERY]}); draft={name:'',icon:'sparkles',c:C.purple}; addSheet(); return }
+  if(t.dataset.val!=null){ const x=k.tasks[+t.dataset.val]; x.value=Math.max(0,Math.min(999,x.value+(+t.dataset.d))); refresh(); return }
   if(t.dataset.days!=null){ daysSheet(+t.dataset.days); return }
   if(t.dataset.day!=null){ const x=k.tasks[+t.dataset.t]; x.days[+t.dataset.day]=!x.days[+t.dataset.day]; if(!x.days.some(Boolean)) x.days[+t.dataset.day]=true; daysSheet(+t.dataset.t); return }
   if(t.dataset.preset){ const x=k.tasks[+t.dataset.t]; x.days=[...(t.dataset.preset==='every'?EVERY:SCHOOL)]; daysSheet(+t.dataset.t); return }
-  if(t.dataset.goal){ const o=GOALS.find(g=>g.id===t.dataset.goal); k.goal={...o}; refresh(); return }
-  if(t.dataset.amt){ k.goal.amount=Math.max(10,Math.min(2000,k.goal.amount+(+t.dataset.amt))); refresh(); return }
+  if(t.dataset.goal){ if(t.dataset.goal==='custom'){ k.goal={id:'custom',name:'',icon:'gift',c:C.purple,amount:100}; refresh(); setTimeout(()=>$('#gname')&&$('#gname').focus(),50) } else { k.goal={...GOALS.find(g=>g.id===t.dataset.goal)}; refresh() } return }
+  if(t.dataset.amt){ k.goal.amount=Math.max(1,Math.min(99999,k.goal.amount+(+t.dataset.amt))); refresh(); return }
 });
 document.addEventListener('input',e=>{
-  if(e.target.id==='tname'){ draft.name=e.target.value; const b=document.querySelector('[data-addtask]'); if(b) b.disabled=!draft.name.trim() }
-  if(e.target.dataset.gname!=null){ const k=kids[FLOW[at][1]]; k.goal.name=e.target.value }
+  const el=e.target, k=kids[FLOW[at][1]];
+  if(el.id==='tname'){ draft.name=el.value; const b=document.querySelector('[data-addtask]'); if(b){ b.disabled=!draft.name.trim(); b.textContent=`إضافة «${draft.name.trim()||'المهمة'}»` } }
+  if(el.dataset.valin!=null){ const v=parseInt(el.value,10); k.tasks[+el.dataset.valin].value=isNaN(v)?0:Math.max(0,Math.min(999,v)); $('#perday').textContent=perDay(k) }
+  if(el.dataset.gname!=null){ k.goal.name=el.value;
+    if(k.goal.id==='custom'){ Object.assign(k.goal,iconFor(el.value)); $('#gicon').innerHTML=glyph(k.goal.icon,k.goal.c,'sm') }
+    const nb=document.querySelector('[data-next]'); if(nb) nb.disabled=!el.value.trim() }
+  if(el.id==='gamount'){ const v=parseInt(el.value,10); k.goal.amount=isNaN(v)||v<1?1:Math.min(99999,v); $('#eta').innerHTML=etaText(k) }
 });
+/* clean up a typed number when leaving the field */
+document.addEventListener('focusout',e=>{ const el=e.target, k=kids[FLOW[at][1]]; if(!k) return;
+  if(el.dataset.valin!=null) el.value=k.tasks[+el.dataset.valin].value;
+  if(el.id==='gamount') el.value=k.goal.amount; });
 $('#scrim').addEventListener('click',()=>{ closeSheet(); if(FLOW[at][0]==='values') refresh() });
 render(1);
 </script>
