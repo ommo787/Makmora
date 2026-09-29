@@ -72,7 +72,7 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 .hint{text-align:center;font-size:13px;color:var(--label-2);margin-top:10px}
 
 /* app-style icon tile (like iOS Settings / Reminders) */
-.glyph{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;color:#fff;background:var(--c);box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 2px 6px color-mix(in srgb, var(--c) 40%, transparent);flex:none}
+.glyph{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;color:var(--c);background:color-mix(in srgb, var(--c) 12%, #fff);flex:none}
 .glyph svg{width:28px;height:28px}
 .glyph.sm{width:36px;height:36px;border-radius:10px}
 .glyph.sm svg{width:21px;height:21px}
@@ -86,7 +86,7 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 .pick .ok svg{width:13px;height:13px}
 .pick[aria-pressed="true"] .ok{transform:scale(1)}
 .pick.new{background:transparent;box-shadow:inset 0 0 0 1.5px rgba(60,60,67,.18);color:var(--blue)}
-.pick.new .glyph{background:rgba(0,122,255,.12);color:var(--blue);box-shadow:none}
+.pick.new .glyph{background:transparent;color:var(--blue)}
 
 /* task list with delete */
 .tlist .row{min-height:60px}
@@ -229,58 +229,67 @@ const glyph=(icon,c,sm='')=>`<span class="glyph ${sm}" style="--c:${c}">${ic(ico
 const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 
 /* iOS system colours */
+const TASK='#007AFF', GOAL='#FF9500';  // one calm accent each
 const C={red:'#FF3B30',orange:'#FF9500',yellow:'#FFCC00',green:'#34C759',mint:'#00C7BE',teal:'#30B0C7',blue:'#007AFF',indigo:'#5856D6',purple:'#AF52DE',pink:'#FF2D55',brown:'#A2845E'};
 
 /* suggested tasks; `ages` = the range where it is pre-selected */
 const SUGGEST=[
-  {id:'teeth', name:'تفريش الأسنان', icon:'toothbrush', c:C.teal,   ages:[3,15]},
-  {id:'bed',   name:'ترتيب السرير',  icon:'bed',        c:C.indigo, ages:[5,15]},
-  {id:'pray',  name:'الصلاة',        icon:'mosque',     c:C.green,  ages:[7,15]},
-  {id:'read',  name:'القراءة',       icon:'book-open',  c:C.orange, ages:[6,15]},
-  {id:'bag',   name:'تجهيز الشنطة',  icon:'backpack',   c:C.brown,  ages:[6,15]},
-  {id:'hw',    name:'الوظايف',       icon:'pencil',     c:C.blue,   ages:[8,15]},
-  {id:'toys',  name:'ترتيب الألعاب', icon:'toy-brick',  c:C.pink,   ages:[3,7]},
-  {id:'water', name:'شرب المي',      icon:'droplets',   c:C.teal,   ages:[3,6]},
-  {id:'dress', name:'لبس لحالي',     icon:'shirt',      c:C.purple, ages:[3,6]},
-  {id:'table', name:'تجهيز السفرة',  icon:'utensils',   c:C.red,    ages:[99,99]},
-  {id:'plant', name:'سقاية الزرع',   icon:'sprout',     c:C.green,  ages:[99,99]},
-  {id:'sleep', name:'النوم بكير',    icon:'moon',       c:C.indigo, ages:[99,99]},
+  {id:'teeth', name:'تفريش الأسنان', icon:'toothbrush', c:TASK,   ages:[3,15]},
+  {id:'bed',   name:'ترتيب السرير',  icon:'bed',        c:TASK, ages:[5,15]},
+  {id:'pray',  name:'الصلاة',        icon:'mosque',     c:TASK,  ages:[7,15]},
+  {id:'read',  name:'القراءة',       icon:'book-open',  c:TASK, ages:[6,15]},
+  {id:'bag',   name:'تجهيز الشنطة',  icon:'backpack',   c:TASK,  ages:[6,15]},
+  {id:'hw',    name:'الوظايف',       icon:'pencil',     c:TASK,   ages:[8,15]},
+  {id:'toys',  name:'ترتيب الألعاب', icon:'toy-brick',  c:TASK,   ages:[3,7]},
+  {id:'water', name:'شرب المي',      icon:'droplets',   c:TASK,   ages:[3,6]},
+  {id:'dress', name:'لبس لحالي',     icon:'shirt',      c:TASK, ages:[3,6]},
+  {id:'table', name:'تجهيز السفرة',  icon:'utensils',   c:TASK,    ages:[99,99]},
+  {id:'plant', name:'سقاية الزرع',   icon:'sprout',     c:TASK,  ages:[99,99]},
+  {id:'sleep', name:'النوم بكير',    icon:'moon',       c:TASK, ages:[99,99]},
 ];
 const GOALS=[
-  {id:'bike',  name:'دراجة',       icon:'bike',       c:C.red,    amount:120},
-  {id:'game',  name:'لعبة إلكترونية', icon:'gamepad-2', c:C.indigo, amount:200},
-  {id:'lego',  name:'ليغو',        icon:'toy-brick',  c:C.yellow, amount:80},
-  {id:'art',   name:'علبة ألوان',   icon:'palette',    c:C.pink,   amount:40},
-  {id:'ball',  name:'طابة',        icon:'volleyball', c:C.orange, amount:50},
-  {id:'book',  name:'قصص',         icon:'book',       c:C.green,  amount:30},
+  {id:'bike',  name:'دراجة',       icon:'bike',       c:GOAL,    amount:120},
+  {id:'game',  name:'لعبة إلكترونية', icon:'gamepad-2', c:GOAL, amount:200},
+  {id:'lego',  name:'ليغو',        icon:'toy-brick',  c:GOAL, amount:80},
+  {id:'art',   name:'علبة ألوان',   icon:'palette',    c:GOAL,   amount:40},
+  {id:'ball',  name:'طابة',        icon:'volleyball', c:GOAL, amount:50},
+  {id:'book',  name:'قصص',         icon:'book',       c:GOAL,  amount:30},
 ];
 /* a custom goal gets an icon from its name (in the real app: an on-device model) */
 const GOAL_WORDS=[
-  [/بلاي|بلايستيشن|playstation|ps\d|اكس ?بوكس|xbox|نينتندو|nintendo|سويتش|switch|لعب[ةه] ?(الكترونية|فيديو)/i,'gamepad-2',C.indigo],
-  [/ايباد|آيباد|ipad|تابلت|tablet/i,'tablet',C.blue],
-  [/موبايل|جوال|تلفون|ايفون|آيفون|iphone|phone/i,'smartphone',C.blue],
-  [/لابتوب|كمبيوتر|laptop|computer/i,'laptop',C.teal],
-  [/ساعة|watch/i,'watch',C.pink],
-  [/سماعات|سماعة|headphone|airpods/i,'headphones',C.purple],
-  [/كاميرا|camera/i,'camera',C.brown],
-  [/سفر|رحلة|طيارة|trip/i,'plane',C.teal],
-  [/مدينة ملاهي|ملاهي|ألعاب|العاب/i,'ferris-wheel',C.pink],
-  [/تخييم|خيمة|camp/i,'tent',C.green],
-  [/دراجة|بسكليت|سكوتر|bike|scooter/i,'bike',C.red],
-  [/طابة|كرة|فوتبول|ball/i,'volleyball',C.orange],
-  [/ليغو|lego|مكعبات/i,'toy-brick',C.yellow],
-  [/قصص|كتاب|كتب|book/i,'book',C.green],
-  [/ألوان|الوان|رسم|palette/i,'palette',C.pink],
-  [/بوط|حذاء|شوز|shoes/i,'footprints',C.orange],
-  [/قطة|بسة|cat/i,'cat',C.orange],
-  [/كلب|dog/i,'dog',C.brown],
-  [/كيك|حلو|cake/i,'cake-slice',C.pink],
-  [/لبس|ملابس|تيشيرت|فستان/i,'shirt',C.purple],
-  [/بازل|puzzle/i,'puzzle',C.green],
+  [/بلاي|بلايستيشن|playstation|ps\d|اكس ?بوكس|xbox|نينتندو|nintendo|سويتش|switch|لعب[ةه] ?(الكترونية|فيديو)/i,'gamepad-2',GOAL],
+  [/ايباد|آيباد|ipad|تابلت|tablet/i,'tablet',GOAL],
+  [/موبايل|جوال|تلفون|ايفون|آيفون|iphone|phone/i,'smartphone',GOAL],
+  [/لابتوب|كمبيوتر|laptop|computer/i,'laptop',GOAL],
+  [/ساعة|watch/i,'watch',GOAL],
+  [/سماعات|سماعة|headphone|airpods/i,'headphones',GOAL],
+  [/كاميرا|camera/i,'camera',GOAL],
+  [/سفر|رحلة|طيارة|trip/i,'plane',GOAL],
+  [/مدينة ملاهي|ملاهي|ألعاب|العاب/i,'ferris-wheel',GOAL],
+  [/تخييم|خيمة|camp/i,'tent',GOAL],
+  [/دراجة|بسكليت|سكوتر|bike|scooter/i,'bike',GOAL],
+  [/طابة|كرة|فوتبول|ball/i,'volleyball',GOAL],
+  [/ليغو|lego|مكعبات/i,'toy-brick',GOAL],
+  [/قصص|كتاب|كتب|book/i,'book',GOAL],
+  [/ألوان|الوان|رسم|palette/i,'palette',GOAL],
+  [/بوط|حذاء|شوز|shoes/i,'footprints',GOAL],
+  [/قطة|بسة|cat/i,'cat',GOAL],
+  [/كلب|dog/i,'dog',GOAL],
+  [/كيك|حلو|cake/i,'cake-slice',GOAL],
+  [/لبس|ملابس|تيشيرت|فستان/i,'shirt',GOAL],
+  [/بازل|puzzle/i,'puzzle',GOAL],
 ];
-function iconFor(name){ for(const [re,icon,c] of GOAL_WORDS) if(re.test(name)) return {icon,c}; return {icon:'gift',c:C.purple}; }
-const CUSTOM_ICONS=['sparkles','hand-heart','paw-print','trash-2','shower-head','utensils','sprout','moon','shirt','pencil','book-open','droplets'];
-const CUSTOM_COLORS=[C.red,C.orange,C.yellow,C.green,C.teal,C.blue,C.purple,C.pink];
+function iconFor(name){ for(const [re,icon,c] of GOAL_WORDS) if(re.test(name)) return {icon,c}; return {icon:'gift',c:GOAL}; }
+const TASK_WORDS=[
+  [/صلا|صلي|قرآن|قران|سورة|دعاء/,'mosque'],[/أسنان|اسنان|تفريش|فرشا/,'toothbrush'],[/سرير|تخت/,'bed'],
+  [/قراء|قصة|قصص|كتاب|مطالعة/,'book-open'],[/شنط|حقيبة/,'backpack'],[/وظيف|وظايف|دراس|درس|واجب|حفظ|كتابة/,'pencil'],
+  [/ألعاب|العاب|لعب|ليغو/,'toy-brick'],[/مي|ماء|شرب/,'droplets'],[/لبس|ثياب|ملابس|غسيل|تياب/,'shirt'],
+  [/سفرة|أكل|اكل|غدا|عشا|فطور|صحون|جلي/,'utensils'],[/زرع|نبات|سقاية|ورد/,'sprout'],[/نوم|نام|بكير/,'moon'],
+  [/قط|بسة|كلب|حيوان|عصفور|سمك/,'paw-print'],[/زبالة|قمامة|نفايات|تنظيف|نظافة|كنس|مسح/,'trash-2'],
+  [/دوش|حمام|استحمام|شاور/,'shower-head'],[/ساعد|مساعدة|خدمة|إخوت|اخوت|جدة|جد|تيتا|جدو/,'hand-heart'],
+  [/رياضة|مشي|ركض|تمارين|سباحة/,'footprints'],[/طابة|كرة|فوتبول/,'volleyball'],
+];
+function taskIconFor(name){ for(const [re,icon] of TASK_WORDS) if(re.test(name)) return icon; return 'sparkles'; }
 const DAYS=['سبت','أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة'];
 const SCHOOL=[1,1,1,1,1,0,0].map(Boolean), EVERY=Array(7).fill(true);
 
@@ -386,11 +395,8 @@ function addSheet(){
     <div class="slabel" style="margin-top:4px">مهام جاهزة · كبسة لتضيف</div>
     <div class="grid lib">${lib.map(t=>{const on=have.has(t.id);return `<button class="pick ${lastAdded===t.id?'justadded':''}" aria-pressed="${on}" data-libadd="${t.id}"><span class="ok">${ic('check',3.2)}</span>${glyph(t.icon,t.c)}${esc(t.name)}<span class="state">${on?'انضافت':'&nbsp;'}</span></button>`}).join('')}</div>
     <div class="slabel">أو اكتب مهمة جديدة</div>
-    <div class="field" style="margin-top:0"><span class="glyph sm" style="--c:${d.c};margin-inline-end:12px">${ic(d.icon,2.3)}</span><input id="tname" placeholder="مثلاً: إطعام القطة" value="${esc(d.name)}" autocomplete="off"></div>
-    <div class="slabel">الأيقونة</div>
-    <div class="icons" style="--c:${d.c}">${CUSTOM_ICONS.map(n=>`<button aria-pressed="${d.icon===n}" data-icon="${n}" aria-label="${n}">${ic(n)}</button>`).join('')}</div>
-    <div class="slabel">اللون</div>
-    <div class="colors">${CUSTOM_COLORS.map(c=>`<button style="--c:${c}" aria-pressed="${d.c===c}" data-color="${c}" aria-label="لون"></button>`).join('')}</div>
+    <div class="field" style="margin-top:0"><span class="glyph sm" id="tglyph" style="--c:${TASK};margin-inline-end:12px">${ic(d.icon,2.3)}</span><input id="tname" placeholder="مثلاً: إطعام القطة" value="${esc(d.name)}" autocomplete="off"></div>
+    <div class="autonote">${ic('sparkles')}بنختار الأيقونة حسب الاسم</div>
     <button class="btn filled" data-addtask ${d.name.trim()?'':'disabled'}>إضافة «${esc(d.name.trim()||'المهمة')}»</button>`);
 }
 function daysSheet(n){
@@ -410,24 +416,22 @@ document.addEventListener('click',e=>{
   if('back' in t.dataset){ at=Math.max(0,at-1); render(-1); return }
   if('close' in t.dataset){ closeSheet(); refresh(); return }
   if(t.dataset.remove){ const row=t.closest('.row'); row.classList.add('leaving'); setTimeout(()=>{ k.tasks=k.tasks.filter(x=>x.id!==t.dataset.remove); refresh() },260); return }
-  if('addtasks' in t.dataset){ draft={name:'',icon:'sparkles',c:C.purple}; lastAdded=null; addSheet(); return }
+  if('addtasks' in t.dataset){ draft={name:'',icon:'sparkles'}; lastAdded=null; addSheet(); return }
   if(t.dataset.libadd){ const id=t.dataset.libadd, has=k.tasks.some(x=>x.id===id);
     if(has){ k.tasks=k.tasks.filter(x=>x.id!==id); lastAdded=null }
     else { const src=[...SUGGEST,...k.custom].find(x=>x.id===id); k.tasks.push({...src,value:2,days:[...EVERY]}); lastAdded=id }
     addSheet(); return }
-  if(t.dataset.icon){ draft.icon=t.dataset.icon; addSheet(); return }
-  if(t.dataset.color){ draft.c=t.dataset.color; addSheet(); return }
-  if('addtask' in t.dataset){ if(t.disabled) return; const c={id:'c'+Date.now(),name:draft.name.trim(),icon:draft.icon,c:draft.c}; k.custom.push(c); k.tasks.push({...c,value:2,days:[...EVERY]}); draft={name:'',icon:'sparkles',c:C.purple}; addSheet(); return }
+  if('addtask' in t.dataset){ if(t.disabled) return; const c={id:'c'+Date.now(),name:draft.name.trim(),icon:taskIconFor(draft.name),c:TASK}; k.custom.push(c); k.tasks.push({...c,value:2,days:[...EVERY]}); draft={name:'',icon:'sparkles'}; addSheet(); return }
   if(t.dataset.val!=null){ const x=k.tasks[+t.dataset.val]; x.value=Math.max(0,Math.min(999,x.value+(+t.dataset.d))); refresh(); return }
   if(t.dataset.days!=null){ daysSheet(+t.dataset.days); return }
   if(t.dataset.day!=null){ const x=k.tasks[+t.dataset.t]; x.days[+t.dataset.day]=!x.days[+t.dataset.day]; if(!x.days.some(Boolean)) x.days[+t.dataset.day]=true; daysSheet(+t.dataset.t); return }
   if(t.dataset.preset){ const x=k.tasks[+t.dataset.t]; x.days=[...(t.dataset.preset==='every'?EVERY:SCHOOL)]; daysSheet(+t.dataset.t); return }
-  if(t.dataset.goal){ if(t.dataset.goal==='custom'){ k.goal={id:'custom',name:'',icon:'gift',c:C.purple,amount:100}; refresh(); setTimeout(()=>$('#gname')&&$('#gname').focus(),50) } else { k.goal={...GOALS.find(g=>g.id===t.dataset.goal)}; refresh() } return }
+  if(t.dataset.goal){ if(t.dataset.goal==='custom'){ k.goal={id:'custom',name:'',icon:'gift',c:GOAL,amount:100}; refresh(); setTimeout(()=>$('#gname')&&$('#gname').focus(),50) } else { k.goal={...GOALS.find(g=>g.id===t.dataset.goal)}; refresh() } return }
   if(t.dataset.amt){ k.goal.amount=Math.max(1,Math.min(99999,k.goal.amount+(+t.dataset.amt))); refresh(); return }
 });
 document.addEventListener('input',e=>{
   const el=e.target, k=kids[FLOW[at][1]];
-  if(el.id==='tname'){ draft.name=el.value; const b=document.querySelector('[data-addtask]'); if(b){ b.disabled=!draft.name.trim(); b.textContent=`إضافة «${draft.name.trim()||'المهمة'}»` } }
+  if(el.id==='tname'){ draft.name=el.value; draft.icon=taskIconFor(el.value); const tg=$('#tglyph'); if(tg) tg.innerHTML=ic(draft.icon,2.3); const b=document.querySelector('[data-addtask]'); if(b){ b.disabled=!draft.name.trim(); b.textContent=`إضافة «${draft.name.trim()||'المهمة'}»` } }
   if(el.dataset.valin!=null){ const v=parseInt(el.value,10); k.tasks[+el.dataset.valin].value=isNaN(v)?0:Math.max(0,Math.min(999,v)); $('#perday').textContent=perDay(k) }
   if(el.dataset.gname!=null){ k.goal.name=el.value;
     if(k.goal.id==='custom'){ Object.assign(k.goal,iconFor(el.value)); $('#gicon').innerHTML=glyph(k.goal.icon,k.goal.c,'sm') }
