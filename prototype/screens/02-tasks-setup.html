@@ -101,6 +101,12 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 .empty{padding:22px 16px;text-align:center;color:var(--label-2);font-size:15px}
 .lib{grid-template-columns:repeat(3,1fr);margin-top:0}
 .lib .pick{background:#fff}
+.lib .pick .state{font-size:12px;font-weight:600;color:var(--blue);min-height:15px;margin-top:-4px}
+.lib .pick[aria-pressed="true"]{background:rgba(0,122,255,.06)}
+.lib .pick.justadded .glyph{animation:added .5s var(--spring)}
+.lib .pick.justadded .ok{animation:tick .45s var(--spring)}
+@keyframes added{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes tick{0%{transform:scale(0)}100%{transform:scale(1)}}
 .addbtn{height:44px;margin-top:12px}
 /* grouped list */
 .group{margin-top:22px;background:#fff;border-radius:26px;overflow:hidden;flex:none}
@@ -372,13 +378,13 @@ function openSheet(html,short){ const cur=$('#sheets .sheet.show'); if(cur){ con
   $('#sheets').innerHTML=`<div class="sheet ${short?'short':''}" role="dialog">${html}</div>`; requestAnimationFrame(()=>{ $('#scrim').classList.add('show'); $('#sheets .sheet').classList.add('show') }) }
 function closeSheet(){ const s=$('#sheets .sheet'); $('#scrim').classList.remove('show'); if(s){ s.classList.remove('show'); setTimeout(()=>{ if(!s.classList.contains('show')) s.remove() },450) } }
 
-let draft=null;
+let draft=null, lastAdded=null;
 function addSheet(){
   const k=kids[FLOW[at][1]], d=draft, have=new Set(k.tasks.map(t=>t.id));
-  const lib=[...SUGGEST,...k.custom].filter(t=>!have.has(t.id));
+  const lib=[...SUGGEST,...k.custom];
   openSheet(`<div class="ksbar"><span></span><b>إضافة مهمة</b><button class="done" data-close>تم</button></div>
-    <div class="slabel" style="margin-top:4px">مهام جاهزة</div>
-    ${lib.length?`<div class="grid lib">${lib.map(t=>`<button class="pick" data-libadd="${t.id}">${glyph(t.icon,t.c)}${esc(t.name)}</button>`).join('')}</div>`:'<div class="empty" style="background:#fff;border-radius:26px">كل المهام الجاهزة مضافة</div>'}
+    <div class="slabel" style="margin-top:4px">مهام جاهزة · كبسة لتضيف</div>
+    <div class="grid lib">${lib.map(t=>{const on=have.has(t.id);return `<button class="pick ${lastAdded===t.id?'justadded':''}" aria-pressed="${on}" data-libadd="${t.id}"><span class="ok">${ic('check',3.2)}</span>${glyph(t.icon,t.c)}${esc(t.name)}<span class="state">${on?'انضافت':'&nbsp;'}</span></button>`}).join('')}</div>
     <div class="slabel">أو اكتب مهمة جديدة</div>
     <div class="field" style="margin-top:0"><span class="glyph sm" style="--c:${d.c};margin-inline-end:12px">${ic(d.icon,2.3)}</span><input id="tname" placeholder="مثلاً: إطعام القطة" value="${esc(d.name)}" autocomplete="off"></div>
     <div class="slabel">الأيقونة</div>
@@ -404,8 +410,11 @@ document.addEventListener('click',e=>{
   if('back' in t.dataset){ at=Math.max(0,at-1); render(-1); return }
   if('close' in t.dataset){ closeSheet(); refresh(); return }
   if(t.dataset.remove){ const row=t.closest('.row'); row.classList.add('leaving'); setTimeout(()=>{ k.tasks=k.tasks.filter(x=>x.id!==t.dataset.remove); refresh() },260); return }
-  if('addtasks' in t.dataset){ draft={name:'',icon:'sparkles',c:C.purple}; addSheet(); return }
-  if(t.dataset.libadd){ const src=[...SUGGEST,...k.custom].find(x=>x.id===t.dataset.libadd); k.tasks.push({...src,value:2,days:[...EVERY]}); addSheet(); return }
+  if('addtasks' in t.dataset){ draft={name:'',icon:'sparkles',c:C.purple}; lastAdded=null; addSheet(); return }
+  if(t.dataset.libadd){ const id=t.dataset.libadd, has=k.tasks.some(x=>x.id===id);
+    if(has){ k.tasks=k.tasks.filter(x=>x.id!==id); lastAdded=null }
+    else { const src=[...SUGGEST,...k.custom].find(x=>x.id===id); k.tasks.push({...src,value:2,days:[...EVERY]}); lastAdded=id }
+    addSheet(); return }
   if(t.dataset.icon){ draft.icon=t.dataset.icon; addSheet(); return }
   if(t.dataset.color){ draft.c=t.dataset.color; addSheet(); return }
   if('addtask' in t.dataset){ if(t.disabled) return; const c={id:'c'+Date.now(),name:draft.name.trim(),icon:draft.icon,c:draft.c}; k.custom.push(c); k.tasks.push({...c,value:2,days:[...EVERY]}); draft={name:'',icon:'sparkles',c:C.purple}; addSheet(); return }
