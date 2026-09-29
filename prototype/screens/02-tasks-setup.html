@@ -208,6 +208,82 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .presets button[aria-pressed="true"]{background:rgba(0,122,255,.14);color:var(--blue)}
 .sheet .btn{margin-top:22px}
 
+/* preview: the child's own screen */
+.kidseg{display:flex;gap:8px;margin-top:14px}
+.kidseg button{display:flex;align-items:center;gap:8px;height:40px;padding:0 14px 0 6px;border-radius:99px;background:#fff;font-weight:600;font-size:15px;box-shadow:inset 0 0 0 2px transparent}
+.kidseg button[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--blue)}
+.kidseg .kav{width:30px;height:30px}
+.kidphone{margin-top:18px;background:#fff;border-radius:32px;padding:18px;box-shadow:0 0 0 1px rgba(0,0,0,.05), 0 18px 40px -14px rgba(0,0,0,.2);flex:none}
+.kp-head{display:flex;align-items:center;gap:12px}
+.kp-head span{display:block;font-size:14px;color:var(--label-2)}
+.kp-head b{display:block;font-size:24px;font-weight:700;line-height:1.2}
+.kp-dream{margin-top:14px;border-radius:24px;padding:16px;color:#fff;background:linear-gradient(160deg,#3D9BFF,#0066E6);box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.kp-dt{display:flex;align-items:center;gap:10px}
+.kp-dt .glyph{background:rgba(255,255,255,.2);box-shadow:none}
+.kp-dt span{display:block;font-size:13px;opacity:.85}
+.kp-dt b{display:block;font-size:19px;font-weight:700}
+.kp-bar{height:10px;border-radius:99px;background:rgba(255,255,255,.25);margin-top:14px;overflow:hidden}
+.kp-bar i{display:block;height:100%;width:var(--w);border-radius:99px;background:#fff;animation:grow 1.4s var(--out) .3s both}
+@keyframes grow{from{width:0}}
+.kp-note{font-size:13px;margin-top:8px;opacity:.95;line-height:1.5}
+.kp-tl{font-size:15px;font-weight:700;margin:16px 2px 10px}
+.kp-tasks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kp-t{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px 10px;border-radius:18px;background:var(--grouped);font-size:12.5px;font-weight:600;text-align:center;line-height:1.25}
+.kp-t .glyph{width:46px;height:46px;border-radius:13px}
+.kp-t .glyph svg{width:25px;height:25px}
+.kp-t.done{background:rgba(52,199,89,.12)}
+.kp-t.done .glyph{filter:saturate(.3);opacity:.6}
+.kp-ok{position:absolute;top:6px;left:6px;width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center}
+.kp-ok svg{width:12px;height:12px}
+/* trial */
+.appicon{width:76px;height:76px;margin:0 auto;display:block;flex:none;filter:drop-shadow(0 8px 18px rgba(0,102,230,.3))}
+.appicon.sm{width:52px;height:52px;margin:0;filter:none}
+.c{text-align:center}
+.timeline{list-style:none;margin:24px 4px 0;padding:0;position:relative;flex:none}
+.timeline::before{content:"";position:absolute;top:20px;bottom:20px;right:19px;width:3px;border-radius:3px;background:rgba(0,122,255,.15)}
+.timeline li{display:flex;gap:14px;align-items:flex-start;position:relative;padding-bottom:16px}
+.timeline li:last-child{padding-bottom:0}
+.timeline b{display:block;font-size:16px;font-weight:700;padding-top:2px}
+.timeline div > span{display:block;font-size:14px;color:var(--label-2);margin-top:1px;line-height:1.45}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px;flex:none}
+.plan{position:relative;border-radius:24px;padding:16px 14px 14px;text-align:start;background:#fff;box-shadow:inset 0 0 0 2px transparent;transition:box-shadow .2s}
+.plan[aria-pressed="true"]{box-shadow:inset 0 0 0 2.5px var(--blue)}
+.plan b{display:block;font-size:15px;font-weight:600}
+.plan .p{display:block;font-size:20px;font-weight:800;margin-top:6px;direction:ltr;text-align:right}
+.plan .pm{display:block;font-size:13px;color:var(--label-2);margin-top:2px}
+.plan .save{position:absolute;top:-10px;left:12px;background:var(--blue);color:#fff;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px}
+.plan .tick{position:absolute;top:14px;left:14px;width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--label-3);display:grid;place-items:center;color:#fff}
+.plan .tick svg{width:13px;height:13px;opacity:0}
+.plan[aria-pressed="true"] .tick{background:var(--blue);box-shadow:none}
+.plan[aria-pressed="true"] .tick svg{opacity:1}
+.plan[aria-pressed="true"] .save{top:-10px}
+.trust{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;margin-top:16px;font-size:13px;color:var(--label-2)}
+.trust span{display:flex;align-items:center;gap:4px}
+.trust svg{width:13px;height:13px;color:var(--green)}
+.links{display:flex;justify-content:center;gap:18px;margin-top:8px}
+.links button{font-size:13px;color:var(--label-2)}
+/* App Store sheet */
+.sheet .hd{display:flex;align-items:center;justify-content:space-between;font-size:17px;font-weight:700;margin-top:16px}
+.x{width:30px;height:30px;border-radius:50%;background:rgba(118,118,128,.14);display:grid;place-items:center;color:var(--label-2)}
+.x svg{width:13px;height:13px}
+.sheet .item{display:flex;align-items:center;gap:12px;margin-top:18px;padding-bottom:16px;border-bottom:.5px solid var(--sep)}
+.sheet .item b{display:block;font-size:16px}
+.sheet .item span{display:block;font-size:13px;color:var(--label-2);margin-top:2px}
+.sheet .kv{display:flex;justify-content:space-between;font-size:14px;padding:12px 0;border-bottom:.5px solid var(--sep)}
+.sheet .kv span:first-child{color:var(--label-2)}
+.sheet .note{font-size:12px;color:var(--label-2);margin-top:12px;line-height:1.5}
+.faceid{display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px 0 6px;color:#000;font-size:15px}
+.faceid svg{width:56px;height:56px;animation:pulse 1s ease-in-out infinite alternate}
+@keyframes pulse{to{opacity:.4}}
+.sheet.short{background:#fff}
+/* done: invite */
+.invite{margin-top:26px;display:flex;align-items:center;gap:12px;background:#fff;border-radius:24px;padding:14px;text-align:start;flex:none}
+.invite .t{flex:1}
+.invite b{display:block;font-size:16px;font-weight:600}
+.invite .t span{display:block;font-size:13px;color:var(--label-2);margin-top:2px;line-height:1.45}
+.inv{height:36px;padding:0 14px;border-radius:99px;background:rgba(0,122,255,.12);color:var(--blue);font-size:14px;font-weight:600;flex:none}
+.sent{display:flex;align-items:center;gap:4px;color:#248A3D;font-size:14px;font-weight:600}
+.sent svg{width:14px;height:14px}
 /* ready: one brief per child */
 .brief{margin-top:18px;background:#fff;border-radius:26px;padding:16px;flex:none}
 .brief header{display:flex;align-items:center;gap:12px}
@@ -370,7 +446,7 @@ kids.forEach(k=>{
 });
 
 /* flow: for each child → tasks, values, goal; then ready */
-const FLOW=[...kids.flatMap((k,i)=>[['tasks',i],['values',i],['goal',i]]),['ready',null]];
+const FLOW=[...kids.flatMap((k,i)=>[['tasks',i],['values',i],['goal',i]]),['ready',null],['preview',null],['trial',null],['done',null]];
 let at=0, approved=false;
 const $=s=>document.querySelector(s);
 
@@ -434,25 +510,83 @@ function readyScreen(){
     </article>`}).join('')}
     <div class="bottom">${approved?`<button class="btn filled">للصفحة الرئيسية</button>`:`<button class="btn filled" data-approve>اعتماد المهام</button><div class="hint">بتقدر تعدّل أي شي بعدين من الإعدادات</div>`}</div>`;
 }
+let pk=0, plan='year', invited=false;
+const TRIAL_DAYS=14;
+const PLANS={year:{name:'اشتراك سنوي',price:'$39.99 بالسنة'},month:{name:'اشتراك شهري',price:'$4.99 بالشهر'}};  // App Store shows local prices
+const APP=`<svg class="appicon" viewBox="0 0 104 104" aria-hidden="true"><defs><linearGradient id="ig" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3D9BFF"/><stop offset="1" stop-color="#0066E6"/></linearGradient></defs><rect width="104" height="104" rx="24" fill="url(#ig)"/><rect x="37" y="21" width="30" height="8" rx="3.5" fill="#fff"/><path d="M35 32h34v3c0 3.2 9 5.5 9 14v21a11 11 0 0 1-11 11H37a11 11 0 0 1-11-11V49c0-8.5 9-10.8 9-14z" fill="#fff"/><path d="m52 47.5 3.6 7.3 8 1.2-5.8 5.6 1.4 8-7.2-3.8-7.2 3.8 1.4-8-5.8-5.6 8-1.2z" fill="#0A74F0" stroke="#0A74F0" stroke-width="2" stroke-linejoin="round"/></svg>`;
+
+/* the "wow": what each child will see tomorrow morning */
+function previewScreen(){
+  const k=kids[pk], g=k.goal, week=perDay(k)*7, pct=g?Math.min(1,week/g.amount):0;
+  return `<div class="nav"><button class="back" data-back aria-label="رجوع"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${IC.chev}</svg></button><span></span></div>
+    <h1>هيك رح يشوف ${esc(k.name)} مكمورته بكرة الصبح</h1>
+    ${kids.length>1?`<div class="kidseg">${kids.map((x,n)=>`<button aria-pressed="${n===pk}" data-pk="${n}">${kav(x)}${esc(x.name)}</button>`).join('')}</div>`:''}
+    <div class="kidphone">
+      <div class="kp-head">${kav(k,'big')}<div><span>صباح الخير</span><b>${esc(k.name)}</b></div></div>
+      ${g?`<div class="kp-dream"><div class="kp-dt">${glyph(g.icon,g.c,'sm')}<div><span>حلمي</span><b>${esc(g.name)}</b></div></div>
+        <div class="kp-bar"><i style="--w:${pct*100}%"></i></div>
+        <div class="kp-note">إذا خلّص كل مهامه، بعد أسبوع بيكون عنده <b>${fmt(week)} ${esc(CUR().s)}</b> من ${fmt(g.amount)}</div></div>`:''}
+      <div class="kp-tl">مهامي اليوم</div>
+      <div class="kp-tasks">${k.tasks.slice(0,6).map((t,n)=>`<div class="kp-t ${n===0?'done':''}">${n===0?`<span class="kp-ok">${ic('check',3.2)}</span>`:''}${glyph(t.icon,t.c)}<span>${esc(t.name)}</span></div>`).join('')}</div>
+    </div>
+    <div class="bottom"><button class="btn filled" data-next>كمّل</button><div class="hint">فاضل خطوة وحدة</div></div>`;
+}
+function trialScreen(){
+  return `<div style="height:64px;flex:none"></div>${APP}
+    <h1 class="c">جرّب مكمورة مجاناً</h1>
+    <div class="sub c">${TRIAL_DAYS} يوم كاملة، وبتلغي وقت ما بدك.</div>
+    <ol class="timeline">
+      <li>${glyph('check',TASK,'sm')}<div><b>اليوم</b><span>كل شي مفتوح لعيلتك، وما بتدفع شي.</span></div></li>
+      <li>${glyph('sparkles',TASK,'sm')}<div><b>بعد ${TRIAL_DAYS-2} يوم</b><span>منبعتلك تذكير قبل ما تخلص التجربة.</span></div></li>
+      <li>${glyph('gift',TASK,'sm')}<div><b>بعد ${TRIAL_DAYS} يوم</b><span>بيبلّش الاشتراك، إلا إذا ألغيته قبلها.</span></div></li>
+    </ol>
+    <div class="plans" role="radiogroup" aria-label="الخطة">
+      <button class="plan" data-plan="year" aria-pressed="${plan==='year'}" role="radio"><span class="save">وفّر 33%</span><span class="tick">${ic('check',3.2)}</span><b>سنوي</b><span class="p">$39.99</span><span class="pm">يعني $3.33 بالشهر</span></button>
+      <button class="plan" data-plan="month" aria-pressed="${plan==='month'}" role="radio"><span class="tick">${ic('check',3.2)}</span><b>شهري</b><span class="p">$4.99</span><span class="pm">كل شهر</span></button>
+    </div>
+    <div class="trust"><span>${ic('check',3)}بدون إعلانات</span><span>${ic('check',3)}بيانات أولادك محمية</span><span>${ic('check',3)}بتلغي بأي وقت</span></div>
+    <div class="bottom"><button class="btn filled" data-subscribe>ابدأ التجربة المجانية</button>
+      <div class="hint">مجاناً ${TRIAL_DAYS} يوم، بعدها ${PLANS[plan].price}.</div>
+      <div class="links"><button>استرجاع المشتريات</button><button>الشروط</button><button>الخصوصية</button></div></div>`;
+}
+function doneScreen(){
+  return `<div class="spacer"></div>
+    <div class="burst">${ic('check',3)}</div>
+    <h1>تجربتك بلّشت!</h1>
+    <div class="sub">عندك ${TRIAL_DAYS} يوم مجاناً، ومنذكّرك قبل ما تخلص بيومين.</div>
+    <div class="invite">${glyph('hand-heart',TASK)}<div class="t"><b>بدك حدا تاني يتابع معك؟</b><span>الأم أو الأب يوافقوا على المهام متلك، كل واحد من موبايله.</span></div>
+      ${invited?`<span class="sent">${ic('check',3)}انبعتت</span>`:`<button class="inv" data-invite>إرسال دعوة</button>`}</div>
+    <div class="spacer"></div>
+    <div class="bottom"><button class="btn filled">للصفحة الرئيسية</button></div>`;
+}
+function storeSheet(paying){
+  openSheet(`<div class="hd"><span>App Store</span><button class="x" data-close aria-label="إلغاء">${ic('x',3)}</button></div>
+    <div class="item">${APP.replace('class="appicon"','class="appicon sm"')}<div><b>مكمورة</b><span>${PLANS[plan].name}</span></div></div>
+    <div class="kv"><span>التجربة المجانية</span><span>${TRIAL_DAYS} يوم</span></div>
+    <div class="kv"><span>بعدها</span><span dir="ltr">${PLANS[plan].price}</span></div>
+    <div class="note">ما رح ينسحب شي هلأ. فيك تلغي بأي وقت من الإعدادات، ولو ألغيت قبل يوم على الأقل من نهاية التجربة ما بتدفع أبداً.</div>
+    ${paying?`<div class="faceid"><svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 16V10a6 6 0 0 1 6-6h6M40 4h6a6 6 0 0 1 6 6v6M52 40v6a6 6 0 0 1-6 6h-6M16 52h-6a6 6 0 0 1-6-6v-6"/><path d="M19 20v4M37 20v4M28 20v10h-3M20 38c4.5 4 11.5 4 16 0"/></svg>Face ID</div>`:`<button class="btn filled" data-confirm>اشتراك</button>`}`,true);
+}
+
 function render(dir=1){
   const [kind,i]=FLOW[at];
-  const html = kind==='tasks'?tasksScreen(i):kind==='values'?valuesScreen(i):kind==='goal'?goalScreen(i):readyScreen();
+  const html = kind==='tasks'?tasksScreen(i):kind==='values'?valuesScreen(i):kind==='goal'?goalScreen(i):kind==='ready'?readyScreen():kind==='preview'?previewScreen():kind==='trial'?trialScreen():doneScreen();
   const old=$('#screens').lastElementChild;
-  const el=document.createElement('section'); el.className='screen'+(kind==='ready'?' ready':''); el.innerHTML=html;
+  const el=document.createElement('section'); el.className='screen'+(kind==='ready'||kind==='done'?' ready':'')+(kind==='trial'?' paywall':''); el.innerHTML=html;
   el.dataset.pos=dir>0?'right':'left';
   el.style.zIndex=dir>0?2:1; if(old) old.style.zIndex=dir>0?1:2;   // the screen that moves across is always on top
   $('#screens').appendChild(el);
   el.getBoundingClientRect();                                       // commit the start position, then animate
   el.dataset.pos='center';
   if(old){ old.dataset.pos=dir>0?'left':'right'; setTimeout(()=>old.remove(),520) }
-  $('#prog i').style.width=`${(at+1)/FLOW.length*100}%`; $('#prog').style.opacity=kind==='ready'?0:1;
+  $('#prog i').style.width=`${(at+1)/FLOW.length*100}%`; $('#prog').style.opacity=['ready','preview','trial','done'].includes(kind)?0:1;
   steps();
 }
 /* redraw the current screen in place, keeping scroll */
 function refresh(){ const el=$('#screens .screen:last-child'), y=el.scrollTop, [kind,i]=FLOW[at];
-  el.innerHTML = kind==='tasks'?tasksScreen(i):kind==='values'?valuesScreen(i):kind==='goal'?goalScreen(i):readyScreen(); el.scrollTop=y; }
+  el.innerHTML = kind==='tasks'?tasksScreen(i):kind==='values'?valuesScreen(i):kind==='goal'?goalScreen(i):kind==='ready'?readyScreen():kind==='preview'?previewScreen():kind==='trial'?trialScreen():doneScreen(); el.scrollTop=y; }
 function steps(){
-  const names={tasks:'المهام',values:'القيمة',goal:'الهدف',ready:'جاهز'};
+  const names={tasks:'المهام',values:'القيمة',goal:'الهدف',ready:'جاهز',preview:'شاشة الولد',trial:'التجربة',done:'تم'};
   $('#steps').innerHTML=FLOW.map(([k,i],n)=>`<button data-jump="${n}" ${n===at?'aria-current="step"':''}>${names[k]}${i!=null?` · ${kids[i].name}`:''}</button>`).join('');
 }
 
@@ -503,9 +637,14 @@ document.addEventListener('click',e=>{
   if(t.dataset.jump!=null){ const n=+t.dataset.jump; const d=n>at?1:-1; at=n; closeSheet(); render(d); return }
   if('next' in t.dataset){ if(t.disabled) return; at=Math.min(FLOW.length-1,at+1); render(1); return }
   if(t.dataset.edit!=null){ approved=false; at=FLOW.findIndex(([k,j])=>k==='tasks'&&j===+t.dataset.edit); render(-1); return }
-  if('approve' in t.dataset){ approved=true; refresh(); return }
+  if('approve' in t.dataset){ at++; render(1); return }
+  if(t.dataset.pk!=null){ pk=+t.dataset.pk; refresh(); return }
+  if(t.dataset.plan){ plan=t.dataset.plan; refresh(); return }
+  if('subscribe' in t.dataset){ storeSheet(false); return }
+  if('confirm' in t.dataset){ storeSheet(true); setTimeout(()=>{ closeSheet(); at=FLOW.length-1; render(1) },1100); return }
+  if('invite' in t.dataset){ invited=true; refresh(); return }
   if('back' in t.dataset){ at=Math.max(0,at-1); render(-1); return }
-  if('close' in t.dataset){ closeSheet(); refresh(); return }
+  if('close' in t.dataset){ closeSheet(); if(!['trial'].includes(FLOW[at][0])) refresh(); return }
   if(t.dataset.remove){ const row=t.closest('.row'); row.classList.add('leaving'); setTimeout(()=>{ k.tasks=k.tasks.filter(x=>x.id!==t.dataset.remove); refresh() },260); return }
   if('addtasks' in t.dataset){ draft={name:'',icon:'sparkles'}; lastAdded=null; addSheet(); return }
   if(t.dataset.libadd){ const id=t.dataset.libadd, has=k.tasks.some(x=>x.id===id);

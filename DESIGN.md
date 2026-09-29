@@ -14,7 +14,9 @@ The product follows native iOS design so it feels like an Apple app. The live re
 - **Controls (iOS 26 style):** capsule buttons, frosted-glass secondary buttons, a round glass back button, grouped lists with 26px corners, and the system sheets (Sign in with Apple, App Store).
 - **App icon:** a blue rounded square with a white jar and a blue star inside: the jar the child fills, the star the dream (`prototype/app-icon.svg`).
 - **People:** children and parents appear by photo; until a family adds photos, 3D avatars stand in.
-- **Flow so far:** Welcome → Account (Apple, Google, email) → About you → Parent passcode → Family (parents and children) → Free trial → Task setup per child (tasks, points, dream) → All set.
+- **Flow (value before price):** Welcome → Account (Apple, Google, email) → About you → Children → Task setup per child (tasks, amounts in the family currency, dream) → All set (edit / approve) → Child preview ("this is what Salim sees tomorrow") → Free trial → App Store → Trial started (optional invite for the other parent).
+- **Deferred on purpose:** the parent passcode is asked at the first approval (with Face ID); inviting the other parent is offered after the trial starts.
+- **Money:** task values and dreams are real amounts in one family currency, preset from the device region (most used first: USD, SAR, AED, QAR, KWD, EUR, JOD, EGP, TRY). The app keeps a ledger; parents pay children themselves.
 
 ## Principles
 
