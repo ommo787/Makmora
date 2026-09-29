@@ -114,6 +114,28 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 @keyframes added{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
 @keyframes tick{0%{transform:scale(0)}100%{transform:scale(1)}}
 .addbtn{height:44px;margin-top:12px}
+/* currency */
+.curchip{align-self:flex-start;margin-top:14px;display:flex;align-items:center;gap:8px;height:40px;padding:0 12px 0 14px;border-radius:99px;background:#fff;font-size:15px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.curchip span{color:var(--label-2)}
+.curchip b{font-weight:600}
+.curchip .cs{min-width:28px;height:26px;padding:0 6px;border-radius:8px;background:rgba(0,122,255,.1);color:var(--blue);display:grid;place-items:center;font-weight:700;font-size:13px}
+.curchip svg{width:14px;height:14px;color:var(--label-3);transform:rotate(90deg)}
+.money{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.money .sym,.stepper .sym{font-size:.8em;color:var(--label-2);font-weight:600}
+.bigsym{font-size:22px;font-weight:700;color:var(--label-2)}
+.search{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-radius:12px;background:rgba(118,118,128,.14);margin-top:4px}
+.search svg{width:16px;height:16px;color:var(--label-3)}
+.search input{flex:1;border:0;background:none;outline:none;font:17px var(--font)}
+.clist{margin-top:0}
+.crow{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:6px 16px;text-align:start;position:relative}
+.crow + .crow::before{content:"";position:absolute;top:0;inset-inline:64px 0;height:.5px;background:var(--sep)}
+.csym{width:36px;height:36px;border-radius:10px;background:rgba(0,122,255,.1);color:var(--blue);display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+.crow .t{flex:1}
+.crow .t b{display:block;font-size:17px;font-weight:500}
+.crow .t span{display:block;font-size:13px;color:var(--label-2)}
+.crow .tick{color:var(--blue)}
+.crow .tick svg{width:18px;height:18px}
+.stepper .v{min-width:72px}
 /* grouped list */
 .group{margin-top:22px;background:#fff;border-radius:26px;overflow:hidden;flex:none}
 .row{display:flex;align-items:center;gap:12px;min-height:64px;padding:8px 16px;position:relative;width:100%;text-align:start}
@@ -126,7 +148,7 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 .stepper button:active{background:rgba(118,118,128,.2)}
 .stepper button svg{width:16px;height:16px}
 .stepper .v{min-width:56px;display:flex;align-items:center;justify-content:center;gap:3px}
-.stepper input{width:34px;border:0;background:none;outline:none;text-align:center;font:600 16px var(--font);font-variant-numeric:tabular-nums;padding:0;-moz-appearance:textfield}
+.stepper input{width:40px;border:0;background:none;outline:none;text-align:center;font:600 16px var(--font);font-variant-numeric:tabular-nums;padding:0;-moz-appearance:textfield}
 .stepper input:focus{background:#fff;border-radius:8px}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .coin{width:18px;height:18px;flex:none}
@@ -250,7 +272,7 @@ const IC = {"bed":"<path d=\"M2 4v16\" /><path d=\"M2 8h18a2 2 0 0 1 2 2v10\" />
 IC.toothbrush='<rect x="2" y="15" width="20" height="4" rx="2"/><path d="M14 15v-3"/><path d="M17 15v-4"/><path d="M20 15v-3"/><path d="M6 17h4"/>';
 IC.mosque='<path d="M3 21h18"/><path d="M6 21v-6h12v6"/><path d="M6 15a6 6 0 0 1 12 0"/><path d="M12 9V6.5"/><path d="M12 4.5v.01"/><path d="M10.5 21v-2.5a1.5 1.5 0 0 1 3 0V21"/>';
 IC.check='<path d="M20 6 9 17l-5-5"/>'; IC.plus='<path d="M12 5v14M5 12h14"/>'; IC.minus='<path d="M5 12h14"/>';
-IC.chev='<path d="m9 18 6-6-6-6"/>'; IC.x='<path d="M18 6 6 18M6 6l12 12"/>';
+IC.chev='<path d="m9 18 6-6-6-6"/>'; IC.search='<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>'; IC.x='<path d="M18 6 6 18M6 6l12 12"/>';
 const ic=(n,w=2.4)=>`<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||''}</svg>`;
 const coin=(cls='coin')=>`<svg class="${cls}" aria-hidden="true"><use href="#coin"/></svg>`;
 const glyph=(icon,c,sm='')=>`<span class="glyph ${sm}" style="--c:${c}">${ic(icon,2.3)}</span>`;
@@ -318,6 +340,22 @@ const TASK_WORDS=[
   [/رياضة|مشي|ركض|تمارين|سباحة/,'footprints'],[/طابة|كرة|فوتبول/,'volleyball'],
 ];
 function taskIconFor(name){ for(const [re,icon] of TASK_WORDS) if(re.test(name)) return icon; return 'sparkles'; }
+const CURRENCIES=[
+  // most used by our families first
+  {c:'USD',n:'دولار أمريكي',s:'$',top:1},{c:'SAR',n:'ريال سعودي',s:'ر.س',top:1},{c:'AED',n:'درهم إماراتي',s:'د.إ',top:1},
+  {c:'QAR',n:'ريال قطري',s:'ر.ق',top:1},{c:'KWD',n:'دينار كويتي',s:'د.ك',top:1},{c:'EUR',n:'يورو',s:'€',top:1},
+  {c:'JOD',n:'دينار أردني',s:'د.أ',top:1},{c:'EGP',n:'جنيه مصري',s:'ج.م',top:1},{c:'TRY',n:'ليرة تركية',s:'₺',top:1},
+  {c:'BHD',n:'دينار بحريني',s:'د.ب'},{c:'OMR',n:'ريال عماني',s:'ر.ع'},{c:'GBP',n:'جنيه إسترليني',s:'£'},
+  {c:'MAD',n:'درهم مغربي',s:'د.م'},{c:'TND',n:'دينار تونسي',s:'د.ت'},{c:'DZD',n:'دينار جزائري',s:'د.ج'},
+  {c:'IQD',n:'دينار عراقي',s:'د.ع'},{c:'LBP',n:'ليرة لبنانية',s:'ل.ل'},{c:'SYP',n:'ليرة سورية',s:'ل.س'},
+  {c:'LYD',n:'دينار ليبي',s:'د.ل'},{c:'SDG',n:'جنيه سوداني',s:'ج.س'},{c:'YER',n:'ريال يمني',s:'ر.ي'},
+  {c:'CAD',n:'دولار كندي',s:'C$'},{c:'AUD',n:'دولار أسترالي',s:'A$'},{c:'CHF',n:'فرنك سويسري',s:'CHF'},
+  {c:'SEK',n:'كرونة سويدية',s:'kr'},{c:'MYR',n:'رينغيت ماليزي',s:'RM'},{c:'PKR',n:'روبية باكستانية',s:'₨'},{c:'INR',n:'روبية هندية',s:'₹'},
+];
+let currency='SAR';   // in the app: from the device region (Locale.current.currency), changeable here and in Settings
+const CUR=()=>CURRENCIES.find(x=>x.c===currency);
+const fmt=n=>(Math.round(n*100)/100).toString();
+const money=(n,cls='')=>`<span class="money ${cls}">${fmt(n)} <span class="sym">${esc(CUR().s)}</span></span>`;
 const DAYS=['سبت','أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة'];
 const SCHOOL=[1,1,1,1,1,0,0].map(Boolean), EVERY=Array(7).fill(true);
 
@@ -358,11 +396,12 @@ function valuesScreen(i){
   const k=kids[i];
   return `${nav(i)}
     <h1>كل مهمة قديش بتسوى؟</h1>
-    <div class="sub">هدول النقاط يلي بتنزل بمكمورة ${esc(k.name)} لما توافق على المهمة.</div>
+    <div class="sub">هاد المبلغ بينزل بمكمورة ${esc(k.name)} لما توافق على المهمة.</div>
+    <button class="curchip" data-currency><span>العملة</span><b>${esc(CUR().n)}</b><span class="cs">${esc(CUR().s)}</span>${ic('chev',2.6)}</button>
     <div class="group">${k.tasks.map((t,n)=>`<div class="row">${glyph(t.icon,t.c,'sm')}
       <button class="t" data-days="${n}" style="text-align:start"><b>${esc(t.name)}</b><span>${daysLabel(t.days)}</span></button>
-      <span class="stepper"><button data-val="${n}" data-d="-1" aria-label="أقل">${ic('minus',2.6)}</button><span class="v"><input type="number" inputmode="numeric" min="0" max="999" value="${t.value}" data-valin="${n}" aria-label="نقاط ${esc(t.name)}">${coin()}</span><button data-val="${n}" data-d="1" aria-label="أكتر">${ic('plus',2.6)}</button></span></div>`).join('')}</div>
-    <div class="total">بيقدر يجمع لحد <b id="perday">${perDay(k)}</b><b>${coin()}</b> باليوم</div>
+      <span class="stepper"><button data-val="${n}" data-d="-1" aria-label="أقل">${ic('minus',2.6)}</button><span class="v"><input type="number" inputmode="decimal" min="0" max="9999" step="any" value="${fmt(t.value)}" data-valin="${n}" aria-label="قيمة ${esc(t.name)}"><span class="sym">${esc(CUR().s)}</span></span><button data-val="${n}" data-d="1" aria-label="أكتر">${ic('plus',2.6)}</button></span></div>`).join('')}</div>
+    <div class="total">بيقدر يجمع لحد <b><span id="perday">${fmt(perDay(k))}</span> ${esc(CUR().s)}</b> باليوم</div>
     <div class="bottom"><button class="btn filled" data-next>التالي</button></div>`;
 }
 function goalScreen(i){
@@ -375,7 +414,7 @@ function goalScreen(i){
     ${g?`<div class="namerow"><label for="gname">الهدف</label><input id="gname" value="${esc(g.name)}" placeholder="مثلاً: بلاي ستيشن" data-gname autocomplete="off"><span id="gicon">${glyph(g.icon,g.c,'sm')}</span></div>
       ${g.id==='custom'?`<div class="autonote">${ic('sparkles')}بنختار الأيقونة حسب الاسم</div>`:''}
       <div class="amount"><span class="lbl">بيحتاج يجمع</span>
-        <div class="big"><button data-amt="-10" aria-label="أقل">${ic('minus',2.6)}</button><span class="n"><input type="number" inputmode="numeric" min="1" max="99999" value="${g.amount}" id="gamount" aria-label="قديش بيحتاج">${coin()}</span><button data-amt="10" aria-label="أكتر">${ic('plus',2.6)}</button></div>
+        <div class="big"><button data-amt="-10" aria-label="أقل">${ic('minus',2.6)}</button><span class="n"><input type="number" inputmode="decimal" min="1" max="999999" step="any" value="${fmt(g.amount)}" id="gamount" aria-label="قديش بيحتاج"><span class="bigsym">${esc(CUR().s)}</span></span><button data-amt="10" aria-label="أكتر">${ic('plus',2.6)}</button></div>
         <span class="eta" id="eta">${etaText(k)}</span></div>`:''}
     <div class="bottom"><button class="btn filled" data-next ${g&&!g.name.trim()?'disabled':''}>${!g?'تخطّى هلأ':i<kids.length-1?`التالي: ${esc(kids[i+1].name)}`:'خلصنا'}</button>
       ${g?'':'<div class="hint">فيك تحدده بعدين مع '+esc(k.name)+'</div>'}</div>`;
@@ -389,8 +428,8 @@ function readyScreen(){
     ${kids.map(k=>{const d=k.goal?Math.ceil(k.goal.amount/Math.max(1,perDay(k))):0;return `<article class="brief">
       <header>${kav(k,'big')}<div class="hn"><b>${esc(k.name)}</b><span>${k.age} ${k.age>10?'سنة':'سنين'} · ${k.tasks.length} مهام باليوم</span></div>
         ${approved?`<span class="ok-badge">${ic('check',3)}معتمد</span>`:`<button class="edit" data-edit="${kids.indexOf(k)}">تعديل</button>`}</header>
-      <ul>${k.tasks.map(t=>`<li>${glyph(t.icon,t.c,'sm')}<span class="tn">${esc(t.name)}</span><span class="pts">${t.value}${coin()}</span></li>`).join('')}</ul>
-      ${k.goal?`<div class="dream">${glyph(k.goal.icon,k.goal.c,'sm')}<div><b>بيحلم بـ${esc(k.goal.name||'هدفه')}</b><span>${k.goal.amount} نقطة · تقريباً ${d} ${d>2&&d<11?'أيام':'يوم'}</span></div></div>`
+      <ul>${k.tasks.map(t=>`<li>${glyph(t.icon,t.c,'sm')}<span class="tn">${esc(t.name)}</span><span class="pts">${money(t.value)}</span></li>`).join('')}</ul>
+      ${k.goal?`<div class="dream">${glyph(k.goal.icon,k.goal.c,'sm')}<div><b>بيحلم بـ${esc(k.goal.name||'هدفه')}</b><span>${fmt(k.goal.amount)} ${esc(CUR().s)} · تقريباً ${d} ${d>2&&d<11?'أيام':'يوم'}</span></div></div>`
         :`<div class="dream muted"><div><b>لسا ما في حلم</b><span>حدّدوه سوا من الصفحة الرئيسية</span></div></div>`}
     </article>`}).join('')}
     <div class="bottom">${approved?`<button class="btn filled">للصفحة الرئيسية</button>`:`<button class="btn filled" data-approve>اعتماد المهام</button><div class="hint">بتقدر تعدّل أي شي بعدين من الإعدادات</div>`}</div>`;
@@ -434,6 +473,21 @@ function addSheet(){
     <div class="autonote">${ic('sparkles')}بنختار الأيقونة حسب الاسم</div>
     <button class="btn filled" data-addtask ${d.name.trim()?'':'disabled'}>إضافة «${esc(d.name.trim()||'المهمة')}»</button>`);
 }
+function currencySheet(q=''){
+  const norm=x=>x.replace(/[أإآ]/g,'ا').toLowerCase();
+  const hit=x=>!q||norm(x.n).includes(norm(q))||x.c.toLowerCase().includes(q.toLowerCase());
+  const row=x=>`<button class="crow" data-cur="${x.c}" aria-pressed="${x.c===currency}"><span class="csym">${esc(x.s)}</span><span class="t"><b>${esc(x.n)}</b><span>${x.c}</span></span>${x.c===currency?`<span class="tick">${ic('check',3)}</span>`:''}</button>`;
+  const top=CURRENCIES.filter(x=>x.top&&hit(x)), rest=CURRENCIES.filter(x=>!x.top&&hit(x)).sort((a,b)=>a.n.localeCompare(b.n,'ar'));
+  const body=`${top.length?`<div class="slabel">الأكثر استخداماً</div><div class="group clist">${top.map(row).join('')}</div>`:''}
+    ${rest.length?`<div class="slabel">كل العملات</div><div class="group clist">${rest.map(row).join('')}</div>`:''}
+    ${!top.length&&!rest.length?'<div class="empty">ما لقينا عملة بهالاسم</div>':''}`;
+  const open=$('#sheets .sheet.show');
+  if(open&&open.querySelector('#clist')){ open.querySelector('#clist').innerHTML=body; return }
+  openSheet(`<div class="ksbar"><span></span><b>العملة</b><button class="done" data-close>تم</button></div>
+    <div class="search">${ic('search')}<input id="csearch" placeholder="ابحث: ريال، دولار، EUR…" autocomplete="off"></div>
+    <div class="autonote" style="padding-top:10px">اخترناها حسب منطقة جهازك. هي وحدة لكل العيلة.</div>
+    <div id="clist">${body}</div>`);
+}
 function daysSheet(n){
   const t=kids[FLOW[at][1]].tasks[n], d=t.days;
   openSheet(`<div class="ksbar"><span></span><b>${esc(t.name)}</b><button class="done" data-close>تم</button></div>
@@ -459,7 +513,9 @@ document.addEventListener('click',e=>{
     else { const src=[...SUGGEST,...k.custom].find(x=>x.id===id); k.tasks.push({...src,value:2,days:[...EVERY]}); lastAdded=id }
     addSheet(); return }
   if('addtask' in t.dataset){ if(t.disabled) return; const c={id:'c'+Date.now(),name:draft.name.trim(),icon:taskIconFor(draft.name),c:TASK}; k.custom.push(c); k.tasks.push({...c,value:2,days:[...EVERY]}); draft={name:'',icon:'sparkles'}; addSheet(); return }
-  if(t.dataset.val!=null){ const x=k.tasks[+t.dataset.val]; x.value=Math.max(0,Math.min(999,x.value+(+t.dataset.d))); refresh(); return }
+  if(t.dataset.val!=null){ const x=k.tasks[+t.dataset.val]; x.value=Math.max(0,Math.min(9999,Math.round((x.value+(+t.dataset.d))*100)/100)); refresh(); return }
+  if('currency' in t.dataset){ currencySheet(); return }
+  if(t.dataset.cur){ currency=t.dataset.cur; currencySheet($('#csearch')?$('#csearch').value:''); return }
   if(t.dataset.days!=null){ daysSheet(+t.dataset.days); return }
   if(t.dataset.day!=null){ const x=k.tasks[+t.dataset.t]; x.days[+t.dataset.day]=!x.days[+t.dataset.day]; if(!x.days.some(Boolean)) x.days[+t.dataset.day]=true; daysSheet(+t.dataset.t); return }
   if(t.dataset.preset){ const x=k.tasks[+t.dataset.t]; x.days=[...(t.dataset.preset==='every'?EVERY:SCHOOL)]; daysSheet(+t.dataset.t); return }
@@ -469,15 +525,16 @@ document.addEventListener('click',e=>{
 document.addEventListener('input',e=>{
   const el=e.target, k=kids[FLOW[at][1]];
   if(el.id==='tname'){ draft.name=el.value; draft.icon=taskIconFor(el.value); const tg=$('#tglyph'); if(tg) tg.innerHTML=ic(draft.icon,2.3); const b=document.querySelector('[data-addtask]'); if(b){ b.disabled=!draft.name.trim(); b.textContent=`إضافة «${draft.name.trim()||'المهمة'}»` } }
-  if(el.dataset.valin!=null){ const v=parseInt(el.value,10); k.tasks[+el.dataset.valin].value=isNaN(v)?0:Math.max(0,Math.min(999,v)); $('#perday').textContent=perDay(k) }
+  if(el.id==='csearch'){ currencySheet(el.value); return }
+  if(el.dataset.valin!=null){ const v=parseFloat(el.value); k.tasks[+el.dataset.valin].value=isNaN(v)?0:Math.max(0,Math.min(9999,v)); $('#perday').textContent=fmt(perDay(k)) }
   if(el.dataset.gname!=null){ k.goal.name=el.value;
     if(k.goal.id==='custom'){ Object.assign(k.goal,iconFor(el.value)); $('#gicon').innerHTML=glyph(k.goal.icon,k.goal.c,'sm') }
     const nb=document.querySelector('[data-next]'); if(nb) nb.disabled=!el.value.trim() }
-  if(el.id==='gamount'){ const v=parseInt(el.value,10); k.goal.amount=isNaN(v)||v<1?1:Math.min(99999,v); $('#eta').innerHTML=etaText(k) }
+  if(el.id==='gamount'){ const v=parseFloat(el.value); k.goal.amount=isNaN(v)||v<=0?1:Math.min(999999,v); $('#eta').innerHTML=etaText(k) }
 });
 /* clean up a typed number when leaving the field */
 document.addEventListener('focusout',e=>{ const el=e.target, k=kids[FLOW[at][1]]; if(!k) return;
-  if(el.dataset.valin!=null) el.value=k.tasks[+el.dataset.valin].value;
+  if(el.dataset.valin!=null) el.value=fmt(k.tasks[+el.dataset.valin].value);
   if(el.id==='gamount') el.value=k.goal.amount; });
 $('#scrim').addEventListener('click',()=>{ closeSheet(); if(FLOW[at][0]==='values') refresh() });
 render(1);
