@@ -62,7 +62,8 @@ svg.i{width:1em;height:1em;flex:none}
 h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-height:1.2;text-wrap:balance}
 .sub{margin-top:6px;font-size:16px;color:var(--label-2);line-height:1.5}
 .spacer{flex:1;min-height:20px}
-.kav{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:19px;flex:none}
+.kav{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:19px;flex:none;background:#E6F1FF;overflow:hidden}
+.kav img{width:84%;height:84%;object-fit:contain;margin-top:8%}
 
 .btn{width:100%;height:54px;flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:17px;font-weight:600;transition:transform .35s var(--spring), background .2s}
 .btn:active{transform:scale(.96)}
@@ -139,7 +140,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .amount .big button{width:44px;height:44px;border-radius:50%;background:rgba(118,118,128,.12);display:grid;place-items:center}
 .amount .big button svg{width:20px;height:20px}
 .amount .eta{font-size:14px;color:var(--label-2);text-align:center;line-height:1.5}
-.amount .eta b{color:var(--green)}
+.amount .eta b{color:var(--label)}
 .namerow{margin-top:14px;background:#fff;border-radius:26px;display:flex;align-items:center;padding:0 16px;min-height:52px}
 .namerow label{width:80px;font-size:17px}
 .namerow .glyph{margin-inline-start:10px}
@@ -180,8 +181,25 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .presets button[aria-pressed="true"]{background:rgba(0,122,255,.14);color:var(--blue)}
 .sheet .btn{margin-top:22px}
 
+/* ready: one brief per child */
+.brief{margin-top:18px;background:#fff;border-radius:26px;padding:16px;flex:none}
+.brief header{display:flex;align-items:center;gap:12px}
+.brief header b{display:block;font-size:20px;font-weight:700}
+.brief header span{display:block;font-size:14px;color:var(--label-2);margin-top:1px}
+.kav.big{width:60px;height:60px}
+.brief ul{list-style:none;margin:14px 0 0;padding:0}
+.brief li{display:flex;align-items:center;gap:10px;padding:7px 0;position:relative}
+.brief li + li::before{content:"";position:absolute;top:0;inset-inline:46px 0;height:.5px;background:var(--sep)}
+.brief .tn{flex:1;font-size:16px}
+.brief .pts{display:flex;align-items:center;gap:3px;font-weight:600;font-size:15px;font-variant-numeric:tabular-nums}
+.dream{display:flex;align-items:center;gap:10px;margin-top:12px;padding:12px;border-radius:18px;background:var(--grouped)}
+.dream b{display:block;font-size:15px;font-weight:600}
+.dream span{display:block;font-size:13px;color:var(--label-2);margin-top:1px}
+.dream.muted{justify-content:center;text-align:center}
 /* ready */
-.ready{align-items:center;text-align:center;justify-content:center}
+.ready{text-align:start}
+.ready .burst{margin:0 auto;flex:none}
+.ready h1,.ready .sub{text-align:center}
 .ready .burst{width:96px;height:96px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;transform:scale(.4);opacity:0;transition:transform .5s var(--spring) .1s, opacity .2s .1s}
 .ready .burst svg{width:48px;height:48px}
 .ready[data-pos="center"] .burst{transform:none;opacity:1}
@@ -229,7 +247,7 @@ const glyph=(icon,c,sm='')=>`<span class="glyph ${sm}" style="--c:${c}">${ic(ico
 const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 
 /* iOS system colours */
-const TASK='#007AFF', GOAL='#FF9500';  // one calm accent each
+const TASK='#007AFF', GOAL='#007AFF';  // the identity has one colour
 const C={red:'#FF3B30',orange:'#FF9500',yellow:'#FFCC00',green:'#34C759',mint:'#00C7BE',teal:'#30B0C7',blue:'#007AFF',indigo:'#5856D6',purple:'#AF52DE',pink:'#FF2D55',brown:'#A2845E'};
 
 /* suggested tasks; `ages` = the range where it is pre-selected */
@@ -295,8 +313,8 @@ const SCHOOL=[1,1,1,1,1,0,0].map(Boolean), EVERY=Array(7).fill(true);
 
 /* the family from step 1 (demo) */
 const kids=[
-  {name:'سليم', age:9, color:C.orange},
-  {name:'لؤي',  age:6, color:C.green},
+  {name:'سليم', age:9, photo:'../photos/boy.png'},
+  {name:'لؤي',  age:6, photo:'../photos/child.png'},
 ];
 kids.forEach(k=>{
   k.tasks=SUGGEST.filter(t=>k.age>=t.ages[0]&&k.age<=t.ages[1]).map(t=>({...t,value:t.id==='hw'||t.id==='pray'?3:2,days:[...EVERY]}));
@@ -310,7 +328,7 @@ const $=s=>document.querySelector(s);
 
 function daysLabel(d){ if(d.every(Boolean))return 'كل يوم'; if(d.join()===SCHOOL.join())return 'أيام المدرسة'; const n=d.filter(Boolean).length; return n?`${n} ${n>2&&n<11?'أيام':'يوم'} بالأسبوع`:'ولا يوم'; }
 const perDay=k=>k.tasks.reduce((a,t)=>a+t.value,0);
-const kav=(k,cls='')=>`<span class="kav ${cls}" style="background:${k.color}">${esc(k.name[0])}</span>`;
+const kav=(k,cls='')=>`<span class="kav ${cls}">${k.photo?`<img src="${k.photo}" alt="">`:esc(k.name[0])}</span>`;
 function nav(i,canBack=true){ const k=kids[i]; return `<div class="nav">${canBack?`<button class="back" data-back aria-label="رجوع"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${IC.chev}</svg></button>`:'<span></span>'}${k?`<span class="who">${esc(k.name)}${kav(k)}</span>`:''}</div>` }
 
 /* ---------- screens ---------- */
@@ -354,17 +372,18 @@ function goalScreen(i){
 }
 function etaText(k){ const d=Math.ceil(k.goal.amount/Math.max(1,perDay(k))); return perDay(k)?`إذا خلّص كل مهامه، بيوصل خلال <b>${d} ${d>2&&d<11?'أيام':'يوم'}</b> تقريباً`:'ما في مهام عليها نقاط لسا'; }
 function readyScreen(){
-  return `<div class="spacer"></div>
+  return `<div style="height:70px;flex:none"></div>
     <div class="burst">${ic('check',3)}</div>
     <h1>كل شي جاهز!</h1>
-    <div class="sub">بكرة الصبح بيلاقي الأولاد مهامهم ناطرتهم.</div>
-    <div class="group summary">${kids.map(k=>`<div class="row">${kav(k)}<span class="t"><b>${esc(k.name)}</b>
-      <span class="minis">${k.tasks.map(t=>glyph(t.icon,t.c,'sm')).join('')}</span></span>
-      ${k.goal?`<span class="goalchip">${glyph(k.goal.icon,k.goal.c,'sm')}${k.goal.amount}${coin()}</span>`:''}</div>`).join('')}</div>
-    <div class="spacer"></div>
-    <button class="btn filled">للصفحة الرئيسية</button>`;
+    <div class="sub">بكرة الصبح بيلاقي كل ولد مهامه ناطرته.</div>
+    ${kids.map(k=>{const d=k.goal?Math.ceil(k.goal.amount/Math.max(1,perDay(k))):0;return `<article class="brief">
+      <header>${kav(k,'big')}<div><b>${esc(k.name)}</b><span>${k.age} ${k.age>10?'سنة':'سنين'} · ${k.tasks.length} مهام باليوم</span></div></header>
+      <ul>${k.tasks.map(t=>`<li>${glyph(t.icon,t.c,'sm')}<span class="tn">${esc(t.name)}</span><span class="pts">${t.value}${coin()}</span></li>`).join('')}</ul>
+      ${k.goal?`<div class="dream">${glyph(k.goal.icon,k.goal.c,'sm')}<div><b>بيحلم بـ${esc(k.goal.name||'هدفه')}</b><span>${k.goal.amount} نقطة · تقريباً ${d} ${d>2&&d<11?'أيام':'يوم'}</span></div></div>`
+        :`<div class="dream muted"><div><b>لسا ما في حلم</b><span>حدّدوه سوا من الصفحة الرئيسية</span></div></div>`}
+    </article>`}).join('')}
+    <div class="bottom"><button class="btn filled">للصفحة الرئيسية</button></div>`;
 }
-
 function render(dir=1){
   const [kind,i]=FLOW[at];
   const html = kind==='tasks'?tasksScreen(i):kind==='values'?valuesScreen(i):kind==='goal'?goalScreen(i):readyScreen();

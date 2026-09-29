@@ -13,7 +13,8 @@
   color-scheme: light;
   --bg:#FFFFFF; --grouped:#F2F2F7; --cell:#FFFFFF;
   --label:#000000; --label-2:rgba(60,60,67,.6); --label-3:rgba(60,60,67,.3); --sep:rgba(60,60,67,.18);
-  --blue:#007AFF; --green:#34C759; --orange:#FF9500; --pink:#FF2D55;
+  --blue:#007AFF; --tint:#E6F1FF; --green:#34C759;   /* one brand colour; green only for 'done' */
+  --person:linear-gradient(180deg,#A5ABB6,#858994);  /* contact-style avatar ground */
   --font:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Arabic", "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif;
   --glass:rgba(255,255,255,.72);
   --spring:cubic-bezier(.34,1.4,.64,1);
@@ -57,8 +58,8 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 
 /* welcome */
 .welcome{padding-top:96px;isolation:isolate}
-.welcome::before{content:"";position:absolute;inset:-10% -20% 45%;z-index:-1;filter:blur(40px);opacity:.55;
-  background:radial-gradient(30% 40% at 25% 40%,#FF9500,transparent 70%),radial-gradient(30% 40% at 75% 30%,#34C759,transparent 70%),radial-gradient(35% 45% at 55% 65%,#007AFF,transparent 70%),radial-gradient(25% 35% at 85% 70%,#FF2D55,transparent 70%);
+.welcome::before{content:"";position:absolute;inset:-10% -20% 45%;z-index:-1;filter:blur(50px);opacity:.28;
+  background:radial-gradient(40% 45% at 35% 40%,#007AFF,transparent 70%),radial-gradient(35% 40% at 70% 55%,#7DB9FF,transparent 70%);
   animation:drift 14s ease-in-out infinite alternate}
 .welcome::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(transparent 20%,#fff 62%)}
 @keyframes drift{to{transform:translate(4%,3%) rotate(8deg) scale(1.08)}}
@@ -68,7 +69,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .tag{margin-top:6px;text-align:center;font-size:17px;color:var(--label-2)}
 .features{list-style:none;margin:40px 8px 0;padding:0;display:flex;flex-direction:column;gap:22px}
 .features li{display:flex;align-items:center;gap:16px}
-.sym{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;color:#fff}
+.sym{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--tint);color:var(--blue)}
 .sym svg{width:24px;height:24px}
 .features b{display:block;font-size:17px;font-weight:600}
 .features div > span{display:block;font-size:14px;color:var(--label-2);margin-top:1px;line-height:1.4}
@@ -119,12 +120,13 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .kslabel.sec{margin:26px 16px 8px}
 .kslabel.sec + .group{margin-top:0}
 .kids .you{font-size:12px;font-weight:600;color:var(--label-2);background:rgba(118,118,128,.12);padding:2px 8px;border-radius:99px;margin-inline-start:6px;vertical-align:2px}
-.kids .wait{color:var(--orange)}
+.kids .wait{color:var(--blue)}
 /* about you */
 .roles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .roles button{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0 14px;border-radius:26px;background:#fff;font-size:17px;font-weight:600;box-shadow:inset 0 0 0 2px transparent;transition:box-shadow .2s}
 .roles button[aria-pressed="true"]{box-shadow:inset 0 0 0 2.5px var(--blue)}
-.roles .re{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;color:#fff}
+.roles .re{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:var(--grouped);overflow:hidden}
+.roles .re img{width:52px;height:52px}
 .roles .re svg{width:28px;height:28px}
 /* passcode */
 .pin{text-align:center}
@@ -166,7 +168,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .ksbar #kidAdd{font-weight:600}
 .ksbar #kidAdd[disabled]{color:var(--label-3)}
 .photo{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:10px;cursor:pointer;position:relative}
-.photo .ph{width:104px;height:104px;border-radius:50%;background:var(--kc,#C7C7CC);color:#fff;display:grid;place-items:center;overflow:hidden;font-size:44px;font-weight:700;transition:background .25s}
+.photo .ph{width:104px;height:104px;border-radius:50%;background:var(--person);color:#fff;display:grid;place-items:center;overflow:hidden;font-size:44px;font-weight:700;transition:background .25s}
 .photo .ph svg{width:40px;height:40px}
 .photo .ph img{width:100%;height:100%;object-fit:cover}
 .photo .pl{color:var(--blue);font-size:15px}
@@ -183,7 +185,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .paywall{padding-top:56px}
 .paywall h1{margin:16px 0 0;text-align:center;font-size:28px;font-weight:800;letter-spacing:-.01em}
 .timeline{list-style:none;margin:28px 4px 0;padding:0;position:relative}
-.timeline::before{content:"";position:absolute;top:22px;bottom:22px;right:21px;width:3px;border-radius:3px;background:linear-gradient(var(--green),var(--orange),var(--blue))}
+.timeline::before{content:"";position:absolute;top:22px;bottom:22px;right:21px;width:3px;border-radius:3px;background:var(--tint)}
 .timeline li{display:flex;gap:14px;align-items:flex-start;position:relative;padding-bottom:18px}
 .timeline li:last-child{padding-bottom:0}
 .timeline .sym{width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 4px #fff}
@@ -196,7 +198,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .plan b{display:block;font-size:15px;font-weight:600}
 .plan .p{display:block;font-size:20px;font-weight:800;margin-top:6px;direction:ltr;text-align:right}
 .plan .pm{display:block;font-size:13px;color:var(--label-2);margin-top:2px}
-.plan .save{position:absolute;top:-10px;left:12px;background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px}
+.plan .save{position:absolute;top:-10px;left:12px;background:var(--blue);color:#fff;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px}
 .plan .tick{position:absolute;top:14px;left:14px;width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--label-3);display:grid;place-items:center}
 .plan[aria-pressed="true"] .tick{background:var(--blue);box-shadow:none}
 .plan .tick svg{width:14px;height:14px;color:#fff;opacity:0}
@@ -257,12 +259,11 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="app" viewBox="0 0 104 104">
-    <defs><linearGradient id="ib" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F2F2F7"/></linearGradient></defs>
-    <rect width="104" height="104" rx="24" fill="url(#ib)"/>
-    <circle cx="37" cy="37" r="16" fill="#FF9500"/>
-    <rect x="53" y="21" width="31" height="31" rx="10" fill="#34C759"/>
-    <rect x="20" y="53" width="31" height="31" rx="10" fill="#007AFF"/>
-    <path d="M68.5 56.5l4.3 8.7 9.6 1.4-7 6.8 1.7 9.6-8.6-4.5-8.6 4.5 1.7-9.6-7-6.8 9.6-1.4z" fill="#FF2D55" stroke="#FF2D55" stroke-width="3" stroke-linejoin="round"/>
+    <defs><linearGradient id="ig" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3D9BFF"/><stop offset="1" stop-color="#0066E6"/></linearGradient></defs>
+    <rect width="104" height="104" rx="24" fill="url(#ig)"/>
+    <rect x="37" y="21" width="30" height="8" rx="3.5" fill="#fff"/>
+    <path d="M35 32h34v3c0 3.2 9 5.5 9 14v21a11 11 0 0 1-11 11H37a11 11 0 0 1-11-11V49c0-8.5 9-10.8 9-14z" fill="#fff"/>
+    <path d="m52 47.5 3.6 7.3 8 1.2-5.8 5.6 1.4 8-7.2-3.8-7.2 3.8 1.4-8-5.8-5.6 8-1.2z" fill="#0A74F0" stroke="#0A74F0" stroke-width="2" stroke-linejoin="round"/>
   </symbol>
   <symbol id="apple" viewBox="0 0 24 24"><path fill="currentColor" d="M16.37 1.43c0 1.14-.49 2.27-1.18 3.08-.74.9-1.99 1.57-2.99 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.57-2.27 1.21-2.98.8-.94 2.14-1.64 3.25-1.68.03.13.05.28.05.43zm4.56 15.71c-.03.07-.46 1.58-1.52 3.12-.94 1.34-1.94 2.71-3.43 2.71-1.52 0-1.9-.88-3.63-.88-1.7 0-2.3.91-3.67.91-1.38 0-2.33-1.26-3.43-2.8-1.29-1.82-2.32-4.63-2.32-7.28 0-4.28 2.8-6.55 5.55-6.55 1.45 0 2.68.95 3.6.95.87 0 2.22-1.01 3.9-1.01.61 0 2.89.06 4.37 2.19-.13.09-2.38 1.37-2.38 4.19 0 3.26 2.85 4.42 2.96 4.45z"/></symbol>
   <symbol id="google" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.98-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></symbol>
@@ -287,11 +288,11 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
       <h1>مكمورة</h1>
       <div class="tag">مهام صغيرة… وأحلام كبيرة</div>
       <ul class="features">
-        <li><span class="sym" style="background:var(--green)"><svg><use href="#ok"/></svg></span>
+        <li><span class="sym"><svg><use href="#ok"/></svg></span>
           <div><b>مهام يومية بسيطة</b><span>أولادك بيعرفوا شو عليهم اليوم بنظرة.</span></div></li>
-        <li><span class="sym" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.3l-5.8 3.1 1.1-6.5L2.6 9.3l6.5-.9z"/></svg></span>
+        <li><span class="sym"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.3l-5.8 3.1 1.1-6.5L2.6 9.3l6.5-.9z"/></svg></span>
           <div><b>أهداف بيحلموا فيها</b><span>كل مهمة بتقرّبهم خطوة من هدفهم.</span></div></li>
-        <li><span class="sym" style="background:var(--pink)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.8 4.5c2.2 0 3.7 1.2 5.2 3 1.5-1.8 3-3 5.2-3 3.8 0 5.9 3.8 4.4 7.2C19.5 16.4 12 21 12 21z"/></svg></span>
+        <li><span class="sym"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.8 4.5c2.2 0 3.7 1.2 5.2 3 1.5-1.8 3-3 5.2-3 3.8 0 5.9 3.8 4.4 7.2C19.5 16.4 12 21 12 21z"/></svg></span>
           <div><b>لحظات عائلية حلوة</b><span>مفاجآت للعيلة لما ينجزوا سوا.</span></div></li>
       </ul>
       <div class="spacer"></div>
@@ -332,8 +333,8 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
       <div class="group" style="margin-top:20px"><div class="row"><label for="meName">الاسم</label><input id="meName" autocomplete="name" placeholder="اسمك"></div></div>
       <div class="kslabel">الأولاد بينادوك</div>
       <div class="roles" role="radiogroup" aria-label="الأولاد بينادوك">
-        <button role="radio" aria-pressed="false" data-role="بابا"><span class="re" style="background:#007AFF"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4 21a8 8 0 0 1 16 0z"/></svg></span>بابا</button>
-        <button role="radio" aria-pressed="false" data-role="ماما"><span class="re" style="background:#FF2D55"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4 21a8 8 0 0 1 16 0z"/></svg></span>ماما</button>
+        <button role="radio" aria-pressed="false" data-role="بابا"><span class="re"><img src="../photos/man.png" alt=""></span>بابا</button>
+        <button role="radio" aria-pressed="false" data-role="ماما"><span class="re"><img src="../photos/woman.png" alt=""></span>ماما</button>
       </div>
       <div class="spacer"></div>
       <button class="btn filled" id="meNext" disabled>التالي</button>
@@ -371,11 +372,11 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
       <div class="tag" style="font-size:16px"><span class="days">14</span> يوم كاملة، وبتلغي وقت ما بدك.</div>
 
       <ol class="timeline">
-        <li><span class="sym" style="background:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.8-1.2"/></svg></span>
+        <li><span class="sym"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.8-1.2"/></svg></span>
           <div><b>اليوم</b><span>كل شي مفتوح لعيلتك، وما بتدفع شي.</span></div></li>
-        <li><span class="sym" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></span>
+        <li><span class="sym"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></span>
           <div><b>بعد <span class="remind">12</span> يوم</b><span>منبعتلك تذكير قبل ما تخلص التجربة.</span></div></li>
-        <li><span class="sym" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.3l-5.8 3.1 1.1-6.5L2.6 9.3l6.5-.9z"/></svg></span>
+        <li><span class="sym"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.3l-5.8 3.1 1.1-6.5L2.6 9.3l6.5-.9z"/></svg></span>
           <div><b>بعد <span class="days">14</span> يوم</b><span>بيبلّش الاشتراك، إلا إذا ألغيته قبلها.</span></div></li>
       </ol>
 
@@ -417,8 +418,6 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
       <div class="group" style="margin-top:22px"><div class="row"><label for="kidName">الاسم</label><input id="kidName" placeholder="سليم" autocomplete="off"></div></div>
       <div class="kslabel">العمر</div>
       <div class="ages" id="ages"></div>
-      <div class="kslabel">لونه المفضّل</div>
-      <div class="colors" id="colors"></div>
     </div>
 
     <!-- Sign in with Apple (Apple's system sheet; shown so the step is real) -->
@@ -484,10 +483,11 @@ $('#emailOpen').addEventListener('click',()=>showEmail(true));
 
 /* ---------- about you ---------- */
 const me={name:'',role:null,photo:null};
+const roleImg=r=>r==='بابا'?'../photos/man.png':r==='ماما'?'../photos/woman.png':null;  // until a real photo is added
 function paintMe(){
   const n=$('#meName').value.trim(); me.name=n;
-  $('#meAv').innerHTML = me.photo?`<img src="${me.photo}" alt="">` : n ? n[0] : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>';
-  $('#meAv').style.setProperty('--kc', me.role==='ماما'?'#FF2D55':me.role==='بابا'?'#007AFF':'#8E8E93');
+  const pic = me.photo || roleImg(me.role);
+  $('#meAv').innerHTML = pic?`<img src="${pic}" alt="">` : n ? n[0] : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>';
   document.querySelectorAll('[data-role]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.role===me.role));
   $('#meNext').disabled=!(n && me.role);
 }
@@ -515,17 +515,16 @@ function key(k){
 }
 
 /* ---------- family: add children (name, age, favourite colour, optional photo) ---------- */
-const COLORS=['#FF9500','#34C759','#007AFF','#FF2D55','#AF52DE','#30B0C7'];
 const kids=[]; let draft=null;
-function kidAv(k){return `<span class="kav" style="background:${k.color}">${k.photo?`<img src="${k.photo}" alt="">`:k.name.trim()[0]||''}</span>`}
+function kidAv(k){return `<span class="kav" style="background:var(--person)">${k.photo?`<img src="${k.photo}" alt="">`:k.name.trim()[0]||''}</span>`}
 /* the account owner, plus at most one other parent */
 let spouse=null, spDraft=null;
-const other=()=>me.role==='ماما'?{role:'بابا',word:'الزوج',pron:'ه',color:'#007AFF'}:{role:'ماما',word:'الزوجة',pron:'ها',color:'#FF2D55'};
+const other=()=>me.role==='ماما'?{role:'بابا',word:'الزوج',pron:'ه'}:{role:'ماما',word:'الزوجة',pron:'ها'};
 function renderParents(){
   const o=other(), meRole=me.role||'بابا';
-  let h=`<div class="row">${kidAv({name:me.name||'؟',color:meRole==='ماما'?'#FF2D55':'#007AFF',photo:me.photo})}<span class="nm"><b>${(me.name||'إنت').replace(/</g,'&lt;')}<span class="you">إنت</span></b><span>${meRole}</span></span></div>`;
+  let h=`<div class="row">${kidAv({name:me.name||'؟',photo:me.photo||roleImg(meRole)})}<span class="nm"><b>${(me.name||'إنت').replace(/</g,'&lt;')}<span class="you">إنت</span></b><span>${meRole}</span></span></div>`;
   h += spouse
-    ? `<div class="row">${kidAv(spouse)}<span class="nm"><b>${spouse.name.replace(/</g,'&lt;')}</b><span>${o.role} · <span class="wait">بعتنال${o.pron} دعوة</span></span></span><button class="del" data-delsp aria-label="حذف">حذف</button></div>`
+    ? `<div class="row">${kidAv({...spouse,photo:spouse.photo||roleImg(other().role)})}<span class="nm"><b>${spouse.name.replace(/</g,'&lt;')}</b><span>${o.role} · <span class="wait">بعتنال${o.pron} دعوة</span></span></span><button class="del" data-delsp aria-label="حذف">حذف</button></div>`
     : `<div class="row"><button class="addrow row" style="padding:0" id="addSp"><span class="kav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>إضافة ${o.word}</button></div>`;
   $('#parentsList').innerHTML=h;
 }
@@ -557,7 +556,7 @@ function renderKids(){
   $('#familyNext').disabled=!kids.length;
 }
 function kidSheet(open){
-  if(open){ draft={name:'',age:8,color:COLORS[kids.length%COLORS.length],photo:null}; $('#kidName').value=''; paintDraft() }
+  if(open){ draft={name:'',age:8,photo:null}; $('#kidName').value=''; paintDraft() }
   $('#scrim').classList.toggle('show',open); $('#kidSheet').classList.toggle('show',open);
   if(open) setTimeout(()=>$('#kidName').focus(),350);
 }
@@ -565,7 +564,6 @@ function paintDraft(){
   const ph=$('#phPreview'); ph.style.setProperty('--kc',draft.color);
   ph.innerHTML = draft.photo?`<img src="${draft.photo}" alt="">` : draft.name.trim() ? draft.name.trim()[0] : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>';
   $('#ages').innerHTML=Array.from({length:13},(_,n)=>n+3).map(a=>`<button aria-pressed="${a===draft.age}" data-age="${a}">${a}</button>`).join('');
-  $('#colors').innerHTML=COLORS.map(c=>`<button style="--c:${c}" aria-pressed="${c===draft.color}" data-color="${c}" aria-label="لون"></button>`).join('');
   $('#kidAdd').disabled=!draft.name.trim();
 }
 $('#kidName').addEventListener('input',e=>{draft.name=e.target.value;paintDraft()});
