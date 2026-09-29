@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Makmoura Task Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+/* Same native iOS system as screen 1. */
+:root{
+  color-scheme: light;
+  --bg:#FFFFFF; --grouped:#F2F2F7; --cell:#FFFFFF;
+  --label:#000000; --label-2:rgba(60,60,67,.6); --label-3:rgba(60,60,67,.3); --sep:rgba(60,60,67,.18);
+  --blue:#007AFF; --green:#34C759; --orange:#FF9500; --yellow:#FFCC00; --pink:#FF2D55;
+  --font:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Arabic", "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --glass:rgba(255,255,255,.72);
+  --out:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.4,.64,1);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:#E5E5EA;color:var(--label);font-family:var(--font);-webkit-font-smoothing:antialiased;padding-inline:16px}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);outline-offset:2px}
+svg.i{width:1em;height:1em;flex:none}
+
+/* desktop preview */
+.stage{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding-block:24px}
+.label{display:flex;flex-direction:column;align-items:center;gap:10px}
+.label b{font-size:17px;font-weight:600}
+.seg{display:flex;flex-wrap:wrap;justify-content:center;background:rgba(118,118,128,.12);border-radius:9px;padding:2px;max-width:560px}
+.seg button{height:30px;padding:0 12px;border-radius:7px;font-size:13px;font-weight:500}
+.seg button[aria-current="step"]{background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.12), 0 3px 1px rgba(0,0,0,.04);font-weight:600}
+.phone{position:relative;width:390px;height:min(844px, calc(100dvh - 110px));min-height:660px;border-radius:55px;overflow:hidden;background:var(--grouped);
+  box-shadow:0 0 0 12px #1C1C1E, 0 0 0 13px #3A3A3C, 0 30px 80px rgba(0,0,0,.25)}
+.chrome{position:absolute;inset:0;pointer-events:none;z-index:60}
+.sb{position:absolute;top:0;inset-inline:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:4px 34px 0;direction:ltr;font:600 17px/1 "Inter",-apple-system,sans-serif;color:#000}
+.sb .ic{display:flex;gap:6px;align-items:center}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:124px;height:36px;border-radius:20px;background:#000}
+.home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:138px;height:5px;border-radius:3px;background:#000}
+@media (max-width: 520px){
+  body{padding-inline:0;background:var(--grouped)}
+  .stage{padding-block:0;gap:0}
+  .label,.chrome{display:none}
+  .phone{width:100%;height:100vh;height:100dvh;min-height:560px;border-radius:0;box-shadow:none}
+}
+
+/* screens */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:0 20px 34px;transition:transform .45s var(--out), opacity .35s;overflow-y:auto;scrollbar-width:none;background:var(--grouped)}
+.screen::-webkit-scrollbar{display:none}
+.screen[data-pos="right"]{transform:translateX(-100%);opacity:0;pointer-events:none}
+.screen[data-pos="left"]{transform:translateX(30%);opacity:0;pointer-events:none}
+@media (max-width:520px){.screen{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}}
+.nav{height:52px;margin-top:54px;display:flex;align-items:center;justify-content:space-between;flex:none}
+.back{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--glass);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.08), inset 0 1px 0 #fff, 0 2px 10px rgba(0,0,0,.08);transition:transform .35s var(--spring)}
+.back:active{transform:scale(.9)}
+.back svg{width:22px;height:22px}
+.who{display:flex;align-items:center;gap:8px;height:36px;padding:0 6px 0 14px;border-radius:99px;background:var(--glass);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.08), 0 2px 10px rgba(0,0,0,.06);font-size:15px;font-weight:600}
+.who .kav{width:28px;height:28px;font-size:13px}
+h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-height:1.2;text-wrap:balance}
+.sub{margin-top:6px;font-size:16px;color:var(--label-2);line-height:1.5}
+.spacer{flex:1;min-height:20px}
+.kav{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:19px;flex:none}
+
+.btn{width:100%;height:54px;flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:17px;font-weight:600;transition:transform .35s var(--spring), background .2s}
+.btn:active{transform:scale(.96)}
+.btn.filled{background:var(--blue);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 6px 18px -6px rgba(0,122,255,.55)}
+.btn[disabled]{background:rgba(118,118,128,.14);color:var(--label-3);box-shadow:none;cursor:default}
+.bottom{position:sticky;bottom:0;padding-top:14px;margin-top:auto;background:linear-gradient(rgba(242,242,247,0),var(--grouped) 30%)}
+.hint{text-align:center;font-size:13px;color:var(--label-2);margin-top:10px}
+
+/* app-style icon tile (like iOS Settings / Reminders) */
+.glyph{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;color:#fff;background:var(--c);box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 2px 6px color-mix(in srgb, var(--c) 40%, transparent);flex:none}
+.glyph svg{width:28px;height:28px}
+.glyph.sm{width:36px;height:36px;border-radius:10px}
+.glyph.sm svg{width:21px;height:21px}
+
+/* task picker grid */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+.pick{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 4px 12px;border-radius:24px;background:#fff;font-size:14px;font-weight:500;line-height:1.3;text-align:center;transition:transform .35s var(--spring), box-shadow .2s}
+.pick:active{transform:scale(.94)}
+.pick[aria-pressed="true"]{box-shadow:inset 0 0 0 2.5px var(--blue)}
+.pick .ok{position:absolute;top:8px;left:8px;width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;transform:scale(0);transition:transform .35s var(--spring)}
+.pick .ok svg{width:13px;height:13px}
+.pick[aria-pressed="true"] .ok{transform:scale(1)}
+.pick.new{background:transparent;box-shadow:inset 0 0 0 1.5px rgba(60,60,67,.18);color:var(--blue)}
+.pick.new .glyph{background:rgba(0,122,255,.12);color:var(--blue);box-shadow:none}
+
+/* grouped list */
+.group{margin-top:22px;background:#fff;border-radius:26px;overflow:hidden;flex:none}
+.row{display:flex;align-items:center;gap:12px;min-height:64px;padding:8px 16px;position:relative;width:100%;text-align:start}
+.row + .row::before{content:"";position:absolute;top:0;inset-inline-start:64px;inset-inline-end:0;height:.5px;background:var(--sep)}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block;font-size:17px;font-weight:500}
+.row .t > span{display:block;font-size:13px;color:var(--blue);margin-top:1px}
+.stepper{display:flex;align-items:center;background:rgba(118,118,128,.12);border-radius:99px;height:36px;direction:ltr}
+.stepper button{width:40px;height:36px;display:grid;place-items:center;border-radius:99px}
+.stepper button:active{background:rgba(118,118,128,.2)}
+.stepper button svg{width:16px;height:16px}
+.stepper .v{min-width:44px;display:flex;align-items:center;justify-content:center;gap:4px;font-weight:600;font-size:16px;font-variant-numeric:tabular-nums}
+.coin{width:18px;height:18px;flex:none}
+.total{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;font-size:15px;color:var(--label-2)}
+.total b{color:var(--label);display:inline-flex;align-items:center;gap:4px}
+
+/* goal */
+.goals{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+.amount{margin-top:22px;background:#fff;border-radius:26px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.amount .lbl{font-size:15px;color:var(--label-2)}
+.amount .big{display:flex;align-items:center;gap:18px;direction:ltr}
+.amount .big .n{font-size:44px;font-weight:700;min-width:110px;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;font-variant-numeric:tabular-nums}
+.amount .big .n .coin{width:30px;height:30px}
+.amount .big button{width:44px;height:44px;border-radius:50%;background:rgba(118,118,128,.12);display:grid;place-items:center}
+.amount .big button svg{width:20px;height:20px}
+.amount .eta{font-size:14px;color:var(--label-2);text-align:center;line-height:1.5}
+.amount .eta b{color:var(--green)}
+.namerow{margin-top:14px;background:#fff;border-radius:26px;display:flex;align-items:center;padding:0 16px;min-height:52px}
+.namerow label{width:80px;font-size:17px}
+.namerow input{flex:1;height:52px;border:0;outline:none;background:none;font:17px var(--font)}
+
+/* sheets */
+.scrim{position:absolute;inset:0;background:rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .3s;z-index:20}
+.scrim.show{opacity:1;pointer-events:auto}
+.sheet{position:absolute;inset-inline:0;bottom:0;top:54px;background:var(--grouped);border-radius:14px 14px 0 0;z-index:21;padding:0 20px 28px;transform:translateY(105%);transition:transform .45s var(--out);overflow-y:auto}
+.sheet.show{transform:none}
+.sheet.short{top:auto;border-radius:40px;inset-inline:8px;bottom:8px}
+.ksbar{display:flex;align-items:center;justify-content:space-between;height:56px;font-size:17px}
+.ksbar b{font-weight:600}
+.ksbar button{color:var(--blue)}
+.ksbar .done{font-weight:600}
+.ksbar .done[disabled]{color:var(--label-3)}
+.preview{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:6px}
+.preview .glyph{width:84px;height:84px;border-radius:24px}
+.preview .glyph svg{width:44px;height:44px}
+.field{margin-top:18px;background:#fff;border-radius:26px;display:flex;align-items:center;padding:0 16px;min-height:52px}
+.field label{width:70px;font-size:17px}
+.field input{flex:1;height:52px;border:0;outline:none;background:none;font:17px var(--font)}
+.slabel{font-size:13px;color:var(--label-2);margin:22px 16px 8px}
+.icons{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;background:#fff;border-radius:26px;padding:14px}
+.icons button{aspect-ratio:1;border-radius:12px;display:grid;place-items:center;color:var(--label-2)}
+.icons button svg{width:24px;height:24px}
+.icons button[aria-pressed="true"]{background:var(--c);color:#fff}
+.colors{display:flex;justify-content:space-between;background:#fff;border-radius:26px;padding:14px 16px}
+.colors button{width:34px;height:34px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px #fff}
+.colors button[aria-pressed="true"]{box-shadow:0 0 0 3px #fff, 0 0 0 5.5px var(--c)}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:6px}
+.days button{height:44px;border-radius:14px;background:rgba(118,118,128,.12);font-size:12px;font-weight:600}
+.days button[aria-pressed="true"]{background:var(--blue);color:#fff}
+.presets{display:flex;gap:8px;margin-top:16px}
+.presets button{flex:1;height:40px;border-radius:99px;background:rgba(118,118,128,.12);font-size:14px;font-weight:600}
+.presets button[aria-pressed="true"]{background:rgba(0,122,255,.14);color:var(--blue)}
+.sheet .btn{margin-top:22px}
+
+/* ready */
+.ready{align-items:center;text-align:center;justify-content:center}
+.ready .burst{width:96px;height:96px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;transform:scale(.4);opacity:0;transition:transform .5s var(--spring) .1s, opacity .2s .1s}
+.ready .burst svg{width:48px;height:48px}
+.ready[data-pos="center"] .burst{transform:none;opacity:1}
+.ready h1{margin-top:22px}
+.summary{width:100%;margin-top:26px;text-align:start}
+.summary .row .t > span{color:var(--label-2)}
+.row .t > .minis{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.minis .glyph.sm{width:24px;height:24px;border-radius:7px}
+.minis .glyph.sm svg{width:15px;height:15px}
+.goalchip{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--label-2)}
+@media (prefers-reduced-motion: reduce){*{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#FFCC00"/><circle cx="12" cy="12" r="11" fill="url(#cg)"/><circle cx="12" cy="12" r="7.6" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.4"/><path d="m12 7.4 1.4 2.9 3.2.5-2.3 2.2.5 3.2-2.8-1.5-2.8 1.5.5-3.2-2.3-2.2 3.2-.5z" fill="#fff"/><defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD60A"/><stop offset="1" stop-color="#FF9F0A"/></linearGradient></defs></symbol>
+</svg>
+
+<div class="stage">
+  <div class="label"><b>الخطوة ٢ · تجهيز المهام</b><nav class="seg" id="steps" aria-label="المراحل"></nav></div>
+  <main class="phone" id="phone">
+    <div class="chrome" aria-hidden="true">
+      <div class="sb"><span>9:41</span><span class="ic">
+        <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5 5.6 9a3.4 3.4 0 0 1 4.8 0z"/><path d="M3.5 7a6.5 6.5 0 0 1 9 0l-1.3 1.3a4.6 4.6 0 0 0-6.4 0z"/><path d="M1.3 4.8a9.6 9.6 0 0 1 13.4 0l-1.3 1.3a7.8 7.8 0 0 0-10.8 0z"/></svg>
+        <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#000" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2"/><path d="M25 4.5v4a2 2 0 0 0 0-4z" opacity=".4"/></svg></span></div>
+      <div class="island"></div><div class="home"></div>
+    </div>
+    <div id="screens"></div>
+    <div class="scrim" id="scrim"></div>
+    <div id="sheets"></div>
+  </main>
+</div>
+
+<script>
+/* ---------- icons: Lucide (ISC) outlines + two custom glyphs on the same grid ---------- */
+const IC = {"bed":"<path d=\"M2 4v16\" /><path d=\"M2 8h18a2 2 0 0 1 2 2v10\" /><path d=\"M2 17h20\" /><path d=\"M6 8v9\" />","book-open":"<path d=\"M12 7v14\" /><path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\" />","backpack":"<path d=\"M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z\" /><path d=\"M8 10h8\" /><path d=\"M8 18h8\" /><path d=\"M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6\" /><path d=\"M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2\" />","droplets":"<path d=\"M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z\" /><path d=\"M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97\" />","shirt":"<path d=\"M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z\" />","trash-2":"<path d=\"M3 6h18\" /><path d=\"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6\" /><path d=\"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2\" /><line x1=\"10\" x2=\"10\" y1=\"11\" y2=\"17\" /><line x1=\"14\" x2=\"14\" y1=\"11\" y2=\"17\" />","moon":"<path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\" />","paw-print":"<circle cx=\"11\" cy=\"4\" r=\"2\" /><circle cx=\"18\" cy=\"8\" r=\"2\" /><circle cx=\"20\" cy=\"16\" r=\"2\" /><path d=\"M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z\" />","pencil":"<path d=\"M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z\" /><path d=\"m15 5 4 4\" />","utensils":"<path d=\"M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2\" /><path d=\"M7 2v20\" /><path d=\"M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7\" />","sprout":"<path d=\"M7 20h10\" /><path d=\"M10 20c5.5-2.5.8-6.4 3-10\" /><path d=\"M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z\" /><path d=\"M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z\" />","shower-head":"<path d=\"m4 4 2.5 2.5\" /><path d=\"M13.5 6.5a4.95 4.95 0 0 0-7 7\" /><path d=\"M15 5 5 15\" /><path d=\"M14 17v.01\" /><path d=\"M10 16v.01\" /><path d=\"M13 13v.01\" /><path d=\"M16 10v.01\" /><path d=\"M11 20v.01\" /><path d=\"M17 14v.01\" /><path d=\"M20 11v.01\" />","toy-brick":"<rect width=\"18\" height=\"12\" x=\"3\" y=\"8\" rx=\"1\" /><path d=\"M10 8V5c0-.6-.4-1-1-1H6a1 1 0 0 0-1 1v3\" /><path d=\"M19 8V5c0-.6-.4-1-1-1h-3a1 1 0 0 0-1 1v3\" />","bike":"<circle cx=\"18.5\" cy=\"17.5\" r=\"3.5\" /><circle cx=\"5.5\" cy=\"17.5\" r=\"3.5\" /><circle cx=\"15\" cy=\"5\" r=\"1\" /><path d=\"M12 17.5V14l-3-3 4-3 2 3h2\" />","gamepad-2":"<line x1=\"6\" x2=\"10\" y1=\"11\" y2=\"11\" /><line x1=\"8\" x2=\"8\" y1=\"9\" y2=\"13\" /><line x1=\"15\" x2=\"15.01\" y1=\"12\" y2=\"12\" /><line x1=\"18\" x2=\"18.01\" y1=\"10\" y2=\"10\" /><path d=\"M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z\" />","camera":"<path d=\"M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z\" /><circle cx=\"12\" cy=\"13\" r=\"3\" />","palette":"<circle cx=\"13.5\" cy=\"6.5\" r=\".5\" fill=\"currentColor\" /><circle cx=\"17.5\" cy=\"10.5\" r=\".5\" fill=\"currentColor\" /><circle cx=\"8.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\" /><circle cx=\"6.5\" cy=\"12.5\" r=\".5\" fill=\"currentColor\" /><path d=\"M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z\" />","gift":"<rect x=\"3\" y=\"8\" width=\"18\" height=\"4\" rx=\"1\" /><path d=\"M12 8v13\" /><path d=\"M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7\" /><path d=\"M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5\" />","plane":"<path d=\"M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z\" />","headphones":"<path d=\"M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3\" />","puzzle":"<path d=\"M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z\" />","volleyball":"<path d=\"M11.1 7.1a16.55 16.55 0 0 1 10.9 4\" /><path d=\"M12 12a12.6 12.6 0 0 1-8.7 5\" /><path d=\"M16.8 13.6a16.55 16.55 0 0 1-9 7.5\" /><path d=\"M20.7 17a12.8 12.8 0 0 0-8.7-5 13.3 13.3 0 0 1 0-10\" /><path d=\"M6.3 3.8a16.55 16.55 0 0 0 1.9 11.5\" /><circle cx=\"12\" cy=\"12\" r=\"10\" />","book":"<path d=\"M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20\" />","sparkles":"<path d=\"M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z\" /><path d=\"M20 3v4\" /><path d=\"M22 5h-4\" /><path d=\"M4 17v2\" /><path d=\"M5 18H3\" />","hand-heart":"<path d=\"M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16\" /><path d=\"m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9\" /><path d=\"m2 15 6 6\" /><path d=\"M19.5 8.5c.7-.7 1.5-1.6 1.5-2.7A2.73 2.73 0 0 0 16 4a2.78 2.78 0 0 0-5 1.8c0 1.2.8 2 1.5 2.8L16 12Z\" />"};
+IC.toothbrush='<rect x="2" y="15" width="20" height="4" rx="2"/><path d="M14 15v-3"/><path d="M17 15v-4"/><path d="M20 15v-3"/><path d="M6 17h4"/>';
+IC.mosque='<path d="M3 21h18"/><path d="M6 21v-6h12v6"/><path d="M6 15a6 6 0 0 1 12 0"/><path d="M12 9V6.5"/><path d="M12 4.5v.01"/><path d="M10.5 21v-2.5a1.5 1.5 0 0 1 3 0V21"/>';
+IC.check='<path d="M20 6 9 17l-5-5"/>'; IC.plus='<path d="M12 5v14M5 12h14"/>'; IC.minus='<path d="M5 12h14"/>';
+IC.chev='<path d="m9 18 6-6-6-6"/>'; IC.x='<path d="M18 6 6 18M6 6l12 12"/>';
+const ic=(n,w=2.2)=>`<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||''}</svg>`;
+const coin=(cls='coin')=>`<svg class="${cls}" aria-hidden="true"><use href="#coin"/></svg>`;
+const glyph=(icon,c,sm='')=>`<span class="glyph ${sm}" style="--c:${c}">${ic(icon,2.3)}</span>`;
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+
+/* iOS system colours */
+const C={red:'#FF3B30',orange:'#FF9500',yellow:'#FFCC00',green:'#34C759',mint:'#00C7BE',teal:'#30B0C7',blue:'#007AFF',indigo:'#5856D6',purple:'#AF52DE',pink:'#FF2D55',brown:'#A2845E'};
+
+/* suggested tasks; `ages` = the range where it is pre-selected */
+const SUGGEST=[
+  {id:'teeth', name:'تفريش الأسنان', icon:'toothbrush', c:C.teal,   ages:[3,15]},
+  {id:'bed',   name:'ترتيب السرير',  icon:'bed',        c:C.indigo, ages:[5,15]},
+  {id:'pray',  name:'الصلاة',        icon:'mosque',     c:C.green,  ages:[7,15]},
+  {id:'read',  name:'القراءة',       icon:'book-open',  c:C.orange, ages:[6,15]},
+  {id:'bag',   name:'تجهيز الشنطة',  icon:'backpack',   c:C.brown,  ages:[6,15]},
+  {id:'hw',    name:'الوظايف',       icon:'pencil',     c:C.blue,   ages:[8,15]},
+  {id:'toys',  name:'ترتيب الألعاب', icon:'toy-brick',  c:C.pink,   ages:[3,7]},
+  {id:'water', name:'شرب المي',      icon:'droplets',   c:C.teal,   ages:[3,6]},
+  {id:'dress', name:'لبس لحالي',     icon:'shirt',      c:C.purple, ages:[3,6]},
+  {id:'table', name:'تجهيز السفرة',  icon:'utensils',   c:C.red,    ages:[99,99]},
+  {id:'plant', name:'سقاية الزرع',   icon:'sprout',     c:C.green,  ages:[99,99]},
+  {id:'sleep', name:'النوم بكير',    icon:'moon',       c:C.indigo, ages:[99,99]},
+];
+const GOALS=[
+  {id:'bike',  name:'دراجة',       icon:'bike',       c:C.red,    amount:120},
+  {id:'game',  name:'لعبة إلكترونية', icon:'gamepad-2', c:C.indigo, amount:200},
+  {id:'lego',  name:'ليغو',        icon:'toy-brick',  c:C.yellow, amount:80},
+  {id:'art',   name:'علبة ألوان',   icon:'palette',    c:C.pink,   amount:40},
+  {id:'ball',  name:'طابة',        icon:'volleyball', c:C.orange, amount:50},
+  {id:'book',  name:'قصص',         icon:'book',       c:C.green,  amount:30},
+];
+const CUSTOM_ICONS=['sparkles','hand-heart','paw-print','trash-2','shower-head','utensils','sprout','moon','shirt','pencil','book-open','droplets'];
+const CUSTOM_COLORS=[C.red,C.orange,C.yellow,C.green,C.teal,C.blue,C.purple,C.pink];
+const DAYS=['سبت','أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة'];
+const SCHOOL=[1,1,1,1,1,0,0].map(Boolean), EVERY=Array(7).fill(true);
+
+/* the family from step 1 (demo) */
+const kids=[
+  {name:'سليم', age:9, color:C.orange},
+  {name:'لؤي',  age:6, color:C.green},
+];
+kids.forEach(k=>{
+  k.tasks=SUGGEST.filter(t=>k.age>=t.ages[0]&&k.age<=t.ages[1]).map(t=>({...t,value:t.id==='hw'||t.id==='pray'?3:2,days:[...EVERY]}));
+  k.goal=null; k.custom=[];
+});
+
+/* flow: for each child → tasks, values, goal; then ready */
+const FLOW=[...kids.flatMap((k,i)=>[['tasks',i],['values',i],['goal',i]]),['ready',null]];
+let at=0;
+const $=s=>document.querySelector(s);
+
+function daysLabel(d){ if(d.every(Boolean))return 'كل يوم'; if(d.join()===SCHOOL.join())return 'أيام المدرسة'; const n=d.filter(Boolean).length; return n?`${n} ${n>2&&n<11?'أيام':'يوم'} بالأسبوع`:'ولا يوم'; }
+const perDay=k=>k.tasks.reduce((a,t)=>a+t.value,0);
+const kav=(k,cls='')=>`<span class="kav ${cls}" style="background:${k.color}">${esc(k.name[0])}</span>`;
+function nav(i,canBack=true){ const k=kids[i]; return `<div class="nav">${canBack?`<button class="back" data-back aria-label="رجوع"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${IC.chev}</svg></button>`:'<span></span>'}${k?`<span class="who">${esc(k.name)}${kav(k)}</span>`:''}</div>` }
+
+/* ---------- screens ---------- */
+function tasksScreen(i){
+  const k=kids[i], chosen=new Set(k.tasks.map(t=>t.id));
+  const all=[...SUGGEST,...k.custom];
+  return `${nav(i,at>0)}
+    <h1>شو بدك ${esc(k.name)} يعمل كل يوم؟</h1>
+    <div class="sub">اخترنالك حسب عمره (${k.age} ${k.age>10?'سنة':'سنين'}). كبسة لتضيف أو تشيل.</div>
+    <div class="grid">${all.map(t=>`<button class="pick" aria-pressed="${chosen.has(t.id)}" data-task="${t.id}"><span class="ok">${ic('check',3.2)}</span>${glyph(t.icon,t.c)}${esc(t.name)}</button>`).join('')}
+      <button class="pick new" data-newtask>${glyph('plus',C.blue)}مهمة جديدة</button></div>
+    <div class="bottom"><button class="btn filled" data-next ${k.tasks.length?'':'disabled'}>التالي</button>
+      <div class="hint">${k.tasks.length} مهام · فيك تغيّرهم بعدين</div></div>`;
+}
+function valuesScreen(i){
+  const k=kids[i];
+  return `${nav(i)}
+    <h1>كل مهمة قديش بتسوى؟</h1>
+    <div class="sub">هدول النقاط يلي بتنزل بمكمورة ${esc(k.name)} لما توافق على المهمة.</div>
+    <div class="group">${k.tasks.map((t,n)=>`<div class="row">${glyph(t.icon,t.c,'sm')}
+      <button class="t" data-days="${n}" style="text-align:start"><b>${esc(t.name)}</b><span>${daysLabel(t.days)}</span></button>
+      <span class="stepper"><button data-val="${n}" data-d="-1" aria-label="أقل">${ic('minus',2.6)}</button><span class="v">${t.value}${coin()}</span><button data-val="${n}" data-d="1" aria-label="أكتر">${ic('plus',2.6)}</button></span></div>`).join('')}</div>
+    <div class="total">بيقدر يجمع لحد <b>${perDay(k)}${coin()}</b> باليوم</div>
+    <div class="bottom"><button class="btn filled" data-next>التالي</button></div>`;
+}
+function goalScreen(i){
+  const k=kids[i], g=k.goal, days=g?Math.ceil(g.amount/Math.max(1,perDay(k))):0;
+  return `${nav(i)}
+    <h1>شو بيحلم ${esc(k.name)}؟</h1>
+    <div class="sub">هدف يجمعله. اسأله، وخلّيه يختار معك.</div>
+    <div class="goals">${GOALS.map(o=>`<button class="pick" aria-pressed="${g&&g.id===o.id}" data-goal="${o.id}"><span class="ok">${ic('check',3.2)}</span>${glyph(o.icon,o.c)}${o.name}</button>`).join('')}</div>
+    ${g?`<div class="namerow"><label for="gname">الهدف</label><input id="gname" value="${esc(g.name)}" data-gname></div>
+      <div class="amount"><span class="lbl">بيحتاج يجمع</span>
+        <div class="big"><button data-amt="-10" aria-label="أقل">${ic('minus',2.6)}</button><span class="n">${g.amount}${coin()}</span><button data-amt="10" aria-label="أكتر">${ic('plus',2.6)}</button></div>
+        <span class="eta">إذا خلّص كل مهامه، بيوصل خلال <b>${days} ${days>2&&days<11?'أيام':'يوم'}</b> تقريباً</span></div>`:''}
+    <div class="bottom"><button class="btn filled" data-next>${!g?'تخطّى هلأ':i<kids.length-1?`التالي: ${esc(kids[i+1].name)}`:'خلصنا'}</button>
+      ${g?'':'<div class="hint">فيك تحدده بعدين مع '+esc(k.name)+'</div>'}</div>`;
+}
+function readyScreen(){
+  return `<div class="spacer"></div>
+    <div class="burst">${ic('check',3)}</div>
+    <h1>كل شي جاهز!</h1>
+    <div class="sub">بكرة الصبح بيلاقي الأولاد مهامهم ناطرتهم.</div>
+    <div class="group summary">${kids.map(k=>`<div class="row">${kav(k)}<span class="t"><b>${esc(k.name)}</b>
+      <span class="minis">${k.tasks.map(t=>glyph(t.icon,t.c,'sm')).join('')}</span></span>
+      ${k.goal?`<span class="goalchip">${glyph(k.goal.icon,k.goal.c,'sm')}${k.goal.amount}${coin()}</span>`:''}</div>`).join('')}</div>
+    <div class="spacer"></div>
+    <button class="btn filled">للصفحة الرئيسية</button>`;
+}
+
+function render(dir=1){
+  const [kind,i]=FLOW[at];
+  const html = kind==='tasks'?tasksScreen(i):kind==='values'?valuesScreen(i):kind==='goal'?goalScreen(i):readyScreen();
+  const old=$('#screens .screen');
+  const el=document.createElement('section'); el.className='screen'+(kind==='ready'?' ready':''); el.dataset.pos=dir>0?'right':'left'; el.innerHTML=html;
+  $('#screens').appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ el.dataset.pos='center'; if(old){ old.dataset.pos=dir>0?'left':'right'; setTimeout(()=>old.remove(),450) } }));
+  steps();
+}
+/* redraw the current screen in place, keeping scroll */
+function refresh(){ const el=$('#screens .screen:last-child'), y=el.scrollTop, [kind,i]=FLOW[at];
+  el.innerHTML = kind==='tasks'?tasksScreen(i):kind==='values'?valuesScreen(i):kind==='goal'?goalScreen(i):readyScreen(); el.scrollTop=y; }
+function steps(){
+  const names={tasks:'المهام',values:'القيمة',goal:'الهدف',ready:'جاهز'};
+  $('#steps').innerHTML=FLOW.map(([k,i],n)=>`<button data-jump="${n}" ${n===at?'aria-current="step"':''}>${names[k]}${i!=null?` · ${kids[i].name}`:''}</button>`).join('');
+}
+
+/* ---------- sheets ---------- */
+function openSheet(html,short){ $('#sheets').innerHTML=`<div class="sheet ${short?'short':''}" role="dialog">${html}</div>`; requestAnimationFrame(()=>{ $('#scrim').classList.add('show'); $('#sheets .sheet').classList.add('show') }) }
+function closeSheet(){ const s=$('#sheets .sheet'); $('#scrim').classList.remove('show'); if(s){ s.classList.remove('show'); setTimeout(()=>{ if(!s.classList.contains('show')) s.remove() },450) } }
+
+let draft=null;
+function newTaskSheet(){
+  const d=draft;
+  openSheet(`<div class="ksbar"><button data-close>إلغاء</button><b>مهمة جديدة</b><button class="done" data-addtask ${d.name.trim()?'':'disabled'}>إضافة</button></div>
+    <div class="preview">${glyph(d.icon,d.c)}</div>
+    <div class="field"><label for="tname">الاسم</label><input id="tname" placeholder="مثلاً: إطعام القطة" value="${esc(d.name)}" autocomplete="off"></div>
+    <div class="slabel">الأيقونة</div>
+    <div class="icons" style="--c:${d.c}">${CUSTOM_ICONS.map(n=>`<button aria-pressed="${d.icon===n}" data-icon="${n}" aria-label="${n}">${ic(n)}</button>`).join('')}</div>
+    <div class="slabel">اللون</div>
+    <div class="colors">${CUSTOM_COLORS.map(c=>`<button style="--c:${c}" aria-pressed="${d.c===c}" data-color="${c}" aria-label="لون"></button>`).join('')}</div>`);
+}
+function daysSheet(n){
+  const t=kids[FLOW[at][1]].tasks[n], d=t.days;
+  openSheet(`<div class="ksbar"><span></span><b>${esc(t.name)}</b><button class="done" data-close>تم</button></div>
+    <div class="slabel" style="margin-top:4px">بأي أيام؟</div>
+    <div class="days">${DAYS.map((x,j)=>`<button aria-pressed="${d[j]}" data-day="${j}" data-t="${n}" >${x}</button>`).join('')}</div>
+    <div class="presets"><button aria-pressed="${d.every(Boolean)}" data-preset="every" data-t="${n}">كل يوم</button><button aria-pressed="${d.join()===SCHOOL.join()}" data-preset="school" data-t="${n}">أيام المدرسة</button></div>`,true);
+}
+
+/* ---------- actions ---------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button'); if(!t) return;
+  const [kind,i]=FLOW[at], k=kids[i];
+  if(t.dataset.jump!=null){ const n=+t.dataset.jump; const d=n>at?1:-1; at=n; closeSheet(); render(d); return }
+  if('next' in t.dataset){ if(t.disabled) return; at=Math.min(FLOW.length-1,at+1); render(1); return }
+  if('back' in t.dataset){ at=Math.max(0,at-1); render(-1); return }
+  if('close' in t.dataset){ closeSheet(); if(FLOW[at][0]==='values') refresh(); return }
+  if(t.dataset.task){ const id=t.dataset.task, has=k.tasks.findIndex(x=>x.id===id);
+    if(has>=0) k.tasks.splice(has,1); else { const src=[...SUGGEST,...k.custom].find(x=>x.id===id); k.tasks.push({...src,value:2,days:[...EVERY]}) }
+    refresh(); return }
+  if('newtask' in t.dataset){ draft={name:'',icon:'sparkles',c:C.purple}; newTaskSheet(); return }
+  if(t.dataset.icon){ draft.icon=t.dataset.icon; newTaskSheet(); return }
+  if(t.dataset.color){ draft.c=t.dataset.color; newTaskSheet(); return }
+  if('addtask' in t.dataset){ if(t.disabled) return; const c={id:'c'+Date.now(),name:draft.name.trim(),icon:draft.icon,c:draft.c}; k.custom.push(c); k.tasks.push({...c,value:2,days:[...EVERY]}); closeSheet(); refresh(); return }
+  if(t.dataset.val!=null){ const x=k.tasks[+t.dataset.val]; x.value=Math.max(1,Math.min(20,x.value+(+t.dataset.d))); refresh(); return }
+  if(t.dataset.days!=null){ daysSheet(+t.dataset.days); return }
+  if(t.dataset.day!=null){ const x=k.tasks[+t.dataset.t]; x.days[+t.dataset.day]=!x.days[+t.dataset.day]; if(!x.days.some(Boolean)) x.days[+t.dataset.day]=true; daysSheet(+t.dataset.t); return }
+  if(t.dataset.preset){ const x=k.tasks[+t.dataset.t]; x.days=[...(t.dataset.preset==='every'?EVERY:SCHOOL)]; daysSheet(+t.dataset.t); return }
+  if(t.dataset.goal){ const o=GOALS.find(g=>g.id===t.dataset.goal); k.goal={...o}; refresh(); return }
+  if(t.dataset.amt){ k.goal.amount=Math.max(10,Math.min(2000,k.goal.amount+(+t.dataset.amt))); refresh(); return }
+});
+document.addEventListener('input',e=>{
+  if(e.target.id==='tname'){ draft.name=e.target.value; const b=document.querySelector('[data-addtask]'); if(b) b.disabled=!draft.name.trim() }
+  if(e.target.dataset.gname!=null){ const k=kids[FLOW[at][1]]; k.goal.name=e.target.value }
+});
+$('#scrim').addEventListener('click',()=>{ closeSheet(); if(FLOW[at][0]==='values') refresh() });
+render(1);
+</script>
+</body>
+</html>
