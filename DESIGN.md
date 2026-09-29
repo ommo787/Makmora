@@ -5,6 +5,17 @@ Makmoura is a family product. It should feel calm and premium to parents, and ob
 Feature specs:
 - [Family Rewards](docs/family-rewards.md)
 
+## Current direction (supersedes the older colour, type and screen notes below)
+
+The product follows native iOS design so it feels like an Apple app. The live references are the screen prototypes in [`prototype/screens/`](prototype/screens/) and the Makmoura identity design system.
+
+- **Colour:** one brand colour, blue `#007AFF`, for buttons, links, selection and every icon (on a `#E6F1FF` tile). Gold only for the points coin, green only for "done", red only for delete. Everything else is white, `#F2F2F7` and greys.
+- **Font:** Apple's system font (SF Arabic / SF Pro) on Apple devices; IBM Plex Sans Arabic and Inter elsewhere.
+- **Controls (iOS 26 style):** capsule buttons, frosted-glass secondary buttons, a round glass back button, grouped lists with 26px corners, and the system sheets (Sign in with Apple, App Store).
+- **App icon:** a blue rounded square with a white jar and a blue star inside: the jar the child fills, the star the dream (`prototype/app-icon.svg`).
+- **People:** children and parents appear by photo; until a family adds photos, 3D avatars stand in.
+- **Flow so far:** Welcome → Account (Apple, Google, email) → About you → Parent passcode → Family (parents and children) → Free trial → Task setup per child (tasks, points, dream) → All set.
+
 ## Principles
 
 **One thing per screen.** Every screen answers: *what is the one most important thing to see or do here?* Anything that doesn't serve that goes to a deeper level or goes away.
