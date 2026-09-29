@@ -38,7 +38,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
   box-shadow:0 0 0 12px #1C1C1E, 0 0 0 13px #3A3A3C, 0 30px 80px rgba(0,0,0,.25)}
 
 .chrome{position:absolute;inset:0;pointer-events:none;z-index:60}
-.sb{position:absolute;top:0;inset-inline:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:4px 34px 0;direction:ltr;font:600 17px/1 "Inter",-apple-system,sans-serif;color:#000}
+.sb{position:absolute;top:0;inset-inline:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:4px 34px 0;font:600 17px/1 "Inter",-apple-system,sans-serif;color:#000}
 .sb .ic{display:flex;gap:6px;align-items:center}
 .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:124px;height:36px;border-radius:20px;background:#000}
 .home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:138px;height:5px;border-radius:3px;background:#000}
@@ -69,7 +69,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .tag{margin-top:6px;text-align:center;font-size:17px;color:var(--label-2)}
 .features{list-style:none;margin:40px 8px 0;padding:0;display:flex;flex-direction:column;gap:22px}
 .features li{display:flex;align-items:center;gap:16px}
-.sym{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--tint);color:var(--blue)}
+.sym{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;color:#fff;background:linear-gradient(180deg,#3D9BFF,#0066E6);box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 3px 8px -2px rgba(0,102,230,.45)}
 .sym svg{width:24px;height:24px}
 .features b{display:block;font-size:17px;font-weight:600}
 .features div > span{display:block;font-size:14px;color:var(--label-2);margin-top:1px;line-height:1.4}
@@ -135,7 +135,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .lock svg{width:32px;height:32px}
 .pin h1{margin-top:18px;font-size:28px}
 .pin .sub{max-width:290px;margin-inline:auto}
-.dots{display:flex;justify-content:center;gap:20px;margin-top:34px;direction:ltr}
+.dots{display:flex;justify-content:center;gap:20px;margin-top:34px}
 .dots i{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--label);transition:background .15s}
 .dots i.on{background:var(--label)}
 .dots.bad{animation:shake .4s}
@@ -188,7 +188,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .timeline::before{content:"";position:absolute;top:22px;bottom:22px;right:21px;width:3px;border-radius:3px;background:var(--tint)}
 .timeline li{display:flex;gap:14px;align-items:flex-start;position:relative;padding-bottom:18px}
 .timeline li:last-child{padding-bottom:0}
-.timeline .sym{width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 4px #fff}
+.timeline .sym{width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 4px #fff, 0 3px 8px -2px rgba(0,102,230,.45)}
 .timeline .sym svg{width:20px;height:20px}
 .timeline b{display:block;font-size:16px;font-weight:700;padding-top:2px}
 .timeline div > span{display:block;font-size:14px;color:var(--label-2);margin-top:1px;line-height:1.45}
@@ -213,7 +213,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 .scrim.show{opacity:1;pointer-events:auto}
 .sheet{position:absolute;inset-inline:8px;bottom:8px;background:#fff;border-radius:40px;box-shadow:0 -4px 30px rgba(0,0,0,.12);padding:20px 20px 24px;z-index:21;transform:translateY(110%);transition:transform .45s var(--out)}
 .sheet.show{transform:none}
-.sheet .hd{display:flex;align-items:center;justify-content:space-between;font-size:17px;font-weight:700;direction:ltr}
+.sheet .hd{display:flex;align-items:center;justify-content:space-between;font-size:17px;font-weight:700}
 .sheet .hd button{width:30px;height:30px;border-radius:50%;background:rgba(118,118,128,.12);display:grid;place-items:center;color:var(--label-2)}
 .sheet .hd button svg{width:14px;height:14px}
 .sheet .item{display:flex;align-items:center;gap:12px;margin-top:18px;padding-bottom:16px;border-bottom:.5px solid var(--sep)}
@@ -230,8 +230,8 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
 
 /* Sign in with Apple sheet */
 #appleSheet{text-align:center;padding-top:14px}
-.ash-top{display:flex;justify-content:space-between;align-items:center;direction:ltr}
-.alogo{width:22px;height:22px;margin-left:8px}
+.ash-top{display:flex;justify-content:space-between;align-items:center}
+.alogo{width:22px;height:22px;margin-inline-start:8px}
 .x{width:32px;height:32px;border-radius:50%;background:rgba(118,118,128,.14);display:grid;place-items:center;color:var(--label-2)}
 .x svg{width:14px;height:14px}
 .ash-h{margin:14px 12px 0;font-size:20px;font-weight:700;line-height:1.4}
@@ -363,6 +363,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
       <div class="foot">فيك تضيف أو تعدّل بعدين من الإعدادات.</div>
       <div class="spacer"></div>
       <button class="btn filled" id="familyNext" disabled>التالي</button>
+      <div class="legal" id="familyHint" style="margin-top:10px">ضيف ولد واحد على الأقل لتكمّل</div>
     </section>
 
     <!-- 6. Free trial: the plan, what happens when, and cancel anytime -->
@@ -398,6 +399,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
       <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
       <h1 id="doneTitle">تجربتك بلّشت!</h1>
       <p id="doneSub"></p>
+      <a class="btn filled" id="doneNext" href="02-tasks-setup.html" style="margin-top:36px;text-decoration:none;max-width:320px">جهّز مهام الأولاد</a>
     </section>
 
     <!-- Add the other parent: same pattern as adding a child, plus an invite -->
@@ -553,7 +555,7 @@ $('#spAdd').addEventListener('click',()=>{spouse=spDraft;spSheet(false);renderPa
 function renderKids(){
   $('#kidsList').innerHTML = kids.map((k,i)=>`<div class="row">${kidAv(k)}<span class="nm"><b>${k.name.replace(/</g,'&lt;')}</b><span>${k.age} ${k.age>10?'سنة':'سنين'}</span></span><button class="del" data-del="${i}" aria-label="حذف">حذف</button></div>`).join('')
     + `<div class="row"><button class="addrow row" style="padding:0" id="addKid"><span class="kav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>${kids.length?'إضافة ولد تاني':'إضافة ولد'}</button></div>`;
-  $('#familyNext').disabled=!kids.length;
+  $('#familyNext').disabled=!kids.length; $('#familyHint').hidden=!!kids.length;
 }
 function kidSheet(open){
   if(open){ draft={name:'',age:8,photo:null}; $('#kidName').value=''; paintDraft() }
@@ -590,6 +592,7 @@ function fine(){ $('#fine').textContent=`مجاناً ${TRIAL_DAYS} يوم، ب�
 function signedIn(via){
   me.name = via==='email' ? '' : 'أحمد الخطيب';   // Apple/Google share the name; email sign-up asks for it
   $('#meName').value=me.name; $('#meSub').textContent = me.name ? 'جبنا اسمك من حسابك، فيك تعدّله.' : 'شو اسمك؟'; paintMe();
+  $('#doneNext').hidden = mode==='login';
   if(mode==='login'){ $('#doneTitle').textContent='أهلاً من جديد!'; $('#doneSub').textContent='عم نفتح عيلتك…'; go('done') }
   else go('me');
 }

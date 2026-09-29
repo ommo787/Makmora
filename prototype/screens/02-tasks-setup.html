@@ -36,7 +36,7 @@ svg.i{width:1em;height:1em;flex:none}
 .phone{position:relative;width:390px;height:min(844px, calc(100dvh - 110px));min-height:660px;border-radius:55px;overflow:hidden;background:var(--grouped);
   box-shadow:0 0 0 12px #1C1C1E, 0 0 0 13px #3A3A3C, 0 30px 80px rgba(0,0,0,.25)}
 .chrome{position:absolute;inset:0;pointer-events:none;z-index:60}
-.sb{position:absolute;top:0;inset-inline:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:4px 34px 0;direction:ltr;font:600 17px/1 "Inter",-apple-system,sans-serif;color:#000}
+.sb{position:absolute;top:0;inset-inline:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:4px 34px 0;font:600 17px/1 "Inter",-apple-system,sans-serif;color:#000}
 .sb .ic{display:flex;gap:6px;align-items:center}
 .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:124px;height:36px;border-radius:20px;background:#000}
 .home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:138px;height:5px;border-radius:3px;background:#000}
@@ -53,11 +53,13 @@ svg.i{width:1em;height:1em;flex:none}
 .screen[data-pos="right"]{transform:translateX(-100%);opacity:0;pointer-events:none}
 .screen[data-pos="left"]{transform:translateX(30%);opacity:0;pointer-events:none}
 @media (max-width:520px){.screen{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}}
-.nav{height:52px;margin-top:54px;display:flex;align-items:center;justify-content:space-between;flex:none}
+.progress{position:absolute;top:54px;inset-inline:20px;height:4px;border-radius:2px;background:rgba(118,118,128,.16);overflow:hidden}
+.progress i{display:block;height:100%;border-radius:2px;background:var(--blue);transition:width .45s var(--out)}
+.nav{height:52px;margin-top:62px;display:flex;align-items:center;justify-content:space-between;flex:none}
 .back{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--glass);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.08), inset 0 1px 0 #fff, 0 2px 10px rgba(0,0,0,.08);transition:transform .35s var(--spring)}
 .back:active{transform:scale(.9)}
 .back svg{width:22px;height:22px}
-.who{display:flex;align-items:center;gap:8px;height:36px;padding:0 6px 0 14px;border-radius:99px;background:var(--glass);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.08), 0 2px 10px rgba(0,0,0,.06);font-size:15px;font-weight:600}
+.who{display:flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 6px;border-radius:99px;background:var(--glass);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.08), 0 2px 10px rgba(0,0,0,.06);font-size:15px;font-weight:600}
 .who .kav{width:28px;height:28px;font-size:13px}
 h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-height:1.2;text-wrap:balance}
 .sub{margin-top:6px;font-size:16px;color:var(--label-2);line-height:1.5}
@@ -73,10 +75,10 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 .hint{text-align:center;font-size:13px;color:var(--label-2);margin-top:10px}
 
 /* app-style icon tile (like iOS Settings / Reminders) */
-.glyph{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;color:var(--c);background:color-mix(in srgb, var(--c) 12%, #fff);flex:none}
-.glyph svg{width:28px;height:28px}
-.glyph.sm{width:36px;height:36px;border-radius:10px}
-.glyph.sm svg{width:21px;height:21px}
+.glyph{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;color:#fff;background:linear-gradient(180deg,#3D9BFF,#0066E6);box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 4px 10px -3px rgba(0,102,230,.5);flex:none}
+.glyph svg{width:30px;height:30px}
+.glyph.sm{width:40px;height:40px;border-radius:11px}
+.glyph.sm svg{width:23px;height:23px}
 
 /* task picker grid */
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
@@ -87,13 +89,14 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 .pick .ok svg{width:13px;height:13px}
 .pick[aria-pressed="true"] .ok{transform:scale(1)}
 .pick.new{background:transparent;box-shadow:inset 0 0 0 1.5px rgba(60,60,67,.18);color:var(--blue)}
-.pick.new .glyph{background:transparent;color:var(--blue)}
+.pick.new .glyph{background:transparent;color:var(--blue);box-shadow:none}
 
 /* task list with delete */
 .tlist .row{min-height:60px}
 .tlist .t b{font-size:17px;font-weight:500}
-.del{width:30px;height:30px;border-radius:50%;background:rgba(118,118,128,.14);color:var(--label-2);display:grid;place-items:center;flex:none;transition:transform .3s var(--spring)}
+.del{position:relative;width:30px;height:30px;border-radius:50%;background:rgba(118,118,128,.14);color:var(--label-2);display:grid;place-items:center;flex:none;transition:transform .3s var(--spring)}
 .del:active{transform:scale(.85)}
+.del::after{content:"";position:absolute;inset:-7px}
 .del svg{width:14px;height:14px}
 .addrow{color:var(--blue);font-size:17px}
 .addrow .glyph{background:rgba(0,122,255,.12);color:var(--blue);box-shadow:none}
@@ -112,11 +115,11 @@ h1{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.01em;line-hei
 /* grouped list */
 .group{margin-top:22px;background:#fff;border-radius:26px;overflow:hidden;flex:none}
 .row{display:flex;align-items:center;gap:12px;min-height:64px;padding:8px 16px;position:relative;width:100%;text-align:start}
-.row + .row::before{content:"";position:absolute;top:0;inset-inline-start:64px;inset-inline-end:0;height:.5px;background:var(--sep)}
+.row + .row::before{content:"";position:absolute;top:0;inset-inline-start:68px;inset-inline-end:0;height:.5px;background:var(--sep)}
 .row .t{flex:1;min-width:0}
 .row .t b{display:block;font-size:17px;font-weight:500}
 .row .t > span{display:block;font-size:13px;color:var(--blue);margin-top:1px}
-.stepper{display:flex;align-items:center;background:rgba(118,118,128,.12);border-radius:99px;height:36px;direction:ltr}
+.stepper{display:flex;align-items:center;background:rgba(118,118,128,.12);border-radius:99px;height:36px}
 .stepper button{width:40px;height:36px;display:grid;place-items:center;border-radius:99px}
 .stepper button:active{background:rgba(118,118,128,.2)}
 .stepper button svg{width:16px;height:16px}
@@ -132,7 +135,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .goals{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
 .amount{margin-top:22px;background:#fff;border-radius:26px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .amount .lbl{font-size:15px;color:var(--label-2)}
-.amount .big{display:flex;align-items:center;gap:18px;direction:ltr}
+.amount .big{display:flex;align-items:center;gap:18px}
 .amount .big .n{display:flex;align-items:center;justify-content:center;gap:6px}
 .amount .big input{width:120px;border:0;outline:none;background:none;text-align:center;font:700 44px var(--font);font-variant-numeric:tabular-nums;padding:0;border-radius:14px;-moz-appearance:textfield}
 .amount .big input:focus{background:var(--grouped)}
@@ -184,6 +187,10 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 /* ready: one brief per child */
 .brief{margin-top:18px;background:#fff;border-radius:26px;padding:16px;flex:none}
 .brief header{display:flex;align-items:center;gap:12px}
+.brief header .hn{flex:1;min-width:0}
+.brief .edit{height:34px;padding:0 14px;border-radius:99px;background:rgba(0,122,255,.1);color:var(--blue);font-size:15px;font-weight:600}
+.ok-badge{display:flex;align-items:center;gap:4px;height:30px;padding:0 12px;border-radius:99px;background:rgba(52,199,89,.14);color:#248A3D;font-size:14px;font-weight:600}
+.ok-badge svg{width:14px;height:14px}
 .brief header b{display:block;font-size:20px;font-weight:700}
 .brief header span{display:block;font-size:14px;color:var(--label-2);margin-top:1px}
 .kav.big{width:60px;height:60px}
@@ -241,7 +248,7 @@ IC.toothbrush='<rect x="2" y="15" width="20" height="4" rx="2"/><path d="M14 15v
 IC.mosque='<path d="M3 21h18"/><path d="M6 21v-6h12v6"/><path d="M6 15a6 6 0 0 1 12 0"/><path d="M12 9V6.5"/><path d="M12 4.5v.01"/><path d="M10.5 21v-2.5a1.5 1.5 0 0 1 3 0V21"/>';
 IC.check='<path d="M20 6 9 17l-5-5"/>'; IC.plus='<path d="M12 5v14M5 12h14"/>'; IC.minus='<path d="M5 12h14"/>';
 IC.chev='<path d="m9 18 6-6-6-6"/>'; IC.x='<path d="M18 6 6 18M6 6l12 12"/>';
-const ic=(n,w=2.2)=>`<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||''}</svg>`;
+const ic=(n,w=2.4)=>`<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||''}</svg>`;
 const coin=(cls='coin')=>`<svg class="${cls}" aria-hidden="true"><use href="#coin"/></svg>`;
 const glyph=(icon,c,sm='')=>`<span class="glyph ${sm}" style="--c:${c}">${ic(icon,2.3)}</span>`;
 const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
@@ -323,13 +330,13 @@ kids.forEach(k=>{
 
 /* flow: for each child → tasks, values, goal; then ready */
 const FLOW=[...kids.flatMap((k,i)=>[['tasks',i],['values',i],['goal',i]]),['ready',null]];
-let at=0;
+let at=0, approved=false;
 const $=s=>document.querySelector(s);
 
 function daysLabel(d){ if(d.every(Boolean))return 'كل يوم'; if(d.join()===SCHOOL.join())return 'أيام المدرسة'; const n=d.filter(Boolean).length; return n?`${n} ${n>2&&n<11?'أيام':'يوم'} بالأسبوع`:'ولا يوم'; }
 const perDay=k=>k.tasks.reduce((a,t)=>a+t.value,0);
 const kav=(k,cls='')=>`<span class="kav ${cls}">${k.photo?`<img src="${k.photo}" alt="">`:esc(k.name[0])}</span>`;
-function nav(i,canBack=true){ const k=kids[i]; return `<div class="nav">${canBack?`<button class="back" data-back aria-label="رجوع"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${IC.chev}</svg></button>`:'<span></span>'}${k?`<span class="who">${esc(k.name)}${kav(k)}</span>`:''}</div>` }
+function nav(i,canBack=true){ const k=kids[i]; return `<div class="progress" aria-hidden="true"><i style="width:${(at+1)/FLOW.length*100}%"></i></div><div class="nav">${canBack?`<button class="back" data-back aria-label="رجوع"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${IC.chev}</svg></button>`:'<span></span>'}${k?`<span class="who">${kav(k)}${esc(k.name)}</span>`:''}</div>` }
 
 /* ---------- screens ---------- */
 function tasksScreen(i){
@@ -377,12 +384,13 @@ function readyScreen(){
     <h1>كل شي جاهز!</h1>
     <div class="sub">بكرة الصبح بيلاقي كل ولد مهامه ناطرته.</div>
     ${kids.map(k=>{const d=k.goal?Math.ceil(k.goal.amount/Math.max(1,perDay(k))):0;return `<article class="brief">
-      <header>${kav(k,'big')}<div><b>${esc(k.name)}</b><span>${k.age} ${k.age>10?'سنة':'سنين'} · ${k.tasks.length} مهام باليوم</span></div></header>
+      <header>${kav(k,'big')}<div class="hn"><b>${esc(k.name)}</b><span>${k.age} ${k.age>10?'سنة':'سنين'} · ${k.tasks.length} مهام باليوم</span></div>
+        ${approved?`<span class="ok-badge">${ic('check',3)}معتمد</span>`:`<button class="edit" data-edit="${kids.indexOf(k)}">تعديل</button>`}</header>
       <ul>${k.tasks.map(t=>`<li>${glyph(t.icon,t.c,'sm')}<span class="tn">${esc(t.name)}</span><span class="pts">${t.value}${coin()}</span></li>`).join('')}</ul>
       ${k.goal?`<div class="dream">${glyph(k.goal.icon,k.goal.c,'sm')}<div><b>بيحلم بـ${esc(k.goal.name||'هدفه')}</b><span>${k.goal.amount} نقطة · تقريباً ${d} ${d>2&&d<11?'أيام':'يوم'}</span></div></div>`
         :`<div class="dream muted"><div><b>لسا ما في حلم</b><span>حدّدوه سوا من الصفحة الرئيسية</span></div></div>`}
     </article>`}).join('')}
-    <div class="bottom"><button class="btn filled">للصفحة الرئيسية</button></div>`;
+    <div class="bottom">${approved?`<button class="btn filled">للصفحة الرئيسية</button>`:`<button class="btn filled" data-approve>اعتماد المهام</button><div class="hint">بتقدر تعدّل أي شي بعدين من الإعدادات</div>`}</div>`;
 }
 function render(dir=1){
   const [kind,i]=FLOW[at];
@@ -432,6 +440,8 @@ document.addEventListener('click',e=>{
   const [kind,i]=FLOW[at], k=kids[i];
   if(t.dataset.jump!=null){ const n=+t.dataset.jump; const d=n>at?1:-1; at=n; closeSheet(); render(d); return }
   if('next' in t.dataset){ if(t.disabled) return; at=Math.min(FLOW.length-1,at+1); render(1); return }
+  if(t.dataset.edit!=null){ approved=false; at=FLOW.findIndex(([k,j])=>k==='tasks'&&j===+t.dataset.edit); render(-1); return }
+  if('approve' in t.dataset){ approved=true; refresh(); return }
   if('back' in t.dataset){ at=Math.max(0,at-1); render(-1); return }
   if('close' in t.dataset){ closeSheet(); refresh(); return }
   if(t.dataset.remove){ const row=t.closest('.row'); row.classList.add('leaving'); setTimeout(()=>{ k.tasks=k.tasks.filter(x=>x.id!==t.dataset.remove); refresh() },260); return }
