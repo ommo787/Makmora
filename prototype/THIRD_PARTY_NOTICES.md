@@ -51,3 +51,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ## Avatars
 
 `photos/` holds Microsoft Fluent Emoji 3D people (boy, child, girl, man, woman; medium skin tone), MIT licence as above. They stand in for real family photos.
+
+## Saudi Riyal sign
+
+The riyal sign in `screens/02-tasks-setup.html` is the glyph from Saudi-Riyal-Font by Emran Alhaddad (npm `@emran-alhaddad/saudi-riyal-font` 1.1.0), SIL Open Font License 1.1.

@@ -171,6 +171,10 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .namerow{margin-top:14px;background:#fff;border-radius:26px;display:flex;align-items:center;padding:0 16px;min-height:52px}
 .namerow label{width:80px;font-size:17px}
 .namerow .glyph{margin-inline-start:10px}
+.goalfield{margin-top:24px;gap:12px}
+.goalfield .glyph{margin:0}
+.riyal{width:.95em;height:.95em;vertical-align:-.12em;display:inline-block}
+.bigsym .riyal{width:26px;height:26px;vertical-align:-3px}
 .autonote{font-size:13px;color:var(--label-2);padding:8px 16px 0;display:flex;align-items:center;gap:6px}
 .autonote svg{width:14px;height:14px;color:var(--purple,#AF52DE)}
 .namerow input{flex:1;height:52px;border:0;outline:none;background:none;font:17px var(--font)}
@@ -428,10 +432,13 @@ const CURRENCIES=[
   {c:'CAD',n:'دولار كندي',s:'C$'},{c:'AUD',n:'دولار أسترالي',s:'A$'},{c:'CHF',n:'فرنك سويسري',s:'CHF'},
   {c:'SEK',n:'كرونة سويدية',s:'kr'},{c:'MYR',n:'رينغيت ماليزي',s:'RM'},{c:'PKR',n:'روبية باكستانية',s:'₨'},{c:'INR',n:'روبية هندية',s:'₹'},
 ];
-let currency='SAR';   // in the app: from the device region (Locale.current.currency), changeable here and in Settings
+let currency='SAR';   // from the device region (Locale.current.currency); no picker needed
 const CUR=()=>CURRENCIES.find(x=>x.c===currency);
 const fmt=n=>(Math.round(n*100)/100).toString();
-const money=(n,cls='')=>`<span class="money ${cls}">${fmt(n)} <span class="sym">${esc(CUR().s)}</span></span>`;
+/* official Saudi riyal sign (Saudi-Riyal-Font, SIL OFL 1.1) */
+const RIYAL=`<svg class="riyal" viewBox="0 0 1256 1256" aria-label="ريال" role="img"><path fill="currentColor" d="M0,0M750,1119 C730,1163,716,1211,711,1262 C711,1262,1136,1172,1136,1172 C1156,1127,1169,1079,1174,1028 C1174,1028,750,1119,750,1119Z M1136,901 C1136,901,1136,901,1136,901 C1156,857,1169,809,1174,758 C1174,758,843,828,843,828 C843,828,843,693,843,693 C843,693,1136,631,1136,631 C1156,587,1169,538,1174,488 C1174,488,843,558,843,558 C843,558,843,72,843,72 C793,100,748,138,711,183 C711,183,711,586,711,586 C711,586,579,614,579,614 C579,614,579,6,579,6 C528,34,483,72,447,117 C447,117,447,642,447,642 C447,642,151,705,151,705 C131,750,117,798,112,849 C112,849,447,777,447,777 C447,777,447,948,447,948 C447,948,88,1024,88,1024 C68,1068,55,1117,50,1167 C50,1167,425,1088,425,1088 C456,1081,482,1063,499,1038 C499,1038,568,936,568,936 C568,936,568,936,568,936 C575,926,579,913,579,899 C579,899,579,749,579,749 C579,749,711,721,711,721 C711,721,711,992,711,992 C711,992,1136,901,1136,901Z "/></svg>`;
+const SYM=()=>currency==='SAR'?RIYAL:esc(CUR().s);
+const money=(n,cls='')=>`<span class="money ${cls}">${fmt(n)} <span class="sym">${SYM()}</span></span>`;
 const DAYS=['سبت','أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة'];
 const SCHOOL=[1,1,1,1,1,0,0].map(Boolean), EVERY=Array(7).fill(true);
 
@@ -471,29 +478,26 @@ function tasksScreen(i){
 function valuesScreen(i){
   const k=kids[i];
   return `${nav(i)}
-    <h1>كل مهمة قديش بتسوى؟</h1>
+    <h1>مكافأة كل مهمة</h1>
     <div class="sub">هاد المبلغ بينزل بمكمورة ${esc(k.name)} لما توافق على المهمة.</div>
-    <button class="curchip" data-currency><span>العملة</span><b>${esc(CUR().n)}</b><span class="cs">${esc(CUR().s)}</span>${ic('chev',2.6)}</button>
     <div class="group">${k.tasks.map((t,n)=>`<div class="row">${glyph(t.icon,t.c,'sm')}
       <button class="t" data-days="${n}" style="text-align:start"><b>${esc(t.name)}</b><span>${daysLabel(t.days)}</span></button>
-      <span class="stepper"><button data-val="${n}" data-d="-1" aria-label="أقل">${ic('minus',2.6)}</button><span class="v"><input type="number" inputmode="decimal" min="0" max="9999" step="any" value="${fmt(t.value)}" data-valin="${n}" aria-label="قيمة ${esc(t.name)}"><span class="sym">${esc(CUR().s)}</span></span><button data-val="${n}" data-d="1" aria-label="أكتر">${ic('plus',2.6)}</button></span></div>`).join('')}</div>
-    <div class="total">بيقدر يجمع لحد <b><span id="perday">${fmt(perDay(k))}</span> ${esc(CUR().s)}</b> باليوم</div>
+      <span class="stepper"><button data-val="${n}" data-d="-1" aria-label="أقل">${ic('minus',2.6)}</button><span class="v"><input type="number" inputmode="decimal" min="0" max="9999" step="any" value="${fmt(t.value)}" data-valin="${n}" aria-label="قيمة ${esc(t.name)}"><span class="sym">${SYM()}</span></span><button data-val="${n}" data-d="1" aria-label="أكتر">${ic('plus',2.6)}</button></span></div>`).join('')}</div>
+    <div class="total">بيقدر يجمع لحد <b><span id="perday">${fmt(perDay(k))}</span> ${SYM()}</b> باليوم</div>
     <div class="bottom"><button class="btn filled" data-next>التالي</button></div>`;
 }
 function goalScreen(i){
   const k=kids[i], g=k.goal;
   return `${nav(i)}
-    <h1>شو بيحلم ${esc(k.name)}؟</h1>
-    <div class="sub">هدف يجمعله. اسأله، وخلّيه يختار معك.</div>
-    <div class="goals">${GOALS.map(o=>`<button class="pick" aria-pressed="${g&&g.id===o.id}" data-goal="${o.id}"><span class="ok">${ic('check',3.2)}</span>${glyph(o.icon,o.c)}${o.name}</button>`).join('')}
-      <button class="pick new" aria-pressed="${g&&g.id==='custom'}" data-goal="custom"><span class="ok">${ic('check',3.2)}</span>${glyph('plus',C.blue)}شي تاني</button></div>
-    ${g?`<div class="namerow"><label for="gname">الهدف</label><input id="gname" value="${esc(g.name)}" placeholder="مثلاً: بلاي ستيشن" data-gname autocomplete="off"><span id="gicon">${glyph(g.icon,g.c,'sm')}</span></div>
-      ${g.id==='custom'?`<div class="autonote">${ic('sparkles')}بنختار الأيقونة حسب الاسم</div>`:''}
-      <div class="amount"><span class="lbl">بيحتاج يجمع</span>
-        <div class="big"><button data-amt="-10" aria-label="أقل">${ic('minus',2.6)}</button><span class="n"><input type="number" inputmode="decimal" min="1" max="999999" step="any" value="${fmt(g.amount)}" id="gamount" aria-label="قديش بيحتاج"><span class="bigsym">${esc(CUR().s)}</span></span><button data-amt="10" aria-label="أكتر">${ic('plus',2.6)}</button></div>
+    <h1>هدف ${esc(k.name)}</h1>
+    <div class="sub">شي بيطمح يوصله. اكتبه متل ما بيحكيه ${esc(k.name)}.</div>
+    <div class="namerow goalfield"><span id="gicon">${glyph(g?g.icon:'gift',TASK,'sm')}</span><input id="gname" value="${esc(g?g.name:'')}" placeholder="مثلاً: بلاي ستيشن، دراجة، رحلة…" data-gname autocomplete="off"></div>
+    <div class="autonote">${ic('sparkles')}بنختار الأيقونة حسب الاسم</div>
+    ${g&&g.name.trim()?`<div class="amount"><span class="lbl">بيحتاج يجمع</span>
+        <div class="big"><button data-amt="-10" aria-label="أقل">${ic('minus',2.6)}</button><span class="n"><input type="number" inputmode="decimal" min="1" max="999999" step="any" value="${fmt(g.amount)}" id="gamount" aria-label="قديش بيحتاج"><span class="bigsym">${SYM()}</span></span><button data-amt="10" aria-label="أكتر">${ic('plus',2.6)}</button></div>
         <span class="eta" id="eta">${etaText(k)}</span></div>`:''}
-    <div class="bottom"><button class="btn filled" data-next ${g&&!g.name.trim()?'disabled':''}>${!g?'تخطّى هلأ':i<kids.length-1?`التالي: ${esc(kids[i+1].name)}`:'خلصنا'}</button>
-      ${g?'':'<div class="hint">فيك تحدده بعدين مع '+esc(k.name)+'</div>'}</div>`;
+    <div class="bottom"><button class="btn filled" data-next>${!(g&&g.name.trim())?'تخطّى هلأ':i<kids.length-1?`التالي: ${esc(kids[i+1].name)}`:'خلصنا'}</button>
+      ${g&&g.name.trim()?'':'<div class="hint">فيك تحدده بعدين مع '+esc(k.name)+'</div>'}</div>`;
 }
 function etaText(k){ const d=Math.ceil(k.goal.amount/Math.max(1,perDay(k))); return perDay(k)?`إذا خلّص كل مهامه، بيوصل خلال <b>${d} ${d>2&&d<11?'أيام':'يوم'}</b> تقريباً`:'ما في مهام عليها نقاط لسا'; }
 function readyScreen(){
@@ -505,8 +509,8 @@ function readyScreen(){
       <header>${kav(k,'big')}<div class="hn"><b>${esc(k.name)}</b><span>${k.age} ${k.age>10?'سنة':'سنين'} · ${k.tasks.length} مهام باليوم</span></div>
         ${approved?`<span class="ok-badge">${ic('check',3)}معتمد</span>`:`<button class="edit" data-edit="${kids.indexOf(k)}">تعديل</button>`}</header>
       <ul>${k.tasks.map(t=>`<li>${glyph(t.icon,t.c,'sm')}<span class="tn">${esc(t.name)}</span><span class="pts">${money(t.value)}</span></li>`).join('')}</ul>
-      ${k.goal?`<div class="dream">${glyph(k.goal.icon,k.goal.c,'sm')}<div><b>بيحلم بـ${esc(k.goal.name||'هدفه')}</b><span>${fmt(k.goal.amount)} ${esc(CUR().s)} · تقريباً ${d} ${d>2&&d<11?'أيام':'يوم'}</span></div></div>`
-        :`<div class="dream muted"><div><b>لسا ما في حلم</b><span>حدّدوه سوا من الصفحة الرئيسية</span></div></div>`}
+      ${k.goal?`<div class="dream">${glyph(k.goal.icon,k.goal.c,'sm')}<div><b>هدفه: ${esc(k.goal.name||'')}</b><span>${fmt(k.goal.amount)} ${SYM()} · تقريباً ${d} ${d>2&&d<11?'أيام':'يوم'}</span></div></div>`
+        :`<div class="dream muted"><div><b>لسا ما في هدف</b><span>حدّدوه سوا من الصفحة الرئيسية</span></div></div>`}
     </article>`}).join('')}
     <div class="bottom">${approved?`<button class="btn filled">للصفحة الرئيسية</button>`:`<button class="btn filled" data-approve>اعتماد المهام</button><div class="hint">بتقدر تعدّل أي شي بعدين من الإعدادات</div>`}</div>`;
 }
@@ -523,9 +527,9 @@ function previewScreen(){
     ${kids.length>1?`<div class="kidseg">${kids.map((x,n)=>`<button aria-pressed="${n===pk}" data-pk="${n}">${kav(x)}${esc(x.name)}</button>`).join('')}</div>`:''}
     <div class="kidphone">
       <div class="kp-head">${kav(k,'big')}<div><span>صباح الخير</span><b>${esc(k.name)}</b></div></div>
-      ${g?`<div class="kp-dream"><div class="kp-dt">${glyph(g.icon,g.c,'sm')}<div><span>حلمي</span><b>${esc(g.name)}</b></div></div>
+      ${g?`<div class="kp-dream"><div class="kp-dt">${glyph(g.icon,g.c,'sm')}<div><span>هدفي</span><b>${esc(g.name)}</b></div></div>
         <div class="kp-bar"><i style="--w:${pct*100}%"></i></div>
-        <div class="kp-note">إذا خلّص كل مهامه، بعد أسبوع بيكون عنده <b>${fmt(week)} ${esc(CUR().s)}</b> من ${fmt(g.amount)}</div></div>`:''}
+        <div class="kp-note">إذا خلّص كل مهامه، بعد أسبوع بيكون عنده <b>${fmt(week)} ${SYM()}</b> من ${fmt(g.amount)} ${SYM()}</div></div>`:''}
       <div class="kp-tl">مهامي اليوم</div>
       <div class="kp-tasks">${k.tasks.slice(0,6).map((t,n)=>`<div class="kp-t ${n===0?'done':''}">${n===0?`<span class="kp-ok">${ic('check',3.2)}</span>`:''}${glyph(t.icon,t.c)}<span>${esc(t.name)}</span></div>`).join('')}</div>
     </div>
@@ -598,7 +602,7 @@ function closeSheet(){ const s=$('#sheets .sheet'); $('#scrim').classList.remove
 let draft=null, lastAdded=null;
 function addSheet(){
   const k=kids[FLOW[at][1]], d=draft, have=new Set(k.tasks.map(t=>t.id));
-  const lib=[...SUGGEST,...k.custom];
+  const lib=[...k.tasks.filter(t=>SUGGEST.some(x=>x.id===t.id)), ...SUGGEST.filter(x=>!have.has(x.id))].slice(0,9);   // 9 at most
   openSheet(`<div class="ksbar"><span></span><b>إضافة مهمة</b><button class="done" data-close>تم</button></div>
     <div class="slabel" style="margin-top:4px">مهام جاهزة · كبسة لتضيف</div>
     <div class="grid lib">${lib.map(t=>{const on=have.has(t.id);return `<button class="pick ${lastAdded===t.id?'justadded':''}" aria-pressed="${on}" data-libadd="${t.id}"><span class="ok">${ic('check',3.2)}</span>${glyph(t.icon,t.c)}${esc(t.name)}<span class="state">${on?'انضافت':'&nbsp;'}</span></button>`}).join('')}</div>
@@ -666,9 +670,9 @@ document.addEventListener('input',e=>{
   if(el.id==='tname'){ draft.name=el.value; draft.icon=taskIconFor(el.value); const tg=$('#tglyph'); if(tg) tg.innerHTML=ic(draft.icon,2.3); const b=document.querySelector('[data-addtask]'); if(b){ b.disabled=!draft.name.trim(); b.textContent=`إضافة «${draft.name.trim()||'المهمة'}»` } }
   if(el.id==='csearch'){ currencySheet(el.value); return }
   if(el.dataset.valin!=null){ const v=parseFloat(el.value); k.tasks[+el.dataset.valin].value=isNaN(v)?0:Math.max(0,Math.min(9999,v)); $('#perday').textContent=fmt(perDay(k)) }
-  if(el.dataset.gname!=null){ k.goal.name=el.value;
-    if(k.goal.id==='custom'){ Object.assign(k.goal,iconFor(el.value)); $('#gicon').innerHTML=glyph(k.goal.icon,k.goal.c,'sm') }
-    const nb=document.querySelector('[data-next]'); if(nb) nb.disabled=!el.value.trim() }
+  if(el.dataset.gname!=null){ const had=!!(k.goal&&k.goal.name.trim()); if(!k.goal) k.goal={id:'custom',name:'',icon:'gift',c:GOAL,amount:100}; k.goal.name=el.value;
+    Object.assign(k.goal,iconFor(el.value),{c:TASK}); $('#gicon').innerHTML=glyph(k.goal.icon,TASK,'sm');
+    if(had!==!!el.value.trim()){ refresh(); const f=$('#gname'); f.focus(); f.setSelectionRange(f.value.length,f.value.length) } }
   if(el.id==='gamount'){ const v=parseFloat(el.value); k.goal.amount=isNaN(v)||v<=0?1:Math.min(999999,v); $('#eta').innerHTML=etaText(k) }
 });
 /* clean up a typed number when leaving the field */
