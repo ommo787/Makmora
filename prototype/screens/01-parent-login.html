@@ -20,6 +20,7 @@
   --spring:cubic-bezier(.34,1.4,.64,1);
   --out:cubic-bezier(.22,1,.36,1);
 }
+html,body{direction:rtl}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:100%}
@@ -271,7 +272,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(0,122,255,.5);ou
   <symbol id="ok" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
-<div class="stage">
+<div class="stage" dir="rtl" lang="ar">
   <div class="label"><b>تسجيل الأهل</b><nav class="seg" id="steps" aria-label="مراحل الشاشة"></nav></div>
 
   <main class="phone">
@@ -524,7 +525,7 @@ let spouse=null, spDraft=null;
 const other=()=>me.role==='ماما'?{role:'بابا',word:'الزوج',pron:'ه'}:{role:'ماما',word:'الزوجة',pron:'ها'};
 function renderParents(){
   const o=other(), meRole=me.role||'بابا';
-  let h=`<div class="row">${kidAv({name:me.name||'؟',photo:me.photo||roleImg(meRole)})}<span class="nm"><b>${(me.name||'إنت').replace(/</g,'&lt;')}<span class="you">إنت</span></b><span>${meRole}</span></span></div>`;
+  let h=`<div class="row">${kidAv({name:me.name||'؟',photo:me.photo||roleImg(meRole)})}<span class="nm"><b>${(me.name||'إنت').replace(/</g,'&lt;')}</b><span>${meRole} · إنت</span></span></div>`;
   h += spouse
     ? `<div class="row">${kidAv({...spouse,photo:spouse.photo||roleImg(other().role)})}<span class="nm"><b>${spouse.name.replace(/</g,'&lt;')}</b><span>${o.role} · <span class="wait">بعتنال${o.pron} دعوة</span></span></span><button class="del" data-delsp aria-label="حذف">حذف</button></div>`
     : `<div class="row"><button class="addrow row" style="padding:0" id="addSp"><span class="kav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>إضافة ${o.word}</button></div>`;
