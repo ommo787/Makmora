@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { Check, HandHeart } from 'lucide-react-native';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { Share, View } from 'react-native';
 
 import { TRIAL_DAYS } from '@/data/catalog';
 import { useFamily } from '@/state/store';
@@ -11,7 +11,7 @@ import { Button, Card, Field, Screen, Sheet, T } from '@/ui/kit';
 const okEmail = (v: string) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim());
 
 export default function Started() {
-  const { invitedPartner, invitePartner, parent } = useFamily();
+  const { invitedPartner, invitePartner, parent, partnerCode } = useFamily();
   const [open, setOpen] = useState(false);
   const [mail, setMail] = useState('');
   const other = parent?.role === 'ماما' ? 'الأب' : 'الأم';
@@ -32,9 +32,17 @@ export default function Started() {
         </Card>
       </View>
       <Sheet open={open} onClose={() => setOpen(false)} title="دعوة">
+        {partnerCode ? (
+          <View style={{ alignItems: 'center', gap: space.m }}>
+            <T v="subhead" c={color.text2} center>{`خلّي ${other} ينزّل مكمورة ويفتح حساب، وبشاشة «عرّفنا عليك» يكبس «عندي رمز دعوة» ويكتب هالرمز.`}</T>
+            <T v="largeTitle" style={{ letterSpacing: 4, writingDirection: 'ltr' }}>{partnerCode}</T>
+            <Button title="شارك الرمز" style={{ alignSelf: 'stretch' }} onPress={() => { Share.share({ message: `انضم لعيلتنا على مكمورة. رمز الدعوة: ${partnerCode}` }).catch(() => {}); invitePartner('code'); setOpen(false); }} />
+          </View>
+        ) : <>
         <T v="subhead" c={color.text2} style={{ marginBottom: space.m }}>رح يوصله رابط لينزّل مكمورة ويفوت على نفس العيلة. بيضيف مهام وبيوافق متلك تماماً، وما بيدفع شي.</T>
         <Field label="البريد" value={mail} onChangeText={setMail} keyboardType="email-address" autoCapitalize="none" placeholder="name@email.com" autoFocus />
         <Button title="إرسال الدعوة" disabled={!okEmail(mail)} onPress={() => { invitePartner(mail.trim()); setOpen(false); }} style={{ marginTop: space.l }} />
+        </>}
       </Sheet>
     </Screen>
   );

@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
-import { signInWithApple, signInWithEmail, signInWithGoogle, type SignedIn } from '@/services/auth';
+import { googleReady, signInWithApple, signInWithEmail, signInWithGoogle, type SignedIn } from '@/services/auth';
+import { restoreFamily } from '@/services/sync';
 import { useFamily } from '@/state/store';
 import { color, space } from '@/theme/tokens';
 import { Button, Field, NavBar, Screen, T, Title } from '@/ui/kit';
@@ -30,29 +31,42 @@ export default function Account() {
   const [mail, setMail] = useState('');
   const [pass, setPass] = useState('');
   const onboarded = useFamily((s) => s.onboarded);
+  const [err, setErr] = useState('');
+  const [busy, setBusy] = useState(false);
 
-  const done = (r: SignedIn | null) => {
-    if (!r) return;
-    if (login && onboarded) return router.replace('/today');
-    router.push({ pathname: '/about', params: { name: r.name ?? '', email: r.email ?? '', via: r.via } });
+  const done = async (get: () => Promise<SignedIn | null>) => {
+    setErr(''); setBusy(true);
+    try {
+      const r = await get();
+      if (!r) return;
+      // an account that already has a family goes straight home
+      if (await restoreFamily()) return router.replace('/today');
+      if (login && onboarded) return router.replace('/today');
+      router.push({ pathname: '/about', params: { name: r.name ?? '', email: r.email ?? '', via: r.via } });
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : 'ما زبط، جرّب مرة تانية.');
+    } finally {
+      setBusy(false);
+    }
   };
   return (
     <Screen footer={<T v="caption" c={color.text2} center>بالمتابعة بتوافق على الشروط وسياسة الخصوصية</T>}>
       <NavBar />
       <Title sub={login ? 'أهلاً من جديد.' : 'بثواني، وبدون ما تتذكّر كلمة سر.'}>{login ? 'تسجيل الدخول' : 'أنشئ حسابك'}</Title>
       <View style={{ gap: space.s + 2, marginTop: space.xxl }}>
-        <Button kind="apple" title="متابعة مع Apple" icon={<AppleMark />} onPress={async () => done(await signInWithApple())} />
-        <Button kind="glass" title="متابعة مع Google" icon={<GoogleMark />} onPress={async () => done(await signInWithGoogle())} />
+        <Button kind="apple" title="متابعة مع Apple" icon={<AppleMark />} disabled={busy} onPress={() => done(signInWithApple)} />
+        {googleReady ? <Button kind="glass" title="متابعة مع Google" icon={<GoogleMark />} disabled={busy} onPress={() => done(signInWithGoogle)} /> : null}
         {!email ? (
           <Button kind="glass" title="متابعة بالبريد" icon={<Mail size={18} color={color.navy} />} onPress={() => setEmail(true)} />
         ) : (
           <View style={{ gap: space.s, marginTop: space.s }}>
             <Field label="البريد" value={mail} onChangeText={setMail} keyboardType="email-address" autoCapitalize="none" autoComplete="email" placeholder="name@email.com" autoFocus />
             <Field label="كلمة السر" value={pass} onChangeText={setPass} secureTextEntry autoComplete={login ? 'current-password' : 'new-password'} placeholder={login ? 'مطلوبة' : '8 أحرف على الأقل'} />
-            <Button title="متابعة" disabled={!okEmail(mail) || pass.length < (login ? 1 : 8)} onPress={async () => done(await signInWithEmail(mail, pass))} style={{ marginTop: space.s }} />
+            <Button title="متابعة" disabled={busy || !okEmail(mail) || pass.length < (login ? 1 : 8)} onPress={() => done(() => signInWithEmail(mail, pass, login))} style={{ marginTop: space.s }} />
             {login ? <Button kind="plain" title="نسيت كلمة السر؟" /> : null}
           </View>
         )}
+        {err ? <T v="subhead" c={color.error} center style={{ marginTop: space.s }}>{err}</T> : null}
       </View>
     </Screen>
   );

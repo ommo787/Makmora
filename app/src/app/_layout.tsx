@@ -9,6 +9,7 @@ import { AppState, I18nManager, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { initPurchases } from '@/services/purchases';
+import { ensureFamily, startSync } from '@/services/sync';
 import { useFamily } from '@/state/store';
 import { color } from '@/theme/tokens';
 import { ToastHost } from '@/ui/toast';
@@ -23,6 +24,12 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [loaded] = useFonts({ IBMPlexSansArabic_400Regular, IBMPlexSansArabic_500Medium, IBMPlexSansArabic_600SemiBold, IBMPlexSansArabic_700Bold });
   useEffect(() => { initPurchases(); }, []);
+  // the family's server, when it is set up: listen for the other devices and send this one's changes
+  useEffect(() => {
+    const go = () => { startSync(); ensureFamily(); };
+    if (useFamily.persist.hasHydrated()) go();
+    return useFamily.persist.onFinishHydration(go);
+  }, []);
   // A new day starts at local midnight: check after loading, when the app comes back, and once a minute.
   useEffect(() => {
     const roll = () => { if (useFamily.persist.hasHydrated()) useFamily.getState().rollover(); };

@@ -5,6 +5,7 @@ import { Share, View } from 'react-native';
 
 import { TRIAL_DAYS } from '@/data/catalog';
 import { deviceCurrency } from '@/services/money';
+import { signOut } from '@/services/sync';
 import { useFamily } from '@/state/store';
 import { color, space } from '@/theme/tokens';
 import { Avatar, Button, Field, Group, Row, Screen, SectionLabel, Sheet, T } from '@/ui/kit';
@@ -29,7 +30,7 @@ export default function Settings() {
       <Group>
         <Row lead={<Avatar avatar={f.parent?.avatar ?? 'man'} size={40} />} title={<T v="headline">{f.parent?.name ?? ''}</T>} sub={`${f.parent?.role ?? ''} · إنت`} />
         {f.invitedPartner
-          ? <Row lead={<Avatar avatar={f.parent?.role === 'ماما' ? 'man' : 'woman'} size={40} />} title={f.parent?.role === 'ماما' ? 'بابا' : 'ماما'} sub={f.partnerJoined ? 'نفس صلاحياتك' : <T v="footnote" c={color.gold700}>{`بعتنا دعوة لـ${f.invitedPartner}`}</T>} />
+          ? <Row lead={<Avatar avatar={f.parent?.role === 'ماما' ? 'man' : 'woman'} size={40} />} title={f.parent?.role === 'ماما' ? 'بابا' : 'ماما'} sub={f.partnerJoined ? 'نفس صلاحياتك' : <T v="footnote" c={color.gold700}>{f.invitedPartner === 'code' ? 'بعتنا الدعوة، ناطرين ينضم' : `بعتنا دعوة لـ${f.invitedPartner}`}</T>} />
           : <Row onPress={() => setInvite(true)} lead={<Lead I={UserPlus} />} title={<T v="body" c={color.link}>{`ادعُ ${f.parent?.role === 'ماما' ? 'الأب' : 'الأم'}`}</T>} />}
         <Row onPress={() => router.push('/kids')} lead={<Lead I={UserPlus} />} title="الأولاد" sub={f.children.map((c) => c.name).join('، ')} end={<ChevronLeft size={18} color={color.text3} />} />
       </Group>
@@ -48,13 +49,23 @@ export default function Settings() {
         <Row lead={<Lead I={Globe} />} title="العملة" sub="حسب منطقة جهازك" end={<T v="headline">{cur.code}</T>} />
       </Group>
 
-      <Button kind="danger" title="تسجيل الخروج" icon={<LogOut size={18} color={color.error} />} style={{ marginTop: space.xxl }} onPress={() => { f.reset(); router.replace('/welcome'); }} />
+      <Button kind="danger" title="تسجيل الخروج" icon={<LogOut size={18} color={color.error} />} style={{ marginTop: space.xxl }} onPress={async () => { await signOut(); router.replace('/welcome'); }} />
       <View style={{ height: 110 }} />
 
       <Sheet open={invite} onClose={() => setInvite(false)} title="دعوة">
-        <T v="subhead" c={color.text2} style={{ marginBottom: space.m }}>رح يوصله رابط لينزّل مكمورة ويفوت على نفس العيلة. بيضيف مهام وبيوافق متلك تماماً، وما بيدفع شي.</T>
-        <Field label="البريد" value={mail} onChangeText={setMail} keyboardType="email-address" autoCapitalize="none" placeholder="name@email.com" />
-        <Button title="إرسال الدعوة" disabled={!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail.trim())} style={{ marginTop: space.l }} onPress={() => { f.invitePartner(mail.trim()); setInvite(false); }} />
+        {f.partnerCode ? (
+          <View style={{ alignItems: 'center', gap: space.m }}>
+            <T v="subhead" c={color.text2} center>{`خلّي ${f.parent?.role === 'ماما' ? 'الأب' : 'الأم'} ينزّل مكمورة ويفتح حساب، وبشاشة «عرّفنا عليك» يكبس «عندي رمز دعوة» ويكتب هالرمز. بيصير عنده نفس صلاحياتك، وما بيدفع شي.`}</T>
+            <T v="largeTitle" style={{ letterSpacing: 4, writingDirection: 'ltr' }}>{f.partnerCode}</T>
+            <Button title="شارك الرمز" style={{ alignSelf: 'stretch' }} onPress={() => { Share.share({ message: `انضم لعيلتنا على مكمورة. رمز الدعوة: ${f.partnerCode}` }).catch(() => {}); f.invitePartner('code'); }} />
+          </View>
+        ) : (
+          <>
+            <T v="subhead" c={color.text2} style={{ marginBottom: space.m }}>رح يوصله رابط لينزّل مكمورة ويفوت على نفس العيلة. بيضيف مهام وبيوافق متلك تماماً، وما بيدفع شي.</T>
+            <Field label="البريد" value={mail} onChangeText={setMail} keyboardType="email-address" autoCapitalize="none" placeholder="name@email.com" />
+            <Button title="إرسال الدعوة" disabled={!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail.trim())} style={{ marginTop: space.l }} onPress={() => { f.invitePartner(mail.trim()); setInvite(false); }} />
+          </>
+        )}
       </Sheet>
       <Sheet open={childPick} onClose={() => setChildPick(false)} title="شاشة مين؟">
         <Group>

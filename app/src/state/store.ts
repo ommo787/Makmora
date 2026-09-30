@@ -5,53 +5,32 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import { SURPRISES, TASK_TEMPLATES, type AvatarKey } from '@/data/catalog';
 import type { IconName } from '@/ui/icons';
 
-export type TaskState = 'todo' | 'waiting' | 'done';
-export type Task = {
-  id: string;
-  key?: string;            // ready-made template key, if any
-  name: string;
-  icon: IconName;
-  did: string;             // "رتّب سريره": how the finished task reads
-  reward: number;          // in the family currency
-  days: boolean[];         // Saturday → Friday
-};
-export type Goal = { name: string; icon: IconName; amount: number };
-export type Child = {
-  id: string;
-  name: string;
-  age: number;
-  avatar: AvatarKey;
-  photo?: string;
-  tasks: Task[];
-  goal?: Goal;
-  balance: number;
-  today: Record<string, { state: TaskState; at?: number; by?: Parent['role'] }>;   // task id → today's state, and which parent approved it
-  approved: { taskId: string; at: number; reward: number; by?: Parent['role'] }[]; // history of approvals
-  day?: string;                                          // which day `today` belongs to (YYYY-MM-DD, local)
-  late?: LateTask[];                                     // finished on an earlier day, still waiting for a parent
-  log?: DayLog[];                                        // one line per past day, newest first (last 60 days)
-  celebrated?: { day?: string; goal?: string };          // so each celebration shows once: the day it was, the goal it was
-};
-/** A task the child finished on an earlier day that no parent approved before midnight. It is never lost. */
-export type LateTask = { id: string; taskId: string; name: string; did: string; icon: IconName; reward: number; date: string; at?: number };
-/** What a day looked like once it closed. */
-export type DayLog = { date: string; done: string[]; planned: number; earned: number };
-export type Parent = { name: string; role: 'بابا' | 'ماما'; avatar: AvatarKey; email?: string; via?: 'apple' | 'google' | 'email' };
-export type Surprise = { key: string; title?: string; icon?: IconName; condition: 'all' | 'manual'; status: 'armed' | 'earned'; seenBy: string[] };
+import {
+  dayKey, emptyShared, reduce,
+  type Child, type DayLog, type Ev, type Goal, type LateTask, type Role, type Shared, type Surprise, type Task,
+} from './family';
 
-type Family = {
+export * from './family';
+
+export type Parent = { name: string; role: Role; avatar: AvatarKey; email?: string; via?: 'apple' | 'google' | 'email' };
+
+/** What only this device knows: who is holding it, and where it stands with the server. */
+type Local = {
   onboarded: boolean;
-  parent?: Parent;
-  children: Child[];
-  secured: boolean;                 // Face ID / passcode set at the first approval
-  subscription: { status: 'none' | 'trial' | 'active'; plan?: 'year' | 'month'; startedAt?: number };
-  surprise?: Surprise;
+  parent?: Parent;                  // the parent using this phone
+  secured: boolean;
   invitedPartner?: string;
-  partnerJoined?: boolean;          // the other parent accepted: same rights, free under the one family subscription
-  familyCode: string;
+  familyCode: string;               // 6 digits for the children's devices
+  partnerCode?: string;             // 8 letters for the other parent (from the server)
+  familyId?: string;                // set once the family lives on the server
   mode: 'parent' | 'child';         // what this device shows
   activeChildId?: string;           // on a child's device
+  base: Shared;                     // the family as the server confirmed it
+  pending: Ev[];                    // what this device did that the server has not confirmed yet
+  lastSeq: number;                  // the last server event applied to `base`
 };
+/** What the screens read: the confirmed family with this device's own unconfirmed changes on top. */
+type Family = Local & Shared;
 
 type Actions = {
   setParent(p: Parent): void;
@@ -65,7 +44,7 @@ type Actions = {
   finishOnboarding(): void;
   startTrial(plan: 'year' | 'month'): void;
   setSecured(v: boolean): void;
-  markDone(childId: string, taskId: string): void;      // the child taps "خلّصت"
+  markDone(childId: string, taskId: string): void;   // the child taps a task
   undoDone(childId: string, taskId: string): void;
   approve(childId: string, taskId: string): void;
   approveLate(childId: string, lateId: string): void;
@@ -79,24 +58,15 @@ type Actions = {
   invitePartner(email: string): void;
   setMode(mode: 'parent' | 'child', childId?: string): void;
   reset(): void;
+  /** server side: apply events in the server's order */
+  applyRemote(rows: { seq: number; ev: Ev }[]): void;
+  /** server side: this device's family now lives on the server */
+  attach(f: { familyId: string; familyCode: string; partnerCode?: string; fresh: boolean }): void;
+  /** server side: drop a pending event the server refused for good */
+  reject(eid: string): void;
 };
 
-/** Local calendar day, so a new day starts at midnight where the family lives. */
-export const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-const planned = (c: Child, date: string) => { const w = (new Date(date + 'T12:00').getDay() + 1) % 7; return c.tasks.filter((t) => t.days[w]).length; };
-
-/** Close the child's last day: log what was done, carry what still waits for approval, and start fresh. */
-function closeDay(c: Child, today: string): Child {
-  if (c.day === today) return c;
-  if (!c.day) return { ...c, day: today };
-  const done = c.tasks.filter((t) => c.today[t.id]?.state === 'done');
-  const waiting: LateTask[] = c.tasks.filter((t) => c.today[t.id]?.state === 'waiting')
-    .map((t) => ({ id: uid(), taskId: t.id, name: t.name, did: t.did, icon: t.icon, reward: t.reward, date: c.day!, at: c.today[t.id]?.at }));
-  const entry: DayLog = { date: c.day, done: done.map((t) => t.name), planned: planned(c, c.day), earned: done.reduce((a, t) => a + t.reward, 0) };
-  return { ...c, day: today, today: {}, late: [...(c.late ?? []), ...waiting], log: [entry, ...(c.log ?? []).filter((d) => d.date !== entry.date)].slice(0, 60) };
-}
-
-const uid = () => Math.random().toString(36).slice(2, 10);
+export const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
 const code = () => Array.from({ length: 6 }, () => '0123456789'[Math.floor(Math.random() * 10)]).join('');
 const EVERY = () => Array(7).fill(true) as boolean[];
 
@@ -124,81 +94,125 @@ export const waitingCount = (c: Child) => Object.values(c.today).filter((s) => s
 export const doneCount = (c: Child) => c.tasks.filter((t) => c.today[t.id]?.state === 'done').length;
 export const earnedToday = (c: Child) => c.tasks.filter((t) => c.today[t.id]?.state === 'done').reduce((a, t) => a + t.reward, 0);
 
-const initial: Family = {
-  onboarded: false, children: [], secured: false, subscription: { status: 'none' }, familyCode: code(), mode: 'parent',
-};
+const visible = (base: Shared, pending: Ev[]): Shared => pending.reduce(reduce, base);
+const initialLocal = (): Local => ({
+  onboarded: false, secured: false, familyCode: code(), mode: 'parent', base: emptyShared(), pending: [], lastSeq: 0,
+});
 
-const mapChild = (s: Family, id: string, f: (c: Child) => Child) => ({ children: s.children.map((c) => (c.id === id ? f(c) : c)) });
+/** Called after this device records an event; the sync service hooks in here to send it. */
+export const outbox = { notify: () => {} };
+
+type Body = Ev extends infer E ? (E extends Ev ? Omit<E, 'eid' | 'at' | 'by'> : never) : never;
 
 export const useFamily = create<Family & Actions>()(
   persist(
-    (set) => ({
-      ...initial,
-      setParent: (p) => set({ parent: p }),
-      addChild: ({ name, age, avatar, photo }) =>
-        set((s) => ({ children: [...s.children, { id: uid(), name, age, avatar, photo, tasks: suggestedTasks(age, avatar === 'girl'), balance: 0, today: {}, approved: [], day: dayKey(), late: [], log: [] }] })),
-      removeChild: (id) => set((s) => ({ children: s.children.filter((c) => c.id !== id) })),
-      addTask: (childId, t) => set((s) => mapChild(s, childId, (c) => ({ ...c, tasks: [...c.tasks, { ...t, id: uid() }] }))),
-      removeTask: (childId, taskId) => set((s) => mapChild(s, childId, (c) => ({ ...c, tasks: c.tasks.filter((t) => t.id !== taskId) }))),
-      updateTask: (childId, taskId, patch) =>
-        set((s) => mapChild(s, childId, (c) => ({ ...c, tasks: c.tasks.map((t) => (t.id === taskId ? { ...t, ...patch } : t)) }))),
-      setGoal: (childId, goal) => set((s) => mapChild(s, childId, (c) => ({ ...c, goal }))),
-      redeemGoal: (childId) =>
-        set((s) => mapChild(s, childId, (c) => (c.goal ? { ...c, balance: Math.max(0, c.balance - c.goal.amount), goal: undefined } : c))),
-      finishOnboarding: () => set({ onboarded: true }),
-      startTrial: (plan) => set({ subscription: { status: 'trial', plan, startedAt: Date.now() }, onboarded: true }),
-      setSecured: (v) => set({ secured: v }),
-      markDone: (childId, taskId) =>
-        set((s) => mapChild(s, childId, (c) => ({ ...c, today: { ...c.today, [taskId]: { state: 'waiting', at: Date.now() } } }))),
-      undoDone: (childId, taskId) =>
-        set((s) => mapChild(s, childId, (c) => ({ ...c, today: { ...c.today, [taskId]: { state: 'todo' } } }))),
-      approve: (childId, taskId) =>
-        set((s) => {
-          const next = mapChild(s, childId, (c) => {
-            const t = c.tasks.find((x) => x.id === taskId);
-            if (!t || c.today[taskId]?.state !== 'waiting') return c;
-            const by = s.parent?.role;
-            return {
-              ...c, balance: c.balance + t.reward,
-              today: { ...c.today, [taskId]: { state: 'done', at: Date.now(), by } },
-              approved: [...c.approved, { taskId, at: Date.now(), reward: t.reward, by }],
-            };
-          });
-          // a family surprise set for "everyone finished everything" is earned the moment it becomes true
-          const sur = s.surprise;
-          if (sur && sur.status === 'armed' && sur.condition === 'all') {
-            const all = next.children.every((c) => c.tasks.length > 0 && c.tasks.every((t) => c.today[t.id]?.state === 'done'));
-            if (all) return { ...next, surprise: { ...sur, status: 'earned' as const, seenBy: [] } };
+    (set, get) => {
+      /** Record one change. On the server it waits in `pending` until confirmed; offline it is final at once. */
+      const emit = (body: Body) => {
+        const s = get();
+        const ev = { ...body, eid: uid(), at: Date.now(), by: s.parent?.role } as Ev;
+        if (s.familyId) {
+          const pending = [...s.pending, ev];
+          set({ pending, ...visible(s.base, pending) });
+          outbox.notify();
+        } else {
+          const base = reduce(s.base, ev);
+          set({ base, ...visible(base, s.pending) });
+        }
+      };
+      const child = (id: string) => get().children.find((c) => c.id === id);
+      return {
+        ...initialLocal(),
+        ...emptyShared(),
+        setParent: (p) => set({ parent: p }),
+        addChild: ({ name, age, avatar, photo }) => emit({ type: 'addChild', child: {
+          id: uid(), name, age, avatar, photo, tasks: suggestedTasks(age, avatar === 'girl'), balance: 0, today: {}, approved: [], day: dayKey(), late: [], log: [],
+        } }),
+        removeChild: (childId) => emit({ type: 'removeChild', childId }),
+        addTask: (childId, t) => emit({ type: 'addTask', childId, task: { ...t, id: uid() } }),
+        removeTask: (childId, taskId) => emit({ type: 'removeTask', childId, taskId }),
+        updateTask: (childId, taskId, patch) => emit({ type: 'updateTask', childId, taskId, patch }),
+        setGoal: (childId, goal) => emit({ type: 'setGoal', childId, goal }),
+        redeemGoal: (childId) => emit({ type: 'redeemGoal', childId }),
+        finishOnboarding: () => set({ onboarded: true }),
+        startTrial: (plan) => { set({ onboarded: true }); emit({ type: 'subscription', subscription: { status: 'trial', plan, startedAt: Date.now() } }); },
+        setSecured: (v) => set({ secured: v }),
+        markDone: (childId, taskId) => emit({ type: 'markDone', childId, taskId, date: dayKey() }),
+        undoDone: (childId, taskId) => emit({ type: 'undoDone', childId, taskId, date: dayKey() }),
+        approve: (childId, taskId) => emit({ type: 'approve', childId, taskId, date: child(childId)?.day ?? dayKey() }),
+        approveLate: (childId, lateId) => emit({ type: 'approveLate', childId, lateId }),
+        dropLate: (childId, lateId) => emit({ type: 'dropLate', childId, lateId }),
+        sendBack: (childId, taskId) => emit({ type: 'sendBack', childId, taskId, date: child(childId)?.day ?? dayKey() }),
+        celebrate: (childId, kind) => emit({ type: 'celebrate', childId, kind, value: kind === 'day' ? dayKey() : child(childId)?.goal?.name }),
+        rollover: () => {
+          const today = dayKey();
+          if (get().children.some((c) => c.day && c.day < today)) emit({ type: 'rollover', date: today });
+        },
+        armSurprise: ({ key, title, icon }, condition) => emit({ type: 'armSurprise', surprise: {
+          key, title, icon, condition, status: condition === 'manual' ? 'earned' : 'armed', seenBy: [],
+        } }),
+        seeSurprise: (childId) => emit({ type: 'seeSurprise', childId }),
+        clearSurprise: () => emit({ type: 'clearSurprise' }),
+        invitePartner: (email) => set({ invitedPartner: email }),
+        setMode: (mode, childId) => set({ mode, activeChildId: childId }),
+        reset: () => set({ ...initialLocal(), ...emptyShared(), parent: undefined, invitedPartner: undefined, partnerCode: undefined, familyId: undefined, activeChildId: undefined }),
+        applyRemote: (rows) => {
+          const s = get();
+          let { base, pending, lastSeq } = s;
+          for (const { seq, ev } of [...rows].sort((a, b) => a.seq - b.seq)) {
+            if (seq <= lastSeq) continue;
+            base = reduce(base, ev);
+            pending = pending.filter((p) => p.eid !== ev.eid);
+            lastSeq = seq;
           }
-          return next;
-        }),
-      approveLate: (childId, lateId) =>
-        set((s) => mapChild(s, childId, (c) => {
-          const l = c.late?.find((x) => x.id === lateId);
-          if (!l) return c;
-          const by = s.parent?.role;
-          return {
-            ...c, balance: c.balance + l.reward, late: c.late!.filter((x) => x.id !== lateId),
-            approved: [...c.approved, { taskId: l.taskId, at: Date.now(), reward: l.reward, by }],
-            log: (c.log ?? []).map((d) => (d.date === l.date ? { ...d, done: [...d.done, l.name], earned: d.earned + l.reward } : d)),
+          if (lastSeq !== s.lastSeq) set({ base, pending, lastSeq, ...visible(base, pending) });
+        },
+        attach: ({ familyId, familyCode, partnerCode, fresh }) => {
+          const s = get();
+          if (fresh) {
+            // joining someone else's family: start empty and let the server fill it in
+            set({ familyId, familyCode, partnerCode, base: emptyShared(), pending: [], lastSeq: 0, ...emptyShared() });
+            return;
+          }
+          // this device made the family before it had an account: send it up as the first event
+          const imp = { type: 'import', shared: s.base, eid: uid(), at: Date.now(), by: s.parent?.role } as Ev;
+          const pending = s.familyId === familyId ? s.pending : [imp, ...s.pending];
+          set({ familyId, familyCode, partnerCode, base: s.familyId === familyId ? s.base : emptyShared(), lastSeq: s.familyId === familyId ? s.lastSeq : 0, pending });
+          outbox.notify();
+        },
+        reject: (eid) => {
+          const s = get();
+          const pending = s.pending.filter((p) => p.eid !== eid);
+          set({ pending, ...visible(s.base, pending) });
+        },
+      };
+    },
+    {
+      name: 'makmoura-family',
+      storage: createJSONStorage(() => AsyncStorage),
+      version: 2,
+      // keep only what this device knows plus the confirmed family; the screen's copy is rebuilt on launch
+      partialize: (s) => {
+        const { children: _c, surprise: _s, subscription: _p, partnerJoined: _j, ...keep } = s;
+        return Object.fromEntries(Object.entries(keep).filter(([, v]) => typeof v !== 'function')) as Partial<Family>;
+      },
+      merge: (saved, current) => {
+        const m = { ...current, ...(saved as Partial<Family>) };
+        return { ...m, ...visible(m.base ?? emptyShared(), m.pending ?? []) };
+      },
+      // version 1 kept the family's children at the top level
+      migrate: (old, version) => {
+        const o = (old ?? {}) as Record<string, unknown>;
+        if (version < 2) {
+          const base: Shared = {
+            children: (o.children as Child[]) ?? [], surprise: o.surprise as Surprise | undefined,
+            subscription: (o.subscription as Shared['subscription']) ?? { status: 'none' }, partnerJoined: o.partnerJoined as boolean | undefined,
           };
-        })),
-      dropLate: (childId, lateId) => set((s) => mapChild(s, childId, (c) => ({ ...c, late: (c.late ?? []).filter((x) => x.id !== lateId) }))),
-      celebrate: (childId, kind) =>
-        set((s) => mapChild(s, childId, (c) => ({ ...c, celebrated: { ...c.celebrated, [kind]: kind === 'day' ? dayKey() : c.goal?.name } }))),
-      rollover: () => set((s) => ({ children: s.children.map((c) => closeDay(c, dayKey())) })),
-      sendBack: (childId, taskId) =>
-        set((s) => mapChild(s, childId, (c) => ({ ...c, today: { ...c.today, [taskId]: { state: 'todo' } } }))),
-      armSurprise: ({ key, title, icon }, condition) =>
-        set({ surprise: { key, title, icon, condition, status: condition === 'manual' ? 'earned' : 'armed', seenBy: [] } }),
-      seeSurprise: (childId) =>
-        set((s) => (s.surprise ? { surprise: { ...s.surprise, seenBy: [...new Set([...s.surprise.seenBy, childId])] } } : {})),
-      clearSurprise: () => set({ surprise: undefined }),
-      invitePartner: (email) => set({ invitedPartner: email }),
-      setMode: (mode, childId) => set({ mode, activeChildId: childId }),
-      reset: () => set({ ...initial, familyCode: code() }),
-    }),
-    { name: 'makmoura-family', storage: createJSONStorage(() => AsyncStorage), version: 1 },
+          return { ...o, base, pending: [], lastSeq: 0, ...base } as unknown as Family & Actions;
+        }
+        return o as unknown as Family & Actions;
+      },
+    },
   ),
 );
 
@@ -212,9 +226,8 @@ export function seedDemoFamily() {
   const [salim, mira] = useFamily.getState().children;
   s.setGoal(salim.id, { name: 'بلاي ستيشن', icon: 'gamepad', amount: 300 });
   s.setGoal(mira.id, { name: 'علبة ألوان', icon: 'palette', amount: 40 });
-  useFamily.setState((st) => ({
-    onboarded: true,
-    invitedPartner: 'reem@icloud.com',
+  const st = useFamily.getState();
+  const base: Shared = {
     partnerJoined: true,
     subscription: { status: 'trial', plan: 'year', startedAt: Date.now() },
     children: st.children.map((c, i) => {
@@ -235,5 +248,6 @@ export function seedDemoFamily() {
         .map((x, j) => ({ taskId: x.id, reward: x.reward, at: new Date(d.date + 'T19:00').getTime() - j * 60e3 - n, by: 'بابا' as const })));
       return { ...c, today, balance: i === 0 ? 112 : 26, day: dayKey(), log, late, approved };
     }),
-  }));
+  };
+  useFamily.setState({ onboarded: true, invitedPartner: 'reem@icloud.com', base, pending: [], ...base });
 }

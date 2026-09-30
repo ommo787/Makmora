@@ -45,17 +45,18 @@ src/data/         ready-made tasks, auto icons, surprises, avatars
 | Area | Status |
 | --- | --- |
 | All screens, flows, RTL, fonts, animations | Real |
-| Data | Saved on the device only (AsyncStorage). No server yet |
+| Data | Event log on Supabase when `.env` has the keys (see `../docs/supabase-setup.md`); device-only without them |
 | Sign in with Apple | Real on iOS builds, mocked elsewhere |
-| Google and email sign-in | Mocked, needs a backend |
+| Email sign-in | Real with Supabase (email + password) |
+| Google sign-in | Hidden when the server is on, until Google Cloud is set up |
 | Approvals | One tap, no Face ID. Face ID only guards leaving the child screen for the parents board |
 | Subscription and free trial | RevenueCat wired in `src/services/purchases.ts`; mocked until keys are set |
 | Currency | From the phone region, Saudi riyal uses the official sign |
-| Parent and child on different phones | Needs the backend below |
+| Parent and child on different phones | Real with Supabase: child joins with the 6-digit code, the other parent with the 8-letter code |
 
 ## Next steps to ship
 
-1. **Backend for sync** (parent phone ↔ child tablet ↔ partner): Supabase (Postgres + auth + realtime) fits well. Tables: families, members, children, tasks, completions, surprises. The family code joins a child device.
+1. **Server**: run `supabase/migrations/0001_family_events.sql` once and follow `docs/supabase-setup.md`. Design: `src/state/family.ts` is the one rule book (pure `reduce`), `src/services/sync.ts` sends and receives events.
 2. **Payments**: create the products in App Store Connect and Google Play (monthly and yearly with a 14-day free trial), add them to RevenueCat, then set
    `EXPO_PUBLIC_RC_IOS_KEY` and `EXPO_PUBLIC_RC_ANDROID_KEY`.
 3. **Builds**: `npm i -g eas-cli && eas build -p ios` (needs an Apple Developer account) and `eas submit`.
