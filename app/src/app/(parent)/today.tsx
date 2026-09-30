@@ -1,13 +1,11 @@
 import { router } from 'expo-router';
-import { Check, ChevronLeft, Lock, RotateCcw } from 'lucide-react-native';
-import { useState } from 'react';
+import { Check, ChevronLeft, RotateCcw } from 'lucide-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { confirmParent } from '@/services/biometrics';
 import { success } from '@/services/haptics';
 import { doneCount, earnedToday, useFamily, type Child, type Task, surpriseInfo } from '@/state/store';
 import { color, radius, shadow, space } from '@/theme/tokens';
-import { Avatar, Button, Card, Glyph, Money, Progress, Screen, Sheet, T } from '@/ui/kit';
+import { Avatar, Button, Card, Glyph, Money, Progress, Screen, T } from '@/ui/kit';
 import { toast } from '@/ui/toast';
 
 const ago = (at?: number) => {
@@ -18,23 +16,18 @@ const ago = (at?: number) => {
 const today = new Intl.DateTimeFormat('ar', { weekday: 'long', day: 'numeric', month: 'long', numberingSystem: 'latn' } as Intl.DateTimeFormatOptions).format(new Date());
 
 export default function Today() {
-  const { children, parent, secured, setSecured, approve, sendBack, surprise, clearSurprise } = useFamily();
-  const [ask, setAsk] = useState<null | (() => void)>(null);
+  const { children, parent, approve, sendBack, surprise, clearSurprise } = useFamily();
   const pending: { c: Child; t: Task; at?: number }[] = [];
   children.forEach((c) => c.tasks.forEach((t) => { if (c.today[t.id]?.state === 'waiting') pending.push({ c, t, at: c.today[t.id]?.at }); }));
   pending.sort((a, b) => (a.at ?? 0) - (b.at ?? 0));
 
-  /** The first approval asks to protect approvals; after that Face ID (or the passcode) confirms each batch. */
-  const guard = async (run: () => void) => {
-    if (!secured) return setAsk(() => run);
-    if (await confirmParent()) run();
-  };
-  const ok = (list: typeof pending) => guard(() => {
+  /** One tap approves. No Face ID: either parent approves, and the child simply sees who did. */
+  const ok = (list: typeof pending) => {
     list.forEach(({ c, t }) => approve(c.id, t.id));
     success();
     const total = list.reduce((a, x) => a + x.t.reward, 0);
     toast(<><Check size={16} color={color.gold} strokeWidth={3} /><T v="subhead" c={color.white}>{list.length > 1 ? `وافقت على ${list.length} مهام ·` : `انضافوا لمكمورة ${list[0].c.name}`}</T><Money n={total} v="subhead" c={color.white} /></>);
-  });
+  };
   const sur = surpriseInfo(surprise);
 
   return (
@@ -124,18 +117,6 @@ export default function Today() {
       ) : null}
       <View style={{ height: 96 }} />
 
-      <Sheet open={!!ask} onClose={() => setAsk(null)}>
-        <View style={{ alignItems: 'center', gap: space.s, paddingTop: space.m }}>
-          <View style={st.lock}><Lock size={30} color={color.gold} strokeWidth={2.2} /></View>
-          <T v="title" center style={{ marginTop: space.s }}>خلّي الموافقات إلك بس</T>
-          <T v="subhead" c={color.text2} center>الأولاد ممكن يستعملوا نفس الجهاز. منطلب وجهك قبل أي موافقة، لحتى ما حدا يوافق عنك.</T>
-        </View>
-        <Button title="استعمل Face ID" style={{ marginTop: space.xl }} onPress={async () => {
-          const run = ask; setAsk(null);
-          if (await confirmParent('فعّل Face ID للموافقات')) { setSecured(true); run?.(); }
-        }} />
-        <Button kind="plain" title="بدلاً منه، رمز من ٤ أرقام" onPress={() => { const run = ask; setAsk(null); setSecured(true); run?.(); }} />
-      </Sheet>
     </Screen>
   );
 }
@@ -159,5 +140,4 @@ const st = StyleSheet.create({
   kid: { flexDirection: 'row', alignItems: 'center', gap: space.m, padding: space.l },
   hair: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: color.border },
   surprise: { flexDirection: 'row', alignItems: 'center', gap: space.m, backgroundColor: color.white, borderRadius: radius.card, padding: space.l, marginTop: space.xl, ...shadow.e1 },
-  lock: { width: 64, height: 64, borderRadius: 18, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center' },
 });

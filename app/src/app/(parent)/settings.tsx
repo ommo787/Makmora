@@ -1,16 +1,15 @@
 import { router } from 'expo-router';
-import { ChevronLeft, CreditCard, Globe, KeyRound, LogOut, Smartphone, UserPlus } from 'lucide-react-native';
+import { ChevronLeft, CreditCard, Globe, LogOut, Smartphone, UserPlus } from 'lucide-react-native';
 import { useState } from 'react';
-import { Platform, Share, Switch, View } from 'react-native';
+import { Share, View } from 'react-native';
 
 import { TRIAL_DAYS } from '@/data/catalog';
-import { confirmParent } from '@/services/biometrics';
 import { deviceCurrency } from '@/services/money';
 import { useFamily } from '@/state/store';
 import { color, space } from '@/theme/tokens';
 import { Avatar, Button, Field, Group, Row, Screen, SectionLabel, Sheet, T } from '@/ui/kit';
 
-const Lead = ({ I }: { I: typeof KeyRound }) => (
+const Lead = ({ I }: { I: typeof CreditCard }) => (
   <View style={{ width: 34, height: 34, borderRadius: 9, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center' }}><I size={18} color={color.gold} strokeWidth={2.2} /></View>
 );
 
@@ -42,10 +41,8 @@ export default function Settings() {
         <Row onPress={() => setChildPick(true)} lead={<Lead I={Smartphone} />} title="افتح شاشة ولد على هالجهاز" end={<ChevronLeft size={18} color={color.text3} />} />
       </Group>
 
-      <SectionLabel>الحماية والاشتراك</SectionLabel>
+      <SectionLabel>الاشتراك</SectionLabel>
       <Group>
-        <Row lead={<Lead I={KeyRound} />} title={Platform.OS === 'ios' ? 'Face ID للموافقات' : 'البصمة للموافقات'}
-          end={<Switch value={f.secured} onValueChange={async (v) => { if (!v || (await confirmParent())) f.setSecured(v); }} trackColor={{ true: color.gold, false: color.navy100 }} thumbColor={color.white} {...({ activeThumbColor: color.white } as object)} />} />
         <Row lead={<Lead I={CreditCard} />} title="الاشتراك"
           sub={f.subscription.status === 'trial' ? `للعيلة كلها · تجربة مجانية، باقي ${trialLeft} يوم` : f.subscription.status === 'active' ? (f.subscription.plan === 'year' ? 'سنوي' : 'شهري') : 'ما في اشتراك'} />
         <Row lead={<Lead I={Globe} />} title="العملة" sub="حسب منطقة جهازك" end={<T v="headline">{cur.code}</T>} />

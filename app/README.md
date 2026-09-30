@@ -25,7 +25,7 @@ Checks: `npx tsc --noEmit` and `npx expo lint`.
 
 Onboarding: `welcome` → `account` (Apple, Google, email) → `about` (parent name, بابا/ماما) → `children` → per child `setup/[id]/tasks` → `rewards` → `goal` → `setup/all-set` → `setup/preview` (what the child will see) → `paywall` (14-day free trial) → `started` (optional partner invite).
 
-Parent (tabs): `today` (approvals, first approval asks for Face ID, family surprise), `kids`, `settings`; plus `kid/[id]` and `surprise`.
+Parent (tabs): `today` (one-tap approvals, family surprise), `kids`, `settings`; plus `kid/[id]` and `surprise`.
 
 Child: `child/join` (6-digit family code) and `child/home` (goal jar, big task tiles, surprise reveal).
 
@@ -48,7 +48,7 @@ src/data/         ready-made tasks, auto icons, surprises, avatars
 | Data | Saved on the device only (AsyncStorage). No server yet |
 | Sign in with Apple | Real on iOS builds, mocked elsewhere |
 | Google and email sign-in | Mocked, needs a backend |
-| Face ID before approvals | Real on device (expo-local-authentication), skipped on web |
+| Approvals | One tap, no Face ID. Face ID only guards leaving the child screen for the parents board |
 | Subscription and free trial | RevenueCat wired in `src/services/purchases.ts`; mocked until keys are set |
 | Currency | From the phone region, Saudi riyal uses the official sign |
 | Parent and child on different phones | Needs the backend below |
