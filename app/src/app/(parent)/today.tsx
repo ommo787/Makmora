@@ -113,7 +113,7 @@ export default function Today() {
       {!surprise ? (
         <Pressable onPress={() => router.push('/surprise')} style={({ pressed }) => [st.surprise, pressed && { opacity: 0.9 }]}>
           <Glyph name="gift" size={44} tone="gold" />
-          <View style={{ flex: 1 }}><T v="headline">جهّز مفاجأة للعيلة</T><T v="footnote" c={color.text2}>بيتزا، طلعة، ليلة أفلام، لما يخلّصوا كلهم مهامهم</T></View>
+          <View style={{ flex: 1 }}><T v="headline">جهّز مفاجأة للعيلة</T><T v="footnote" c={color.text2}>مشوار، غدا برا، فيلم المسا، لما يخلّصوا كلهم مهامهم</T></View>
           <ChevronLeft size={18} color={color.text3} />
         </Pressable>
       ) : surprise.status === 'armed' && sur ? (

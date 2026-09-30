@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { Bell, Check, LockOpen, Star } from 'lucide-react-native';
+import { Bell, Check, LockOpen, Star, Users } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
@@ -54,7 +54,14 @@ export default function Paywall() {
           </View>
         ))}
       </View>
-      <View style={{ flexDirection: 'row', gap: space.m, marginTop: space.xxl }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m, marginTop: space.xxl, padding: space.l, borderRadius: radius.card, backgroundColor: color.navy50 }}>
+        <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center' }}><Users size={20} color={color.gold} strokeWidth={2.4} /></View>
+        <View style={{ flex: 1 }}>
+          <T v="headline">اشتراك واحد للعيلة كلها</T>
+          <T v="subhead" c={color.text2}>بابا وماما وكل الأولاد، بدون ولا دفعة زيادة.</T>
+        </View>
+      </View>
+      <View style={{ flexDirection: 'row', gap: space.m, marginTop: space.l }}>
         {(['year', 'month'] as Plan[]).map((p) => {
           const on = plan === p;
           return (

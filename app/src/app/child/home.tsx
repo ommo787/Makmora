@@ -11,7 +11,7 @@ import { toast } from '@/ui/toast';
 
 /** The child's device: one screen, no tabs. Tap a task when it's done; a parent approves it. */
 export default function ChildHome() {
-  const { children, activeChildId, markDone, undoDone, parent, surprise, seeSurprise, setMode } = useFamily();
+  const { children, activeChildId, markDone, undoDone, parent, partnerJoined, surprise, seeSurprise, setMode } = useFamily();
   const child = children.find((c) => c.id === activeChildId);
   if (!child) return null;
   const sur = surpriseInfo(surprise);
@@ -26,7 +26,7 @@ export default function ChildHome() {
             <Lock size={14} color={color.navy} strokeWidth={2.4} /><T v="footnote" c={color.navy}>للأهل</T>
           </Pressable>
         } onTask={(id, state) => {
-          if (state === 'todo') { markDone(child.id, id); toast(<T v="subhead" c={color.white}>{`برافو! بعتناها لـ${parent?.role ?? 'بابا'}`}</T>); }
+          if (state === 'todo') { markDone(child.id, id); toast(<T v="subhead" c={color.white}>{`برافو! بعتناها لـ${partnerJoined ? (parent?.role === 'ماما' ? 'ماما وبابا' : 'بابا وماما') : parent?.role ?? 'بابا'}`}</T>); }
           else if (state === 'waiting') undoDone(child.id, id);
         }} />
       </View>

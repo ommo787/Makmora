@@ -25,8 +25,8 @@ export type Child = {
   tasks: Task[];
   goal?: Goal;
   balance: number;
-  today: Record<string, { state: TaskState; at?: number }>;   // task id → today's state
-  approved: { taskId: string; at: number; reward: number }[]; // history of approvals
+  today: Record<string, { state: TaskState; at?: number; by?: Parent['role'] }>;   // task id → today's state, and which parent approved it
+  approved: { taskId: string; at: number; reward: number; by?: Parent['role'] }[]; // history of approvals
 };
 export type Parent = { name: string; role: 'بابا' | 'ماما'; avatar: AvatarKey; email?: string; via?: 'apple' | 'google' | 'email' };
 export type Surprise = { key: string; title?: string; icon?: IconName; condition: 'all' | 'manual'; status: 'armed' | 'earned'; seenBy: string[] };
@@ -39,6 +39,7 @@ type Family = {
   subscription: { status: 'none' | 'trial' | 'active'; plan?: 'year' | 'month'; startedAt?: number };
   surprise?: Surprise;
   invitedPartner?: string;
+  partnerJoined?: boolean;          // the other parent accepted: same rights, free under the one family subscription
   familyCode: string;
   mode: 'parent' | 'child';         // what this device shows
   activeChildId?: string;           // on a child's device
@@ -82,6 +83,12 @@ export const templateToTask = (key: string): Task => {
   const t = TASK_TEMPLATES.find((x) => x.key === key)!;
   return { id: uid(), key: t.key, name: t.name, icon: t.icon, did: t.did, reward: t.reward, days: EVERY() };
 };
+
+/** "وافق بابا" / "وافقت ماما" */
+export const approvedBy = (by?: Parent['role']) => (by === 'ماما' ? 'وافقت ماما' : by === 'بابا' ? 'وافق بابا' : 'تم');
+/** Who the child is waiting for: one parent, or both once the other joined. */
+export const waitingFor = (p?: Parent, partnerJoined?: boolean) =>
+  partnerJoined ? `${p?.role === 'ماما' ? 'ماما أو بابا' : 'بابا أو ماما'}` : p?.role ?? 'بابا';
 
 /** What a surprise shows: its own title and icon, or the ready-made one it came from. */
 export function surpriseInfo(s?: Surprise): { icon: IconName; title: string } | undefined {
@@ -129,10 +136,11 @@ export const useFamily = create<Family & Actions>()(
           const next = mapChild(s, childId, (c) => {
             const t = c.tasks.find((x) => x.id === taskId);
             if (!t || c.today[taskId]?.state !== 'waiting') return c;
+            const by = s.parent?.role;
             return {
               ...c, balance: c.balance + t.reward,
-              today: { ...c.today, [taskId]: { state: 'done', at: Date.now() } },
-              approved: [...c.approved, { taskId, at: Date.now(), reward: t.reward }],
+              today: { ...c.today, [taskId]: { state: 'done', at: Date.now(), by } },
+              approved: [...c.approved, { taskId, at: Date.now(), reward: t.reward, by }],
             };
           });
           // a family surprise set for "everyone finished everything" is earned the moment it becomes true
@@ -170,13 +178,15 @@ export function seedDemoFamily() {
   s.setGoal(louai.id, { name: 'علبة ألوان', icon: 'palette', amount: 40 });
   useFamily.setState((st) => ({
     onboarded: true,
+    invitedPartner: 'reem@icloud.com',
+    partnerJoined: true,
     subscription: { status: 'trial', plan: 'year', startedAt: Date.now() },
     children: st.children.map((c, i) => {
       const t = c.tasks;
       const today: Child['today'] =
         i === 0
-          ? { [t[0].id]: { state: 'done', at: Date.now() - 3600e3 }, [t[1].id]: { state: 'waiting', at: Date.now() - 10 * 60e3 }, [t[2].id]: { state: 'waiting', at: Date.now() - 25 * 60e3 } }
-          : { [t[0].id]: { state: 'done', at: Date.now() - 3600e3 }, [t[1].id]: { state: 'done', at: Date.now() - 1800e3 }, [t[2].id]: { state: 'waiting', at: Date.now() - 5 * 60e3 } };
+          ? { [t[0].id]: { state: 'done', at: Date.now() - 3600e3, by: 'ماما' }, [t[1].id]: { state: 'waiting', at: Date.now() - 10 * 60e3 }, [t[2].id]: { state: 'waiting', at: Date.now() - 25 * 60e3 } }
+          : { [t[0].id]: { state: 'done', at: Date.now() - 3600e3, by: 'بابا' }, [t[1].id]: { state: 'done', at: Date.now() - 1800e3, by: 'ماما' }, [t[2].id]: { state: 'waiting', at: Date.now() - 5 * 60e3 } };
       return { ...c, today, balance: i === 0 ? 112 : 26 };
     }),
   }));

@@ -3,7 +3,7 @@ import { Check, Hourglass, Pencil } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, View } from 'react-native';
 
-import { useFamily } from '@/state/store';
+import { approvedBy, useFamily } from '@/state/store';
 import { color, shadow, space } from '@/theme/tokens';
 import { days, daysLabel, years } from '@/ui/brand';
 import { Avatar, Button, Card, Glyph, Group, Money, NavBar, Progress, Row, Screen, SectionLabel, T } from '@/ui/kit';
@@ -64,7 +64,7 @@ export default function Kid() {
         {c.tasks.map((t) => {
           const s = c.today[t.id]?.state ?? 'todo';
           return (
-            <Row key={t.id} lead={<Glyph name={t.icon} />} title={t.name} sub={daysLabel(t.days)}
+            <Row key={t.id} lead={<Glyph name={t.icon} />} title={t.name} sub={s === 'done' ? <T v="footnote" c={color.successText}>{approvedBy(c.today[t.id]?.by)}</T> : daysLabel(t.days)}
               end={s === 'done' ? <Check size={20} color={color.success} strokeWidth={3} /> : s === 'waiting' ? <Hourglass size={18} color={color.gold700} /> : <Money n={t.reward} v="subhead" c={color.text2} />} />
           );
         })}

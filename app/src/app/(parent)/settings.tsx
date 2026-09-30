@@ -30,7 +30,7 @@ export default function Settings() {
       <Group>
         <Row lead={<Avatar avatar={f.parent?.avatar ?? 'man'} size={40} />} title={<T v="headline">{f.parent?.name ?? ''}</T>} sub={`${f.parent?.role ?? ''} · إنت`} />
         {f.invitedPartner
-          ? <Row lead={<Avatar avatar={f.parent?.role === 'ماما' ? 'man' : 'woman'} size={40} />} title={f.parent?.role === 'ماما' ? 'بابا' : 'ماما'} sub={<T v="footnote" c={color.gold700}>{`بعتنا دعوة لـ${f.invitedPartner}`}</T>} />
+          ? <Row lead={<Avatar avatar={f.parent?.role === 'ماما' ? 'man' : 'woman'} size={40} />} title={f.parent?.role === 'ماما' ? 'بابا' : 'ماما'} sub={f.partnerJoined ? 'نفس صلاحياتك' : <T v="footnote" c={color.gold700}>{`بعتنا دعوة لـ${f.invitedPartner}`}</T>} />
           : <Row onPress={() => setInvite(true)} lead={<Lead I={UserPlus} />} title={<T v="body" c={color.link}>{`ادعُ ${f.parent?.role === 'ماما' ? 'الأب' : 'الأم'}`}</T>} />}
         <Row onPress={() => router.push('/kids')} lead={<Lead I={UserPlus} />} title="الأولاد" sub={f.children.map((c) => c.name).join('، ')} end={<ChevronLeft size={18} color={color.text3} />} />
       </Group>
@@ -47,7 +47,7 @@ export default function Settings() {
         <Row lead={<Lead I={KeyRound} />} title={Platform.OS === 'ios' ? 'Face ID للموافقات' : 'البصمة للموافقات'}
           end={<Switch value={f.secured} onValueChange={async (v) => { if (!v || (await confirmParent())) f.setSecured(v); }} trackColor={{ true: color.gold, false: color.navy100 }} thumbColor={color.white} {...({ activeThumbColor: color.white } as object)} />} />
         <Row lead={<Lead I={CreditCard} />} title="الاشتراك"
-          sub={f.subscription.status === 'trial' ? `تجربة مجانية · باقي ${trialLeft} يوم` : f.subscription.status === 'active' ? (f.subscription.plan === 'year' ? 'سنوي' : 'شهري') : 'ما في اشتراك'} />
+          sub={f.subscription.status === 'trial' ? `للعيلة كلها · تجربة مجانية، باقي ${trialLeft} يوم` : f.subscription.status === 'active' ? (f.subscription.plan === 'year' ? 'سنوي' : 'شهري') : 'ما في اشتراك'} />
         <Row lead={<Lead I={Globe} />} title="العملة" sub="حسب منطقة جهازك" end={<T v="headline">{cur.code}</T>} />
       </Group>
 
@@ -55,7 +55,7 @@ export default function Settings() {
       <View style={{ height: 110 }} />
 
       <Sheet open={invite} onClose={() => setInvite(false)} title="دعوة">
-        <T v="subhead" c={color.text2} style={{ marginBottom: space.m }}>رح يوصلها رابط لتنزيل مكمورة والدخول على نفس العيلة، وبيقدر يوافق على المهام متلك.</T>
+        <T v="subhead" c={color.text2} style={{ marginBottom: space.m }}>رح يوصله رابط لينزّل مكمورة ويفوت على نفس العيلة. بيضيف مهام وبيوافق متلك تماماً، وما بيدفع شي.</T>
         <Field label="البريد" value={mail} onChangeText={setMail} keyboardType="email-address" autoCapitalize="none" placeholder="name@email.com" />
         <Button title="إرسال الدعوة" disabled={!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail.trim())} style={{ marginTop: space.l }} onPress={() => { f.invitePartner(mail.trim()); setInvite(false); }} />
       </Sheet>

@@ -25,14 +25,14 @@ export default function Started() {
           <View style={{ width: 44, height: 44, borderRadius: 12, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center' }}><HandHeart size={22} color={color.gold} /></View>
           <View style={{ flex: 1 }}>
             <T v="headline">{`بدك ${other} يتابع معك؟`}</T>
-            <T v="footnote" c={color.text2}>بيوافق على المهام متلك، من موبايله.</T>
+            <T v="footnote" c={color.text2}>نفس صلاحياتك، ومن موبايله. ببلاش ضمن اشتراكك.</T>
           </View>
           {invitedPartner ? <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}><Check size={14} color={color.success} strokeWidth={3} /><T v="footnote" c={color.successText}>انبعتت</T></View>
             : <Button small kind="tinted" title="دعوة" onPress={() => setOpen(true)} />}
         </Card>
       </View>
       <Sheet open={open} onClose={() => setOpen(false)} title="دعوة">
-        <T v="subhead" c={color.text2} style={{ marginBottom: space.m }}>رح يوصلها رابط لتنزيل مكمورة والدخول على نفس العيلة.</T>
+        <T v="subhead" c={color.text2} style={{ marginBottom: space.m }}>رح يوصله رابط لينزّل مكمورة ويفوت على نفس العيلة. بيضيف مهام وبيوافق متلك تماماً، وما بيدفع شي.</T>
         <Field label="البريد" value={mail} onChangeText={setMail} keyboardType="email-address" autoCapitalize="none" placeholder="name@email.com" autoFocus />
         <Button title="إرسال الدعوة" disabled={!okEmail(mail)} onPress={() => { invitePartner(mail.trim()); setOpen(false); }} style={{ marginTop: space.l }} />
       </Sheet>

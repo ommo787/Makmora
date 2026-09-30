@@ -3,7 +3,7 @@ import { Check, Hourglass } from 'lucide-react-native';
 import { useEffect, useRef, type ReactNode } from 'react';
 import { Animated, Pressable, StyleSheet, View } from 'react-native';
 
-import { useFamily, type Child, type TaskState } from '@/state/store';
+import { approvedBy, useFamily, waitingFor, type Child, type TaskState } from '@/state/store';
 import { success, tap } from '@/services/haptics';
 import { color, radius, shadow, space } from '@/theme/tokens';
 import { Avatar, Glyph, Money, Progress, T } from '@/ui/kit';
@@ -16,6 +16,7 @@ const greeting = () => (new Date().getHours() < 12 ? 'صباح الخير' : 'م
  */
 export function ChildView({ child, preview, onTask, headerEnd }: { child: Child; preview?: boolean; onTask?: (taskId: string, state: TaskState) => void; headerEnd?: ReactNode }) {
   const parent = useFamily((s) => s.parent);
+  const joined = useFamily((s) => s.partnerJoined);
   const g = child.goal;
   const pct = g ? child.balance / g.amount : 0;
   const state = (id: string, i: number): TaskState => (preview ? (i === 0 ? 'waiting' : 'todo') : child.today[id]?.state ?? 'todo');
@@ -54,7 +55,7 @@ export function ChildView({ child, preview, onTask, headerEnd }: { child: Child;
       <T v="title3">مهامي اليوم</T>
       <View style={st.grid}>
         {child.tasks.map((t, i) => (
-          <TaskTile key={t.id} name={t.name} icon={t.icon} reward={t.reward} state={state(t.id, i)} parentWord={parent?.role ?? 'بابا'}
+          <TaskTile key={t.id} name={t.name} icon={t.icon} reward={t.reward} state={state(t.id, i)} parentWord={waitingFor(parent, joined)} doneWord={approvedBy(child.today[t.id]?.by)}
             onPress={preview || !onTask ? undefined : () => onTask(t.id, state(t.id, i))} />
         ))}
       </View>
@@ -62,8 +63,8 @@ export function ChildView({ child, preview, onTask, headerEnd }: { child: Child;
   );
 }
 
-function TaskTile({ name, icon, reward, state, parentWord, onPress }:
-  { name: string; icon: Parameters<typeof Glyph>[0]['name']; reward: number; state: TaskState; parentWord: string; onPress?: () => void }) {
+function TaskTile({ name, icon, reward, state, parentWord, doneWord, onPress }:
+  { name: string; icon: Parameters<typeof Glyph>[0]['name']; reward: number; state: TaskState; parentWord: string; doneWord: string; onPress?: () => void }) {
   const pop = useRef(new Animated.Value(1)).current;
   const prev = useRef(state);
   useEffect(() => {
@@ -85,7 +86,7 @@ function TaskTile({ name, icon, reward, state, parentWord, onPress }:
         <View style={{ opacity: state === 'done' ? 0.45 : 1 }}><Glyph name={icon} size={64} /></View>
         <T v="headline" center numberOfLines={1} c={state === 'done' ? color.text2 : color.text}>{name}</T>
         {state === 'waiting' ? <T v="caption" c={color.gold700}>{`بانتظار ${parentWord}`}</T>
-          : state === 'done' ? <T v="caption" c={color.successText}>تم</T>
+          : state === 'done' ? <T v="caption" c={color.successText}>{doneWord}</T>
           : <Money n={reward} v="caption" c={color.text2} />}
       </Animated.View>
     </Pressable>
