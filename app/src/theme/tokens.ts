@@ -43,6 +43,7 @@ export const font = {
 
 /** Type scale (Arabic: brand sizes, a little more line height, no negative tracking). */
 export const type = {
+  hero: { fontFamily: font.bold, fontSize: 52, lineHeight: 64 },
   largeTitle: { fontFamily: font.bold, fontSize: 32, lineHeight: 44 },
   title: { fontFamily: font.bold, fontSize: 24, lineHeight: 34 },
   title3: { fontFamily: font.semibold, fontSize: 20, lineHeight: 30 },

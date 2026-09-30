@@ -52,6 +52,7 @@ type Actions = {
   removeTask(childId: string, taskId: string): void;
   updateTask(childId: string, taskId: string, patch: Partial<Task>): void;
   setGoal(childId: string, goal?: Goal): void;
+  redeemGoal(childId: string): void;                 // the parent bought the goal: take it out of the jar
   finishOnboarding(): void;
   startTrial(plan: 'year' | 'month'): void;
   setSecured(v: boolean): void;
@@ -107,6 +108,8 @@ export const useFamily = create<Family & Actions>()(
       updateTask: (childId, taskId, patch) =>
         set((s) => mapChild(s, childId, (c) => ({ ...c, tasks: c.tasks.map((t) => (t.id === taskId ? { ...t, ...patch } : t)) }))),
       setGoal: (childId, goal) => set((s) => mapChild(s, childId, (c) => ({ ...c, goal }))),
+      redeemGoal: (childId) =>
+        set((s) => mapChild(s, childId, (c) => (c.goal ? { ...c, balance: Math.max(0, c.balance - c.goal.amount), goal: undefined } : c))),
       finishOnboarding: () => set({ onboarded: true }),
       startTrial: (plan) => set({ subscription: { status: 'trial', plan, startedAt: Date.now() }, onboarded: true }),
       setSecured: (v) => set({ secured: v }),

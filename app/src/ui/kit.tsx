@@ -40,7 +40,7 @@ export function NavBar({ back = true, end, onBack }: { back?: boolean; end?: Rea
   return (
     <View style={s.nav}>
       {back ? (
-        <Pressable accessibilityRole="button" accessibilityLabel="رجوع" onPress={() => { tap(); onBack ? onBack() : router.back(); }}
+        <Pressable accessibilityRole="button" accessibilityLabel="رجوع" onPress={() => { tap(); if (onBack) onBack(); else if (router.canGoBack()) router.back(); else router.replace('/'); }}
           style={({ pressed }) => [s.round, pressed && { transform: [{ scale: 0.92 }] }]}>
           <ChevronRight size={22} color={color.navy} strokeWidth={2.4} />
         </Pressable>
