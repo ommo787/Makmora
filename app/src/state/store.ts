@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { TASK_TEMPLATES, type AvatarKey } from '@/data/catalog';
+import { SURPRISES, TASK_TEMPLATES, type AvatarKey } from '@/data/catalog';
 import type { IconName } from '@/ui/icons';
 
 export type TaskState = 'todo' | 'waiting' | 'done';
@@ -29,7 +29,7 @@ export type Child = {
   approved: { taskId: string; at: number; reward: number }[]; // history of approvals
 };
 export type Parent = { name: string; role: 'بابا' | 'ماما'; avatar: AvatarKey; email?: string; via?: 'apple' | 'google' | 'email' };
-export type Surprise = { key: string; condition: 'all' | 'manual'; status: 'armed' | 'earned'; seenBy: string[] };
+export type Surprise = { key: string; title?: string; icon?: IconName; condition: 'all' | 'manual'; status: 'armed' | 'earned'; seenBy: string[] };
 
 type Family = {
   onboarded: boolean;
@@ -60,7 +60,7 @@ type Actions = {
   undoDone(childId: string, taskId: string): void;
   approve(childId: string, taskId: string): void;
   sendBack(childId: string, taskId: string): void;
-  armSurprise(key: string, condition: 'all' | 'manual'): void;
+  armSurprise(s: { key: string; title: string; icon: IconName }, condition: 'all' | 'manual'): void;
   seeSurprise(childId: string): void;
   clearSurprise(): void;
   invitePartner(email: string): void;
@@ -82,6 +82,13 @@ export const templateToTask = (key: string): Task => {
   const t = TASK_TEMPLATES.find((x) => x.key === key)!;
   return { id: uid(), key: t.key, name: t.name, icon: t.icon, did: t.did, reward: t.reward, days: EVERY() };
 };
+
+/** What a surprise shows: its own title and icon, or the ready-made one it came from. */
+export function surpriseInfo(s?: Surprise): { icon: IconName; title: string } | undefined {
+  if (!s) return undefined;
+  if (s.title && s.icon) return { title: s.title, icon: s.icon };
+  return SURPRISES.find((x) => x.key === s.key) ?? { title: s.title ?? 'مفاجأة', icon: 'gift' };
+}
 
 /** Everything a child can earn in a day if all tasks are done. */
 export const perDay = (c: Child) => c.tasks.reduce((a, t) => a + t.reward, 0);
@@ -138,8 +145,8 @@ export const useFamily = create<Family & Actions>()(
         }),
       sendBack: (childId, taskId) =>
         set((s) => mapChild(s, childId, (c) => ({ ...c, today: { ...c.today, [taskId]: { state: 'todo' } } }))),
-      armSurprise: (key, condition) =>
-        set({ surprise: { key, condition, status: condition === 'manual' ? 'earned' : 'armed', seenBy: [] } }),
+      armSurprise: ({ key, title, icon }, condition) =>
+        set({ surprise: { key, title, icon, condition, status: condition === 'manual' ? 'earned' : 'armed', seenBy: [] } }),
       seeSurprise: (childId) =>
         set((s) => (s.surprise ? { surprise: { ...s.surprise, seenBy: [...new Set([...s.surprise.seenBy, childId])] } } : {})),
       clearSurprise: () => set({ surprise: undefined }),

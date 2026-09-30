@@ -40,18 +40,22 @@ const GOAL_WORDS: [RegExp, IconName][] = [
 export const iconForTask = (name: string): IconName => TASK_WORDS.find(([re]) => re.test(name))?.[1] ?? 'sparkles';
 export const iconForGoal = (name: string): IconName => GOAL_WORDS.find(([re]) => re.test(name))?.[1] ?? 'gift';
 
-/** Family surprises a parent can prepare. */
-export const SURPRISES: { key: string; icon: IconName; short: string; title: string }[] = [
-  { key: 'pizza', icon: 'pizza', short: 'بيتزا', title: 'بيتزا على الغدا' },
-  { key: 'ice', icon: 'ice-cream', short: 'آيس كريم', title: 'آيس كريم بعد العشا' },
-  { key: 'movie', icon: 'film', short: 'ليلة أفلام', title: 'ليلة أفلام عائلية' },
-  { key: 'pick', icon: 'popcorn', short: 'اختاروا فيلم', title: 'اختاروا فيلم الليلة' },
-  { key: 'park', icon: 'trees', short: 'نزهة', title: 'نزهة نهاية الأسبوع' },
-  { key: 'fun', icon: 'ferris-wheel', short: 'مدينة ألعاب', title: 'زيارة مدينة ألعاب' },
-  { key: 'play', icon: 'gamepad', short: 'لعب عائلي', title: 'وقت لعب عائلي' },
-  { key: 'bike', icon: 'bike', short: 'طلعة دراجات', title: 'طلعة دراجات سوا' },
-  { key: 'sweet', icon: 'cake', short: 'حلوى', title: 'حلوى بعد العشا' },
+/** Family surprises a parent can prepare: six ready examples, or write your own. */
+export const SURPRISES: { key: string; icon: IconName; title: string }[] = [
+  { key: 'park', icon: 'trees', title: 'مشوار عالحديقة' },
+  { key: 'out', icon: 'utensils', title: 'نتغدى برا' },
+  { key: 'home', icon: 'cake', title: 'أكلة طيبة بالبيت' },
+  { key: 'movie', icon: 'film', title: 'فيلم المسا سوا' },
+  { key: 'ice', icon: 'ice-cream', title: 'آيس كريم' },
+  { key: 'fun', icon: 'ferris-wheel', title: 'مدينة ألعاب' },
 ];
+const SURPRISE_WORDS: [RegExp, IconName][] = [
+  [/حديقة|جنينة|منتزه|نزهة|مشوار|طلعة/, 'trees'], [/غدا|عشا|فطور|مطعم|برا/, 'utensils'], [/بيتزا/, 'pizza'],
+  [/فيلم|أفلام|افلام|سينما/, 'film'], [/بوشار|فشار/, 'popcorn'], [/آيس|ايس|بوظة|جيلاتي/, 'ice-cream'],
+  [/ملاهي|مدينة (ألعاب|العاب)/, 'ferris-wheel'], [/لعب|ألعاب|العاب|بلاي|سهرة/, 'gamepad'], [/دراج|بسكليت/, 'bike'],
+  [/حلو|كيك|كاتو|أكلة|اكلة|طبخ/, 'cake'], [/تخييم|خيمة|بر/, 'tent'], [/سفر|رحلة/, 'plane'],
+];
+export const iconForSurprise = (t: string): IconName => SURPRISE_WORDS.find(([re]) => re.test(t))?.[1] ?? 'gift';
 
 export const AVATARS = {
   boy: require('../../assets/avatars/boy.png'),

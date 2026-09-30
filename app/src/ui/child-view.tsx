@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Check, Hourglass } from 'lucide-react-native';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { Animated, Pressable, StyleSheet, View } from 'react-native';
 
 import { useFamily, type Child, type TaskState } from '@/state/store';
@@ -14,7 +14,7 @@ const greeting = () => (new Date().getHours() < 12 ? 'صباح الخير' : 'م
  * The child's own screen: who I am, my goal filling up, and today's tasks as big icon tiles.
  * Icon first, then the picture, then the number, then the word, so a 6-year-old can use it.
  */
-export function ChildView({ child, preview, onTask }: { child: Child; preview?: boolean; onTask?: (taskId: string, state: TaskState) => void }) {
+export function ChildView({ child, preview, onTask, headerEnd }: { child: Child; preview?: boolean; onTask?: (taskId: string, state: TaskState) => void; headerEnd?: ReactNode }) {
   const parent = useFamily((s) => s.parent);
   const g = child.goal;
   const pct = g ? child.balance / g.amount : 0;
@@ -27,6 +27,7 @@ export function ChildView({ child, preview, onTask }: { child: Child; preview?: 
           <T v="subhead" c={color.text2}>{greeting()}</T>
           <T v="title">{child.name}</T>
         </View>
+        {headerEnd ? <View style={{ marginStart: 'auto' }}>{headerEnd}</View> : null}
       </View>
 
       {g ? (

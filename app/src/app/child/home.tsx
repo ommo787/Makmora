@@ -1,10 +1,9 @@
 import { router } from 'expo-router';
-import { PartyPopper } from 'lucide-react-native';
+import { Lock, PartyPopper } from 'lucide-react-native';
 import { Modal, Pressable, View } from 'react-native';
 
-import { SURPRISES } from '@/data/catalog';
 import { confirmParent } from '@/services/biometrics';
-import { useFamily } from '@/state/store';
+import { useFamily, surpriseInfo } from '@/state/store';
 import { color, radius, space } from '@/theme/tokens';
 import { ChildView } from '@/ui/child-view';
 import { Button, Glyph, Screen, T } from '@/ui/kit';
@@ -15,12 +14,18 @@ export default function ChildHome() {
   const { children, activeChildId, markDone, undoDone, parent, surprise, seeSurprise, setMode } = useFamily();
   const child = children.find((c) => c.id === activeChildId);
   if (!child) return null;
-  const sur = surprise && SURPRISES.find((s) => s.key === surprise.key);
+  const sur = surpriseInfo(surprise);
+  const toParents = async () => { if (await confirmParent('لوحة الأهل')) { setMode('parent'); router.replace('/today'); } };
   const reveal = !!sur && surprise?.status === 'earned' && !surprise.seenBy.includes(child.id);
   return (
     <Screen bg={color.white}>
       <View style={{ marginTop: space.l }}>
-        <ChildView child={child} onTask={(id, state) => {
+        <ChildView child={child} headerEnd={
+          <Pressable accessibilityRole="button" accessibilityLabel="لوحة الأهل" onPress={toParents}
+            style={({ pressed }) => [{ flexDirection: 'row', alignItems: 'center', gap: 6, height: 36, paddingHorizontal: 14, borderRadius: 18, backgroundColor: color.navy50 }, pressed && { opacity: 0.7 }]}>
+            <Lock size={14} color={color.navy} strokeWidth={2.4} /><T v="footnote" c={color.navy}>للأهل</T>
+          </Pressable>
+        } onTask={(id, state) => {
           if (state === 'todo') { markDone(child.id, id); toast(<T v="subhead" c={color.white}>{`برافو! بعتناها لـ${parent?.role ?? 'بابا'}`}</T>); }
           else if (state === 'waiting') undoDone(child.id, id);
         }} />
@@ -31,9 +36,6 @@ export default function ChildHome() {
           <View style={{ flex: 1 }}><T v="footnote" c={color.gold700}>مفاجأة اليوم</T><T v="title3">{sur.title}</T><T v="footnote" c={color.text2}>أنجزناها سوا</T></View>
         </View>
       ) : null}
-      <Pressable onPress={async () => { if (await confirmParent('لوحة الأهل')) { setMode('parent'); router.replace('/today'); } }} style={{ alignSelf: 'center', marginTop: space.xxl, padding: space.s }}>
-        <T v="footnote" c={color.text3}>لوحة الأهل</T>
-      </Pressable>
 
       <Modal visible={reveal} transparent animationType="fade">
         <View style={{ flex: 1, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center', padding: space.xxl, gap: space.m }}>

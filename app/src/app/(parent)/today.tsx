@@ -3,10 +3,9 @@ import { Check, ChevronLeft, Lock, RotateCcw } from 'lucide-react-native';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { SURPRISES } from '@/data/catalog';
 import { confirmParent } from '@/services/biometrics';
 import { success } from '@/services/haptics';
-import { doneCount, earnedToday, useFamily, type Child, type Task } from '@/state/store';
+import { doneCount, earnedToday, useFamily, type Child, type Task, surpriseInfo } from '@/state/store';
 import { color, radius, shadow, space } from '@/theme/tokens';
 import { Avatar, Button, Card, Glyph, Money, Progress, Screen, Sheet, T } from '@/ui/kit';
 import { toast } from '@/ui/toast';
@@ -36,7 +35,7 @@ export default function Today() {
     const total = list.reduce((a, x) => a + x.t.reward, 0);
     toast(<><Check size={16} color={color.gold} strokeWidth={3} /><T v="subhead" c={color.white}>{list.length > 1 ? `وافقت على ${list.length} مهام ·` : `انضافوا لمكمورة ${list[0].c.name}`}</T><Money n={total} v="subhead" c={color.white} /></>);
   });
-  const sur = surprise && SURPRISES.find((s) => s.key === surprise.key);
+  const sur = surpriseInfo(surprise);
 
   return (
     <Screen tabs>
@@ -120,7 +119,7 @@ export default function Today() {
       ) : surprise.status === 'armed' && sur ? (
         <View style={st.surprise}>
           <Glyph name={sur.icon} size={44} tone="gold" />
-          <View style={{ flex: 1 }}><T v="headline">{`مفاجأة جاهزة: ${sur.short}`}</T><T v="footnote" c={color.text2}>بتطلع للأولاد لما يخلّصوا كلهم مهامهم اليوم</T></View>
+          <View style={{ flex: 1 }}><T v="headline">{`مفاجأة جاهزة: ${sur.title}`}</T><T v="footnote" c={color.text2}>بتطلع للأولاد لما يخلّصوا كلهم مهامهم اليوم</T></View>
         </View>
       ) : null}
       <View style={{ height: 96 }} />
