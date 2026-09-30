@@ -1,0 +1,62 @@
+{
+  "expo": {
+    "name": "مكمورة",
+    "slug": "makmoura",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "makmoura",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "icon": "./assets/images/icon.png",
+      "bundleIdentifier": "com.salimfy.makmoura",
+      "usesAppleSignIn": true,
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "منستعمل Face ID لحتى ما حدا يوافق على المهام غيرك."
+      }
+    },
+    "android": {
+      "package": "com.salimfy.makmoura",
+      "adaptiveIcon": {
+        "backgroundColor": "#0B1A32",
+        "foregroundImage": "./assets/images/android-icon-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png",
+      "lang": "ar"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0B1A32",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 96
+        }
+      ],
+      [
+        "expo-localization",
+        {
+          "supportsRTL": true,
+          "forcesRTL": true
+        }
+      ],
+      "expo-apple-authentication",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "منستعمل Face ID لحتى ما حدا يوافق على المهام غيرك."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

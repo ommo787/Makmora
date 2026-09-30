@@ -1,0 +1,66 @@
+import type { IconName } from '@/ui/icons';
+
+/** Ready-made tasks. `ages` is the range where the task is suggested by default. `did` reads as a sentence about the child. */
+export type TaskTemplate = { key: string; name: string; icon: IconName; ages: [number, number]; did: string; reward: number };
+
+export const TASK_TEMPLATES: TaskTemplate[] = [
+  { key: 'teeth', name: 'تفريش الأسنان', icon: 'toothbrush', ages: [3, 15], did: 'فرّش سنانه', reward: 2 },
+  { key: 'bed', name: 'ترتيب السرير', icon: 'bed', ages: [5, 15], did: 'رتّب سريره', reward: 2 },
+  { key: 'pray', name: 'الصلاة', icon: 'mosque', ages: [7, 15], did: 'صلّى', reward: 3 },
+  { key: 'read', name: 'القراءة', icon: 'book-open', ages: [6, 15], did: 'قرأ', reward: 2 },
+  { key: 'bag', name: 'تجهيز الشنطة', icon: 'backpack', ages: [6, 15], did: 'جهّز شنطته', reward: 2 },
+  { key: 'hw', name: 'الوظايف', icon: 'pencil', ages: [8, 15], did: 'خلّص وظايفه', reward: 3 },
+  { key: 'toys', name: 'ترتيب الألعاب', icon: 'toy-brick', ages: [3, 7], did: 'رتّب ألعابه', reward: 2 },
+  { key: 'water', name: 'شرب المي', icon: 'droplets', ages: [3, 6], did: 'شرب مي', reward: 2 },
+  { key: 'dress', name: 'لبس لحالي', icon: 'shirt', ages: [3, 6], did: 'لبس لحاله', reward: 2 },
+  { key: 'table', name: 'تجهيز السفرة', icon: 'utensils', ages: [99, 99], did: 'جهّز السفرة', reward: 2 },
+  { key: 'plant', name: 'سقاية الزرع', icon: 'sprout', ages: [99, 99], did: 'سقى الزرع', reward: 2 },
+  { key: 'sleep', name: 'النوم بكير', icon: 'moon', ages: [99, 99], did: 'نام بكير', reward: 2 },
+];
+
+/** A written task or goal gets its icon from its words (in production this can move to an on-device model). */
+const TASK_WORDS: [RegExp, IconName][] = [
+  [/صلا|صلي|قرآن|قران|سورة|دعاء/, 'mosque'], [/أسنان|اسنان|تفريش|فرشا/, 'toothbrush'], [/سرير|تخت/, 'bed'],
+  [/قراء|قصة|قصص|كتاب|مطالعة/, 'book-open'], [/شنط|حقيبة/, 'backpack'], [/وظيف|وظايف|دراس|درس|واجب|حفظ|كتابة/, 'pencil'],
+  [/ألعاب|العاب|لعب|ليغو/, 'toy-brick'], [/مي\b|ماء|شرب/, 'droplets'], [/لبس|ثياب|ملابس|غسيل|تياب/, 'shirt'],
+  [/سفرة|أكل|اكل|غدا|عشا|فطور|صحون|جلي/, 'utensils'], [/زرع|نبات|سقاية|ورد/, 'sprout'], [/نوم|نام|بكير/, 'moon'],
+  [/قط|بسة|كلب|حيوان|عصفور|سمك/, 'paw-print'], [/زبالة|قمامة|نفايات|تنظيف|نظافة|كنس|مسح/, 'trash'],
+  [/دوش|حمام|استحمام|شاور/, 'shower'], [/ساعد|مساعدة|خدمة|إخوت|اخوت|جدة|تيتا|جدو/, 'hand-heart'],
+  [/رياضة|مشي|ركض|تمارين|سباحة/, 'footprints'], [/طابة|كرة|فوتبول/, 'volleyball'],
+];
+const GOAL_WORDS: [RegExp, IconName][] = [
+  [/بلاي|playstation|ps\d|اكس ?بوكس|xbox|نينتندو|nintendo|سويتش|switch|لعبة/i, 'gamepad'],
+  [/ايباد|آيباد|ipad|تابلت/i, 'tablet'], [/موبايل|جوال|تلفون|ايفون|آيفون|iphone/i, 'smartphone'],
+  [/لابتوب|كمبيوتر|laptop/i, 'laptop'], [/ساعة|watch/i, 'watch'], [/سماعات|سماعة|airpods/i, 'headphones'],
+  [/سفر|رحلة|طيارة/i, 'plane'], [/ملاهي|ألعاب|العاب/i, 'ferris-wheel'], [/تخييم|خيمة/i, 'tent'],
+  [/دراجة|بسكليت|سكوتر|bike/i, 'bike'], [/طابة|كرة|فوتبول/i, 'volleyball'], [/ليغو|lego|مكعبات/i, 'toy-brick'],
+  [/قصص|كتاب|كتب/i, 'book'], [/ألوان|الوان|رسم/i, 'palette'], [/بوط|حذاء|شوز/i, 'footprints'],
+  [/قطة|بسة/i, 'cat'], [/كلب/i, 'dog'], [/كيك|حلو/i, 'cake'], [/بازل|puzzle/i, 'puzzle'],
+];
+export const iconForTask = (name: string): IconName => TASK_WORDS.find(([re]) => re.test(name))?.[1] ?? 'sparkles';
+export const iconForGoal = (name: string): IconName => GOAL_WORDS.find(([re]) => re.test(name))?.[1] ?? 'gift';
+
+/** Family surprises a parent can prepare. */
+export const SURPRISES: { key: string; icon: IconName; short: string; title: string }[] = [
+  { key: 'pizza', icon: 'pizza', short: 'بيتزا', title: 'بيتزا على الغدا' },
+  { key: 'ice', icon: 'ice-cream', short: 'آيس كريم', title: 'آيس كريم بعد العشا' },
+  { key: 'movie', icon: 'film', short: 'ليلة أفلام', title: 'ليلة أفلام عائلية' },
+  { key: 'pick', icon: 'popcorn', short: 'اختاروا فيلم', title: 'اختاروا فيلم الليلة' },
+  { key: 'park', icon: 'trees', short: 'نزهة', title: 'نزهة نهاية الأسبوع' },
+  { key: 'fun', icon: 'ferris-wheel', short: 'مدينة ألعاب', title: 'زيارة مدينة ألعاب' },
+  { key: 'play', icon: 'gamepad', short: 'لعب عائلي', title: 'وقت لعب عائلي' },
+  { key: 'bike', icon: 'bike', short: 'طلعة دراجات', title: 'طلعة دراجات سوا' },
+  { key: 'sweet', icon: 'cake', short: 'حلوى', title: 'حلوى بعد العشا' },
+];
+
+export const AVATARS = {
+  boy: require('../../assets/avatars/boy.png'),
+  child: require('../../assets/avatars/child.png'),
+  girl: require('../../assets/avatars/girl.png'),
+  man: require('../../assets/avatars/man.png'),
+  woman: require('../../assets/avatars/woman.png'),
+} as const;
+export type AvatarKey = keyof typeof AVATARS;
+
+export const WEEKDAYS = ['سبت', 'أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة'];
+export const TRIAL_DAYS = 14;
