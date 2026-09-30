@@ -6,7 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { iconForTask, TASK_TEMPLATES } from '@/data/catalog';
 import { templateToTask, useFamily } from '@/state/store';
 import { color, radius, shadow, space } from '@/theme/tokens';
-import { tasksN, years } from '@/ui/brand';
+import { tasksN, years, gx } from '@/ui/brand';
 import { Button, Field, Glyph, Group, Row, Screen, Sheet, T, Title } from '@/ui/kit';
 import { SetupHeader, useSetup } from '@/ui/setup';
 
@@ -22,7 +22,7 @@ export default function Tasks() {
   const lib = [...TASK_TEMPLATES.filter((t) => has.has(t.key)), ...TASK_TEMPLATES.filter((t) => !has.has(t.key))].slice(0, 9);
   const toggle = (key: string) => {
     const t = child.tasks.find((x) => x.key === key);
-    if (t) removeTask(child.id, t.id); else addTask(child.id, templateToTask(key));
+    if (t) removeTask(child.id, t.id); else addTask(child.id, templateToTask(key, child.avatar === 'girl'));
   };
   const addOwn = () => {
     const name = draft.trim();
@@ -35,7 +35,7 @@ export default function Tasks() {
       <T v="footnote" c={color.text2} center>{tasksN(child.tasks.length)} · فيك تغيّرهم بعدين</T>
     </View>}>
       <SetupHeader progress={progress} childId={id} editing={editing} />
-      <Title sub={`جهّزنالك مهام حسب عمره (${years(child.age)}). احذف أو ضيف متل ما بدك.`}>{`مهام ${child.name} اليومية`}</Title>
+      <Title sub={`جهّزنالك مهام حسب ${gx(child, 'عمره', 'عمرها')} (${years(child.age)}). احذف أو ضيف متل ما بدك.`}>{`مهام ${child.name} اليومية`}</Title>
       <Group style={{ marginTop: space.xl }} inset={68}>
         {child.tasks.map((t) => (
           <Row key={t.id} lead={<Glyph name={t.icon} />} title={t.name}

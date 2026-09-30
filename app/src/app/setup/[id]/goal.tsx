@@ -6,7 +6,7 @@ import { iconForGoal } from '@/data/catalog';
 import { deviceCurrency, fmt } from '@/services/money';
 import { perDay, useFamily } from '@/state/store';
 import { color, font, space } from '@/theme/tokens';
-import { days } from '@/ui/brand';
+import { days, gx } from '@/ui/brand';
 import { Button, Card, Field, Glyph, RiyalSign, Screen, T, Title } from '@/ui/kit';
 import { SetupHeader, useSetup } from '@/ui/setup';
 
@@ -26,7 +26,7 @@ export default function Goal() {
       {!named ? <T v="footnote" c={color.text2} center>{`فيك تحدده بعدين مع ${child.name}`}</T> : null}
     </View>}>
       <SetupHeader progress={progress} childId={id} editing={editing} />
-      <Title sub={`شي بيطمح يوصله. اكتبه متل ما بيحكيه ${child.name}.`}>{`هدف ${child.name}`}</Title>
+      <Title sub={gx(child, `شي بيطمح يوصله. اكتبه متل ما بيحكيه ${child.name}.`, `شي بتطمح توصله. اكتبه متل ما بتحكيه ${child.name}.`)}>{`هدف ${child.name}`}</Title>
       <Field value={g?.name ?? ''} onChangeText={setName} placeholder="مثلاً: بلاي ستيشن، دراجة، رحلة" style={{ marginTop: space.xl }}
         lead={<Glyph name={g?.icon ?? 'gift'} size={36} tone={named ? 'gold' : 'navy'} />} />
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: space.s, marginHorizontal: space.l }}>
@@ -34,7 +34,7 @@ export default function Goal() {
       </View>
       {named && g ? (
         <Card style={{ marginTop: space.xl, alignItems: 'center', gap: space.s, paddingVertical: space.xl }}>
-          <T v="subhead" c={color.text2}>بيحتاج يجمع</T>
+          <T v="subhead" c={color.text2}>{gx(child, 'بيحتاج يجمع', 'بتحتاج تجمع')}</T>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m }}>
             <Pressable accessibilityLabel="أقل" onPress={() => setAmount(g.amount - 10)} style={round}><T v="title">−</T></Pressable>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
@@ -44,7 +44,7 @@ export default function Goal() {
             </View>
             <Pressable accessibilityLabel="أكتر" onPress={() => setAmount(g.amount + 10)} style={round}><T v="title">+</T></Pressable>
           </View>
-          {eta ? <T v="subhead" c={color.text2} center>{`إذا خلّص كل مهامه، بيوصل خلال ${days(eta)} تقريباً`}</T> : null}
+          {eta ? <T v="subhead" c={color.text2} center>{`${gx(child, 'إذا خلّص كل مهامه، بيوصل', 'إذا خلّصت كل مهامها، بتوصل')} خلال ${days(eta)} تقريباً`}</T> : null}
         </Card>
       ) : null}
     </Screen>

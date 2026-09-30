@@ -61,4 +61,4 @@ src/data/         ready-made tasks, auto icons, surprises, avatars
 3. **Builds**: `npm i -g eas-cli && eas build -p ios` (needs an Apple Developer account) and `eas submit`.
 4. Prices on the paywall ($4.99 a month, $39.99 a year) are placeholders to confirm.
 
-Icons: Lucide (ISC). Avatars: Microsoft Fluent Emoji 3D (MIT). Saudi riyal sign: SIL OFL. See `../prototype/THIRD_PARTY_NOTICES.md`.
+Icons: Lucide (ISC). Avatars and sounds: drawn and made for Makmoura. Saudi riyal sign: SIL OFL. See `../prototype/THIRD_PARTY_NOTICES.md`.

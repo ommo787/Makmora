@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { useFamily } from '@/state/store';
 import { color, shadow, space } from '@/theme/tokens';
-import { dayName, days, daysLabel, years } from '@/ui/brand';
+import { dayName, days, daysLabel, gx, years } from '@/ui/brand';
 import { DayRing } from '@/ui/child-view';
 import { Avatar, Button, Card, Glyph, Group, Money, NavBar, Progress, Row, Screen, SectionLabel, T } from '@/ui/kit';
 
@@ -35,7 +35,7 @@ export default function Kid() {
             </View>
           </View>
           <View style={{ marginTop: space.l }}>
-            <T v="footnote" c={color.navy300}>جمع بمكمورته</T>
+            <T v="footnote" c={color.navy300}>{gx(c, 'جمع بمكمورته', 'جمعت بمكمورتها')}</T>
             <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8 }}>
               <Money n={c.balance} v="hero" c={color.white} />
               <View style={{ marginBottom: 10, flexDirection: 'row', alignItems: 'center', gap: 4 }}>
@@ -45,17 +45,17 @@ export default function Kid() {
           </View>
           <View style={{ marginTop: space.m }}><Progress value={c.balance / c.goal.amount} height={12} track="rgba(255,255,255,0.14)" /></View>
           <T v="subhead" c={color.navy300} style={{ marginTop: space.s }}>
-            {eta ? `باقي ${Math.ceil(c.goal.amount - c.balance)}. إذا كمّل هيك، بيوصل خلال ${days(eta)} تقريباً` : 'وصل لهدفه!'}
+            {eta ? `باقي ${Math.ceil(c.goal.amount - c.balance)}. ${gx(c, 'إذا كمّل هيك، بيوصل', 'إذا كمّلت هيك، بتوصل')} خلال ${days(eta)} تقريباً` : gx(c, 'وصل لهدفه!', 'وصلت لهدفها!')}
           </T>
           {c.balance >= c.goal.amount ? (
-            <Button kind="primary" title={`اشتريناله ${c.goal.name}`} style={{ marginTop: space.l }} onPress={() => redeem(c.id)} />
+            <Button kind="primary" title={`${gx(c, 'اشتريناله', 'اشترينالها')} ${c.goal.name}`} style={{ marginTop: space.l }} onPress={() => redeem(c.id)} />
           ) : null}
         </LinearGradient>
       ) : (
         <Card style={{ marginTop: space.xl, gap: space.m, alignItems: 'center' }}>
           <Glyph name="gift" size={56} tone="soft" />
-          <T v="headline">{`${c.name} لسا ما عنده هدف`}</T>
-          <T v="subhead" c={color.text2}>{`جمع بمكمورته ${c.balance}`}</T>
+          <T v="headline">{`${c.name} لسا ما ${gx(c, 'عنده', 'عندها')} هدف`}</T>
+          <T v="subhead" c={color.text2}>{`${gx(c, 'جمع بمكمورته', 'جمعت بمكمورتها')} ${c.balance}`}</T>
           <Button small kind="primary" title="حدّد هدف" onPress={() => router.push({ pathname: '/setup/[id]/goal', params: { id: c.id, edit: '1' } })} />
         </Card>
       )}

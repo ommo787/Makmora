@@ -101,14 +101,14 @@ const code = () => Array.from({ length: 6 }, () => '0123456789'[Math.floor(Math.
 const EVERY = () => Array(7).fill(true) as boolean[];
 
 /** Ready-made tasks suggested for an age. */
-export function suggestedTasks(age: number): Task[] {
+export function suggestedTasks(age: number, girl = false): Task[] {
   return TASK_TEMPLATES.filter((t) => age >= t.ages[0] && age <= t.ages[1]).map((t) => ({
-    id: uid(), key: t.key, name: t.name, icon: t.icon, did: t.did, reward: t.reward, days: EVERY(),
+    id: uid(), key: t.key, name: t.name, icon: t.icon, did: girl ? t.didF : t.did, reward: t.reward, days: EVERY(),
   }));
 }
-export const templateToTask = (key: string): Task => {
+export const templateToTask = (key: string, girl = false): Task => {
   const t = TASK_TEMPLATES.find((x) => x.key === key)!;
-  return { id: uid(), key: t.key, name: t.name, icon: t.icon, did: t.did, reward: t.reward, days: EVERY() };
+  return { id: uid(), key: t.key, name: t.name, icon: t.icon, did: girl ? t.didF : t.did, reward: t.reward, days: EVERY() };
 };
 
 /** What a surprise shows: its own title and icon, or the ready-made one it came from. */
@@ -136,7 +136,7 @@ export const useFamily = create<Family & Actions>()(
       ...initial,
       setParent: (p) => set({ parent: p }),
       addChild: ({ name, age, avatar, photo }) =>
-        set((s) => ({ children: [...s.children, { id: uid(), name, age, avatar, photo, tasks: suggestedTasks(age), balance: 0, today: {}, approved: [], day: dayKey(), late: [], log: [] }] })),
+        set((s) => ({ children: [...s.children, { id: uid(), name, age, avatar, photo, tasks: suggestedTasks(age, avatar === 'girl'), balance: 0, today: {}, approved: [], day: dayKey(), late: [], log: [] }] })),
       removeChild: (id) => set((s) => ({ children: s.children.filter((c) => c.id !== id) })),
       addTask: (childId, t) => set((s) => mapChild(s, childId, (c) => ({ ...c, tasks: [...c.tasks, { ...t, id: uid() }] }))),
       removeTask: (childId, taskId) => set((s) => mapChild(s, childId, (c) => ({ ...c, tasks: c.tasks.filter((t) => t.id !== taskId) }))),
@@ -208,10 +208,10 @@ export function seedDemoFamily() {
   s.reset();
   s.setParent({ name: 'أحمد الخطيب', role: 'بابا', avatar: 'man', via: 'apple' });
   s.addChild({ name: 'سليم', age: 9, avatar: 'boy' });
-  s.addChild({ name: 'لؤي', age: 6, avatar: 'child' });
-  const [salim, louai] = useFamily.getState().children;
+  s.addChild({ name: 'ميرا', age: 6, avatar: 'girl' });
+  const [salim, mira] = useFamily.getState().children;
   s.setGoal(salim.id, { name: 'بلاي ستيشن', icon: 'gamepad', amount: 300 });
-  s.setGoal(louai.id, { name: 'علبة ألوان', icon: 'palette', amount: 40 });
+  s.setGoal(mira.id, { name: 'علبة ألوان', icon: 'palette', amount: 40 });
   useFamily.setState((st) => ({
     onboarded: true,
     invitedPartner: 'reem@icloud.com',

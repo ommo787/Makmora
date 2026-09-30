@@ -6,6 +6,7 @@ import { useFamily } from '@/state/store';
 import { color, radius, shadow, space } from '@/theme/tokens';
 import { Avatar, Button, NavBar, Screen, T } from '@/ui/kit';
 import { ChildView } from '@/ui/child-view';
+import { gx } from '@/ui/brand';
 
 /** "This is what Salim sees tomorrow": the moment of value before the price. */
 export default function Preview() {
@@ -16,7 +17,7 @@ export default function Preview() {
   return (
     <Screen footer={<View style={{ gap: space.xs }}><Button title="كمّل" onPress={() => router.push('/paywall')} /><T v="footnote" c={color.text2} center>فاضل خطوة وحدة</T></View>}>
       <NavBar />
-      <T v="largeTitle">{`هيك رح يشوف ${c.name} مكمورته بكرة الصبح`}</T>
+      <T v="largeTitle">{gx(c, `هيك رح يشوف ${c.name} مكمورته بكرة الصبح`, `هيك رح تشوف ${c.name} مكمورتها بكرة الصبح`)}</T>
       {children.length > 1 ? (
         <View style={{ flexDirection: 'row', gap: space.s, marginTop: space.m }}>
           {children.map((x, j) => (

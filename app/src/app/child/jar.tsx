@@ -4,7 +4,7 @@ import Svg, { ClipPath, Defs, G, Path, Rect } from 'react-native-svg';
 
 import { useFamily, dayKey } from '@/state/store';
 import { color, radius, space } from '@/theme/tokens';
-import { dayName } from '@/ui/brand';
+import { dayName, gx } from '@/ui/brand';
 import { Card, Glyph, Group, Money, NavBar, Progress, Row, Screen, SectionLabel, T, Title } from '@/ui/kit';
 
 const BODY = 'M35 32h34v3c0 3.2 9 5.5 9 14v21a11 11 0 0 1-11 11H37a11 11 0 0 1-11-11V49c0-8.5 9-10.8 9-14z';
@@ -78,7 +78,7 @@ export default function MyJar() {
       )) : (
         <View style={{ alignItems: 'center', gap: space.s, padding: space.xl, borderRadius: radius.card, backgroundColor: color.mist }}>
           <Glyph name="sparkles" size={44} tone="soft" />
-          <T v="subhead" c={color.text2} center>لسا ما جمعت شي. كل مهمة بتخلّصها وبتنوافق عليها بتنزل هون.</T>
+          <T v="subhead" c={color.text2} center>{gx(c, 'لسا ما جمعت شي. كل مهمة بتخلّصها وبتنوافق عليها بتنزل هون.', 'لسا ما جمعتِ شي. كل مهمة بتخلّصيها وبتنوافق عليها بتنزل هون.')}</T>
         </View>
       )}
     </Screen>

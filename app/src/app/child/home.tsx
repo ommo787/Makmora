@@ -9,6 +9,7 @@ import { color, radius, space } from '@/theme/tokens';
 import { ChildView } from '@/ui/child-view';
 import { Button, Glyph, Screen, T } from '@/ui/kit';
 import { toast } from '@/ui/toast';
+import { gx } from '@/ui/brand';
 
 /** The child's device: one screen, no tabs. Tap a task when it's done; a parent approves it. */
 export default function ChildHome() {
@@ -45,7 +46,7 @@ export default function ChildHome() {
       <Celebrate open={dayParty} icon="star" title="خلّصت كل مهامك!" sub="بس يوافقوا بابا وماما، بتنزل كلها بمكمورتك."
         button="يا سلام!" onClose={() => celebrate(child.id, 'day')} />
       {child.goal ? (
-        <Celebrate open={goalParty} icon={child.goal.icon} title="وصلت لهدفك!" sub="جمعت كل المبلغ. خبّر بابا وماما."
+        <Celebrate open={goalParty} icon={child.goal.icon} title="وصلت لهدفك!" sub={gx(child, 'جمعت كل المبلغ. خبّر بابا وماما.', 'جمعتِ كل المبلغ. خبّري بابا وماما.')}
           badge={<T v="title">{child.goal.name}</T>} button="هيييه!" onClose={() => celebrate(child.id, 'goal')} />
       ) : null}
 

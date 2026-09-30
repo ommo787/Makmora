@@ -1,21 +1,21 @@
 import type { IconName } from '@/ui/icons';
 
-/** Ready-made tasks. `ages` is the range where the task is suggested by default. `did` reads as a sentence about the child. */
-export type TaskTemplate = { key: string; name: string; icon: IconName; ages: [number, number]; did: string; reward: number };
+/** Ready-made tasks. `ages` is the range where the task is suggested by default. `did` reads as a sentence about a boy, `didF` about a girl. */
+export type TaskTemplate = { key: string; didF: string; name: string; icon: IconName; ages: [number, number]; did: string; reward: number };
 
 export const TASK_TEMPLATES: TaskTemplate[] = [
-  { key: 'teeth', name: 'تفريش الأسنان', icon: 'toothbrush', ages: [3, 15], did: 'فرّش سنانه', reward: 2 },
-  { key: 'bed', name: 'ترتيب السرير', icon: 'bed', ages: [5, 15], did: 'رتّب سريره', reward: 2 },
-  { key: 'pray', name: 'الصلاة', icon: 'mosque', ages: [7, 15], did: 'صلّى', reward: 3 },
-  { key: 'read', name: 'القراءة', icon: 'book-open', ages: [6, 15], did: 'قرأ', reward: 2 },
-  { key: 'bag', name: 'تجهيز الشنطة', icon: 'backpack', ages: [6, 15], did: 'جهّز شنطته', reward: 2 },
-  { key: 'hw', name: 'الوظايف', icon: 'pencil', ages: [8, 15], did: 'خلّص وظايفه', reward: 3 },
-  { key: 'toys', name: 'ترتيب الألعاب', icon: 'toy-brick', ages: [3, 7], did: 'رتّب ألعابه', reward: 2 },
-  { key: 'water', name: 'شرب المي', icon: 'droplets', ages: [3, 6], did: 'شرب مي', reward: 2 },
-  { key: 'dress', name: 'لبس لحالي', icon: 'shirt', ages: [3, 6], did: 'لبس لحاله', reward: 2 },
-  { key: 'table', name: 'تجهيز السفرة', icon: 'utensils', ages: [99, 99], did: 'جهّز السفرة', reward: 2 },
-  { key: 'plant', name: 'سقاية الزرع', icon: 'sprout', ages: [99, 99], did: 'سقى الزرع', reward: 2 },
-  { key: 'sleep', name: 'النوم بكير', icon: 'moon', ages: [99, 99], did: 'نام بكير', reward: 2 },
+  { key: 'teeth', didF: 'فرّشت سنانها', name: 'تفريش الأسنان', icon: 'toothbrush', ages: [3, 15], did: 'فرّش سنانه', reward: 2 },
+  { key: 'bed', didF: 'رتّبت سريرها', name: 'ترتيب السرير', icon: 'bed', ages: [5, 15], did: 'رتّب سريره', reward: 2 },
+  { key: 'pray', didF: 'صلّت', name: 'الصلاة', icon: 'mosque', ages: [7, 15], did: 'صلّى', reward: 3 },
+  { key: 'read', didF: 'قرأت', name: 'القراءة', icon: 'book-open', ages: [6, 15], did: 'قرأ', reward: 2 },
+  { key: 'bag', didF: 'جهّزت شنطتها', name: 'تجهيز الشنطة', icon: 'backpack', ages: [6, 15], did: 'جهّز شنطته', reward: 2 },
+  { key: 'hw', didF: 'خلّصت وظايفها', name: 'الوظايف', icon: 'pencil', ages: [8, 15], did: 'خلّص وظايفه', reward: 3 },
+  { key: 'toys', didF: 'رتّبت ألعابها', name: 'ترتيب الألعاب', icon: 'toy-brick', ages: [3, 7], did: 'رتّب ألعابه', reward: 2 },
+  { key: 'water', didF: 'شربت مي', name: 'شرب المي', icon: 'droplets', ages: [3, 6], did: 'شرب مي', reward: 2 },
+  { key: 'dress', didF: 'لبست لحالها', name: 'لبس لحالي', icon: 'shirt', ages: [3, 6], did: 'لبس لحاله', reward: 2 },
+  { key: 'table', didF: 'جهّزت السفرة', name: 'تجهيز السفرة', icon: 'utensils', ages: [99, 99], did: 'جهّز السفرة', reward: 2 },
+  { key: 'plant', didF: 'سقت الزرع', name: 'سقاية الزرع', icon: 'sprout', ages: [99, 99], did: 'سقى الزرع', reward: 2 },
+  { key: 'sleep', didF: 'نامت بكير', name: 'النوم بكير', icon: 'moon', ages: [99, 99], did: 'نام بكير', reward: 2 },
 ];
 
 /** A written task or goal gets its icon from its words (in production this can move to an on-device model). */

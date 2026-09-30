@@ -70,3 +70,6 @@ export function dayName(date: string) {
   if (diff === 1) return 'مبارح';
   return ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'][d.getDay()];
 }
+
+/** Arabic changes with the child: pick the boy's or the girl's form of a phrase. */
+export const gx = (c: Pick<Child, 'avatar'> | undefined, boy: string, girl: string) => (c?.avatar === 'girl' ? girl : boy);

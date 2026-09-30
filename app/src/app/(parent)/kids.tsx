@@ -4,7 +4,7 @@ import { Pressable, View } from 'react-native';
 
 import { useFamily } from '@/state/store';
 import { color, space } from '@/theme/tokens';
-import { tasksN, years } from '@/ui/brand';
+import { tasksN, years, gx } from '@/ui/brand';
 import { Avatar, Card, Glyph, Money, Progress, Screen, T } from '@/ui/kit';
 
 export default function Kids() {
@@ -24,7 +24,7 @@ export default function Kids() {
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m }}>
                 <Avatar avatar={c.avatar} photo={c.photo} size={56} />
                 <View style={{ flex: 1 }}><T v="title3">{c.name}</T><T v="footnote" c={color.text2}>{`${years(c.age)} · ${tasksN(c.tasks.length)}`}</T></View>
-                <View style={{ alignItems: 'flex-end' }}><T v="caption" c={color.text2}>بمكمورته</T><Money n={c.balance} v="title3" /></View>
+                <View style={{ alignItems: 'flex-end' }}><T v="caption" c={color.text2}>{gx(c, 'بمكمورته', 'بمكمورتها')}</T><Money n={c.balance} v="title3" /></View>
                 <ChevronLeft size={18} color={color.text3} />
               </View>
               {c.goal ? (

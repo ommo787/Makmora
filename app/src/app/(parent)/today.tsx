@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { success } from '@/services/haptics';
 import { doneCount, earnedToday, useFamily, type Child, type LateTask, type Task, surpriseInfo } from '@/state/store';
 import type { IconName } from '@/ui/icons';
-import { dayName } from '@/ui/brand';
+import { dayName, gx } from '@/ui/brand';
 import { color, radius, shadow, space } from '@/theme/tokens';
 import { Avatar, Button, Card, Glyph, Money, Progress, Screen, T } from '@/ui/kit';
 import { toast } from '@/ui/toast';
@@ -69,7 +69,7 @@ export default function Today() {
                 {late
                   ? <Button small kind="tinted" title="ما انعملت" style={{ flex: 1 }} onPress={() => dropLate(c.id, late.id)} />
                   : <Button small kind="tinted" title="رجّعها" icon={<RotateCcw size={16} color={color.navy} />} style={{ flex: 1 }}
-                      onPress={() => { sendBack(c.id, key); toast(<T v="subhead" c={color.white}>{`رجعت المهمة لـ${c.name} ليعيدها`}</T>); }} />}
+                      onPress={() => { sendBack(c.id, key); toast(<T v="subhead" c={color.white}>{`رجعت المهمة لـ${c.name} ${gx(c, 'ليعيدها', 'لتعيدها')}`}</T>); }} />}
                 <Button small title="موافقة" icon={<Check size={17} color={color.navy} strokeWidth={3} />} style={{ flex: 2 }} onPress={() => ok([p])} />
               </View>
             </Card>

@@ -134,7 +134,7 @@ export function Avatar({ avatar, photo, size = 44, ring }: { avatar?: AvatarKey;
   return (
     <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: color.navy50, overflow: 'hidden', alignItems: 'center', justifyContent: 'flex-end', borderWidth: ring ? 2 : 0, borderColor: ring }}>
       {photo ? <Image source={{ uri: photo }} style={{ width: size, height: size }} />
-        : avatar ? <Image source={AVATARS[avatar]} style={{ width: size * 0.86, height: size * 0.86 }} resizeMode="contain" /> : null}
+        : avatar ? <Image source={AVATARS[avatar]} style={{ width: size * 0.96, height: size * 0.96 }} resizeMode="contain" /> : null}
     </View>
   );
 }

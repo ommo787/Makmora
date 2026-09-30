@@ -9,6 +9,7 @@ import { success, tap } from '@/services/haptics';
 import { play } from '@/services/sound';
 import { color, radius, shadow, space } from '@/theme/tokens';
 import { Avatar, Glyph, Money, Progress, T } from '@/ui/kit';
+import { gx } from '@/ui/brand';
 
 const greeting = () => (new Date().getHours() < 12 ? 'صباح الخير' : 'مسا الخير');
 
@@ -52,7 +53,7 @@ export function ChildView({ child, preview, onTask, headerEnd, onGoal }: { child
           </View>
           <View style={{ marginTop: space.m }}><Progress value={pct} height={12} track="rgba(255,255,255,0.14)" /></View>
           <T v="footnote" c={color.navy300} style={{ marginTop: space.s }}>
-            {pct >= 1 ? 'وصلت لهدفك!' : `باقي ${Math.max(0, Math.ceil(g.amount - child.balance))}، كمّل!`}
+            {pct >= 1 ? 'وصلت لهدفك!' : `باقي ${Math.max(0, Math.ceil(g.amount - child.balance))}، ${gx(child, 'كمّل!', 'كمّلي!')}`}
           </T>
         </LinearGradient>
         </Pressable>
