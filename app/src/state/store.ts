@@ -30,6 +30,7 @@ export type Child = {
   day?: string;                                          // which day `today` belongs to (YYYY-MM-DD, local)
   late?: LateTask[];                                     // finished on an earlier day, still waiting for a parent
   log?: DayLog[];                                        // one line per past day, newest first (last 60 days)
+  celebrated?: { day?: string; goal?: string };          // so each celebration shows once: the day it was, the goal it was
 };
 /** A task the child finished on an earlier day that no parent approved before midnight. It is never lost. */
 export type LateTask = { id: string; taskId: string; name: string; did: string; icon: IconName; reward: number; date: string; at?: number };
@@ -69,6 +70,7 @@ type Actions = {
   approve(childId: string, taskId: string): void;
   approveLate(childId: string, lateId: string): void;
   dropLate(childId: string, lateId: string): void;
+  celebrate(childId: string, kind: 'day' | 'goal'): void;
   rollover(): void;                                  // close yesterday at local midnight
   sendBack(childId: string, taskId: string): void;
   armSurprise(s: { key: string; title: string; icon: IconName }, condition: 'all' | 'manual'): void;
@@ -182,6 +184,8 @@ export const useFamily = create<Family & Actions>()(
           };
         })),
       dropLate: (childId, lateId) => set((s) => mapChild(s, childId, (c) => ({ ...c, late: (c.late ?? []).filter((x) => x.id !== lateId) }))),
+      celebrate: (childId, kind) =>
+        set((s) => mapChild(s, childId, (c) => ({ ...c, celebrated: { ...c.celebrated, [kind]: kind === 'day' ? dayKey() : c.goal?.name } }))),
       rollover: () => set((s) => ({ children: s.children.map((c) => closeDay(c, dayKey())) })),
       sendBack: (childId, taskId) =>
         set((s) => mapChild(s, childId, (c) => ({ ...c, today: { ...c.today, [taskId]: { state: 'todo' } } }))),
@@ -227,7 +231,9 @@ export function seedDemoFamily() {
         return { date: past(n), done, planned: names.length, earned: t.filter((x) => done.includes(x.name)).reduce((a, x) => a + x.reward, 0) };
       });
       const late: LateTask[] = i === 0 ? [{ id: 'late1', taskId: t[3].id, name: t[3].name, did: t[3].did, icon: t[3].icon, reward: t[3].reward, date: past(1), at: Date.now() - 20 * 3600e3 }] : [];
-      return { ...c, today, balance: i === 0 ? 112 : 26, day: dayKey(), log, late };
+      const approved = log.flatMap((d, n) => t.filter((x) => d.done.includes(x.name))
+        .map((x, j) => ({ taskId: x.id, reward: x.reward, at: new Date(d.date + 'T19:00').getTime() - j * 60e3 - n, by: 'بابا' as const })));
+      return { ...c, today, balance: i === 0 ? 112 : 26, day: dayKey(), log, late, approved };
     }),
   }));
 }

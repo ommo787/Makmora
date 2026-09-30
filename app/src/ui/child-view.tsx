@@ -1,11 +1,12 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { Check, Hourglass, Star } from 'lucide-react-native';
+import { Check, ChevronLeft, Hourglass, Star } from 'lucide-react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { useEffect, useRef, type ReactNode } from 'react';
 import { Animated, Pressable, StyleSheet, View } from 'react-native';
 
 import { dayKey, type Child, type TaskState } from '@/state/store';
 import { success, tap } from '@/services/haptics';
+import { play } from '@/services/sound';
 import { color, radius, shadow, space } from '@/theme/tokens';
 import { Avatar, Glyph, Money, Progress, T } from '@/ui/kit';
 
@@ -15,7 +16,7 @@ const greeting = () => (new Date().getHours() < 12 ? 'صباح الخير' : 'م
  * The child's own screen: who I am, my goal filling up, and today's tasks as big icon tiles.
  * Icon first, then the picture, then the number, then the word, so a 6-year-old can use it.
  */
-export function ChildView({ child, preview, onTask, headerEnd }: { child: Child; preview?: boolean; onTask?: (taskId: string, state: TaskState) => void; headerEnd?: ReactNode }) {
+export function ChildView({ child, preview, onTask, headerEnd, onGoal }: { child: Child; preview?: boolean; onTask?: (taskId: string, state: TaskState) => void; headerEnd?: ReactNode; onGoal?: () => void }) {
   const g = child.goal;
   const pct = g ? child.balance / g.amount : 0;
   const state = (id: string, i: number): TaskState => (preview ? (i === 0 ? 'waiting' : 'todo') : child.today[id]?.state ?? 'todo');
@@ -31,6 +32,8 @@ export function ChildView({ child, preview, onTask, headerEnd }: { child: Child;
       </View>
 
       {g ? (
+        <Pressable disabled={!onGoal} onPress={() => { tap(); onGoal?.(); }} accessibilityRole="button" accessibilityLabel="مكمورتي"
+          style={({ pressed }) => pressed && { transform: [{ scale: 0.98 }] }}>
         <LinearGradient colors={['#1D3A66', color.navy, '#060F1F']} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} style={st.goal}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m }}>
             <Glyph name={g.icon} size={48} tone="gold" />
@@ -38,6 +41,9 @@ export function ChildView({ child, preview, onTask, headerEnd }: { child: Child;
               <T v="footnote" c={color.navy300}>هدفي</T>
               <T v="title3" c={color.white}>{g.name}</T>
             </View>
+            {onGoal ? (
+              <View style={st.more}><T v="footnote" c={color.gold}>مكمورتي</T><ChevronLeft size={14} color={color.gold} strokeWidth={2.6} /></View>
+            ) : null}
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 6, marginTop: space.l }}>
             <Money n={child.balance} v="largeTitle" c={color.white} />
@@ -49,6 +55,7 @@ export function ChildView({ child, preview, onTask, headerEnd }: { child: Child;
             {pct >= 1 ? 'وصلت لهدفك!' : `باقي ${Math.max(0, Math.ceil(g.amount - child.balance))}، كمّل!`}
           </T>
         </LinearGradient>
+        </Pressable>
       ) : null}
 
       <Week child={child} />
@@ -77,7 +84,7 @@ function TaskTile({ name, icon, reward, state, onPress }:
   }, [state, pop]);
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={`${name}${state === 'waiting' ? '، بانتظار الموافقة' : state === 'done' ? '، تم' : ''}`}
-      disabled={!onPress || state === 'done'} onPress={() => { state === 'todo' ? success() : tap(); onPress?.(); }} style={{ width: '48%' }}>
+      disabled={!onPress || state === 'done'} onPress={() => { if (state === 'todo') { success(); play('tap'); } else tap(); onPress?.(); }} style={{ width: '48%' }}>
       <Animated.View style={[st.tile, state === 'waiting' && st.wait, state === 'done' && st.done, { transform: [{ scale: pop }] }]}>
         {state !== 'todo' ? (
           <View style={[st.badge, { backgroundColor: state === 'done' ? color.success : color.gold }]}>
@@ -96,6 +103,7 @@ function TaskTile({ name, icon, reward, state, onPress }:
 
 const st = StyleSheet.create({
   goal: { borderRadius: 26, padding: space.l, ...shadow.e2 },
+  more: { flexDirection: 'row', alignItems: 'center', gap: 2, alignSelf: 'flex-start' },
   week: { flexDirection: 'row', justifyContent: 'space-between', backgroundColor: color.white, borderRadius: radius.card, padding: space.m, borderWidth: 1, borderColor: color.border },
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: space.m },
   tile: { alignItems: 'center', gap: space.s, paddingTop: space.l, paddingBottom: space.m, borderRadius: radius.card + 4, backgroundColor: color.white, borderWidth: 2, borderColor: color.border, minHeight: 150 },

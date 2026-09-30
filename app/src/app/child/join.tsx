@@ -1,10 +1,11 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { TextInput, View } from 'react-native';
+import { Pressable, TextInput, View } from 'react-native';
 
+import { success } from '@/services/haptics';
 import { useFamily } from '@/state/store';
 import { color, font, radius, space } from '@/theme/tokens';
-import { Avatar, Button, Group, NavBar, Row, Screen, T, Title } from '@/ui/kit';
+import { Avatar, Button, NavBar, Screen, T, Title } from '@/ui/kit';
 
 /** A child's own device joins the family with the 6-digit code from the parent's settings. */
 export default function Join() {
@@ -21,12 +22,16 @@ export default function Join() {
       {ok && children.length ? (
         <View style={{ marginTop: space.xxl }}>
           <T v="title3" style={{ marginBottom: space.m }}>مين إنت؟</T>
-          <Group>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.m }}>
             {children.map((c) => (
-              <Row key={c.id} minHeight={72} lead={<Avatar avatar={c.avatar} photo={c.photo} size={56} />} title={<T v="title3">{c.name}</T>}
-                onPress={() => { setMode('child', c.id); router.replace('/child/home'); }} />
+              <Pressable key={c.id} accessibilityRole="button" accessibilityLabel={c.name}
+                onPress={() => { success(); setMode('child', c.id); router.replace('/child/home'); }}
+                style={({ pressed }) => [{ width: '47.5%', alignItems: 'center', gap: space.s, paddingVertical: space.l, borderRadius: radius.card + 4, backgroundColor: color.white, borderWidth: 2, borderColor: color.border }, pressed && { borderColor: color.gold, transform: [{ scale: 0.96 }] }]}>
+                <Avatar avatar={c.avatar} photo={c.photo} size={96} ring={color.gold} />
+                <T v="title3">{c.name}</T>
+              </Pressable>
             ))}
-          </Group>
+          </View>
         </View>
       ) : code.length === 6 ? <T v="subhead" c={color.error} center style={{ marginTop: space.l }}>الرمز مش صح، جرّب مرة تانية</T> : null}
       {!children.length ? <Button kind="plain" title="رجوع" onPress={() => router.back()} style={{ marginTop: space.xl }} /> : null}

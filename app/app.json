@@ -52,7 +52,8 @@
         {
           "faceIDPermission": "منستعمل Face ID لحتى ما حدا يوافق على المهام غيرك."
         }
-      ]
+      ],
+      "expo-audio"
     ],
     "experiments": {
       "typedRoutes": true,
