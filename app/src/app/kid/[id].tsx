@@ -3,9 +3,10 @@ import { Check, Hourglass, Pencil } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, View } from 'react-native';
 
-import { approvedBy, useFamily } from '@/state/store';
+import { useFamily } from '@/state/store';
 import { color, shadow, space } from '@/theme/tokens';
-import { days, daysLabel, years } from '@/ui/brand';
+import { dayName, days, daysLabel, years } from '@/ui/brand';
+import { DayRing } from '@/ui/child-view';
 import { Avatar, Button, Card, Glyph, Group, Money, NavBar, Progress, Row, Screen, SectionLabel, T } from '@/ui/kit';
 
 /** One child: savings, goal, and today's tasks with their state. Editing reuses the setup screens. */
@@ -64,11 +65,22 @@ export default function Kid() {
         {c.tasks.map((t) => {
           const s = c.today[t.id]?.state ?? 'todo';
           return (
-            <Row key={t.id} lead={<Glyph name={t.icon} />} title={t.name} sub={s === 'done' ? <T v="footnote" c={color.successText}>{approvedBy(c.today[t.id]?.by)}</T> : daysLabel(t.days)}
+            <Row key={t.id} lead={<Glyph name={t.icon} />} title={t.name} sub={s === 'done' ? <T v="footnote" c={color.successText}>تمّت</T> : daysLabel(t.days)}
               end={s === 'done' ? <Check size={20} color={color.success} strokeWidth={3} /> : s === 'waiting' ? <Hourglass size={18} color={color.gold700} /> : <Money n={t.reward} v="subhead" c={color.text2} />} />
           );
         })}
       </Group>
+      {c.log?.length ? (
+        <>
+          <SectionLabel>آخر 7 أيام</SectionLabel>
+          <Group>
+            {c.log.slice(0, 7).map((d) => (
+              <Row key={d.date} lead={<DayRing done={d.done.length} planned={d.planned} />} title={dayName(d.date)}
+                sub={`${d.done.length} من ${d.planned} مهام`} end={<Money n={d.earned} v="subhead" c={color.text2} />} />
+            ))}
+          </Group>
+        </>
+      ) : null}
       <View style={{ gap: space.s, marginTop: space.xl }}>
         <Button kind="tinted" title="تعديل المهام" icon={<Pencil size={16} color={color.navy} />} onPress={() => router.push({ pathname: '/setup/[id]/tasks', params: { id: c.id, edit: '1' } })} />
         <Button kind="tinted" title="تعديل المكافآت" onPress={() => router.push({ pathname: '/setup/[id]/rewards', params: { id: c.id, edit: '1' } })} />

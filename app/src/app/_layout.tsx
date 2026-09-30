@@ -5,10 +5,11 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { I18nManager, Platform } from 'react-native';
+import { AppState, I18nManager, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { initPurchases } from '@/services/purchases';
+import { useFamily } from '@/state/store';
 import { color } from '@/theme/tokens';
 import { ToastHost } from '@/ui/toast';
 
@@ -22,6 +23,15 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [loaded] = useFonts({ IBMPlexSansArabic_400Regular, IBMPlexSansArabic_500Medium, IBMPlexSansArabic_600SemiBold, IBMPlexSansArabic_700Bold });
   useEffect(() => { initPurchases(); }, []);
+  // A new day starts at local midnight: check after loading, when the app comes back, and once a minute.
+  useEffect(() => {
+    const roll = () => { if (useFamily.persist.hasHydrated()) useFamily.getState().rollover(); };
+    roll();
+    const offH = useFamily.persist.onFinishHydration(roll);
+    const sub = AppState.addEventListener('change', (st) => st === 'active' && roll());
+    const timer = setInterval(roll, 60e3);
+    return () => { offH(); sub.remove(); clearInterval(timer); };
+  }, []);
   useEffect(() => { if (loaded) SplashScreen.hideAsync(); }, [loaded]);
   if (!loaded) return null;
   return (

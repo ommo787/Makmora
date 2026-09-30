@@ -3,7 +3,9 @@ import { Check, ChevronLeft, RotateCcw } from 'lucide-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { success } from '@/services/haptics';
-import { doneCount, earnedToday, useFamily, type Child, type Task, surpriseInfo } from '@/state/store';
+import { doneCount, earnedToday, useFamily, type Child, type LateTask, type Task, surpriseInfo } from '@/state/store';
+import type { IconName } from '@/ui/icons';
+import { dayName } from '@/ui/brand';
 import { color, radius, shadow, space } from '@/theme/tokens';
 import { Avatar, Button, Card, Glyph, Money, Progress, Screen, T } from '@/ui/kit';
 import { toast } from '@/ui/toast';
@@ -15,17 +17,23 @@ const ago = (at?: number) => {
 };
 const today = new Intl.DateTimeFormat('ar', { weekday: 'long', day: 'numeric', month: 'long', numberingSystem: 'latn' } as Intl.DateTimeFormatOptions).format(new Date());
 
+type Pending = { c: Child; key: string; did: string; icon: IconName; reward: number; at?: number; t?: Task; late?: LateTask };
+
 export default function Today() {
-  const { children, parent, approve, sendBack, surprise, clearSurprise } = useFamily();
-  const pending: { c: Child; t: Task; at?: number }[] = [];
-  children.forEach((c) => c.tasks.forEach((t) => { if (c.today[t.id]?.state === 'waiting') pending.push({ c, t, at: c.today[t.id]?.at }); }));
+  const { children, parent, approve, approveLate, dropLate, sendBack, surprise, clearSurprise } = useFamily();
+  // today's finished tasks, plus any from earlier days nobody approved yet (oldest first)
+  const pending: Pending[] = [];
+  children.forEach((c) => {
+    (c.late ?? []).forEach((l) => pending.push({ c, key: l.id, did: l.did, icon: l.icon, reward: l.reward, at: l.at, late: l }));
+    c.tasks.forEach((t) => { if (c.today[t.id]?.state === 'waiting') pending.push({ c, key: t.id, did: t.did, icon: t.icon, reward: t.reward, at: c.today[t.id]?.at, t }); });
+  });
   pending.sort((a, b) => (a.at ?? 0) - (b.at ?? 0));
 
   /** One tap approves. No Face ID: either parent approves, and the child simply sees who did. */
   const ok = (list: typeof pending) => {
-    list.forEach(({ c, t }) => approve(c.id, t.id));
+    list.forEach(({ c, t, late }) => (late ? approveLate(c.id, late.id) : t && approve(c.id, t.id)));
     success();
-    const total = list.reduce((a, x) => a + x.t.reward, 0);
+    const total = list.reduce((a, x) => a + x.reward, 0);
     toast(<><Check size={16} color={color.gold} strokeWidth={3} /><T v="subhead" c={color.white}>{list.length > 1 ? `وافقت على ${list.length} مهام ·` : `انضافوا لمكمورة ${list[0].c.name}`}</T><Money n={total} v="subhead" c={color.white} /></>);
   };
   const sur = surpriseInfo(surprise);
@@ -46,23 +54,26 @@ export default function Today() {
       </View>
       {pending.length ? (
         <View style={{ gap: space.m }}>
-          {pending.map(({ c, t, at }) => (
-            <Card key={c.id + t.id} style={{ gap: space.m }}>
+          {pending.map((p) => { const { c, key, did, icon, reward, at, late } = p; return (
+            <Card key={c.id + key} style={{ gap: space.m }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m }}>
                 <View>
                   <Avatar avatar={c.avatar} photo={c.photo} size={50} />
-                  <View style={st.mini}><Glyph name={t.icon} size={24} /></View>
+                  <View style={st.mini}><Glyph name={icon} size={24} /></View>
                 </View>
-                <View style={{ flex: 1 }}><T v="headline">{`${c.name} ${t.did}`}</T><T v="footnote" c={color.text2}>{ago(at)}</T></View>
-                <Money n={t.reward} v="headline" />
+                <View style={{ flex: 1 }}><T v="headline">{`${c.name} ${did}`}</T>
+                  {late ? <T v="footnote" c={color.gold700}>{dayName(late.date)}</T> : <T v="footnote" c={color.text2}>{ago(at)}</T>}</View>
+                <Money n={reward} v="headline" />
               </View>
               <View style={{ flexDirection: 'row', gap: space.s }}>
-                <Button small kind="tinted" title="رجّعها" icon={<RotateCcw size={16} color={color.navy} />} style={{ flex: 1 }}
-                  onPress={() => { sendBack(c.id, t.id); toast(<T v="subhead" c={color.white}>{`رجعت المهمة لـ${c.name} ليعيدها`}</T>); }} />
-                <Button small title="موافقة" icon={<Check size={17} color={color.navy} strokeWidth={3} />} style={{ flex: 2 }} onPress={() => ok([{ c, t, at }])} />
+                {late
+                  ? <Button small kind="tinted" title="ما انعملت" style={{ flex: 1 }} onPress={() => dropLate(c.id, late.id)} />
+                  : <Button small kind="tinted" title="رجّعها" icon={<RotateCcw size={16} color={color.navy} />} style={{ flex: 1 }}
+                      onPress={() => { sendBack(c.id, key); toast(<T v="subhead" c={color.white}>{`رجعت المهمة لـ${c.name} ليعيدها`}</T>); }} />}
+                <Button small title="موافقة" icon={<Check size={17} color={color.navy} strokeWidth={3} />} style={{ flex: 2 }} onPress={() => ok([p])} />
               </View>
             </Card>
-          ))}
+          ); })}
         </View>
       ) : (
         <Card style={{ flexDirection: 'row', alignItems: 'center', gap: space.m, paddingVertical: space.xl }}>

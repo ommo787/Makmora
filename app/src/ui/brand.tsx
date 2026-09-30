@@ -60,3 +60,13 @@ export const tasksN = (n: number) => count(n, 'مهمة', 'مهام');
 export const SCHOOL = [true, true, true, true, true, false, false];
 export const daysLabel = (d: boolean[]) =>
   d.every(Boolean) ? 'كل يوم' : d.join() === SCHOOL.join() ? 'أيام المدرسة' : `${days(d.filter(Boolean).length)} بالأسبوع`;
+
+/** "اليوم", "مبارح", or the weekday name for an older day. */
+export function dayName(date: string) {
+  const d = new Date(date + 'T12:00');
+  const now = new Date(); now.setHours(12, 0, 0, 0);
+  const diff = Math.round((now.getTime() - d.getTime()) / 864e5);
+  if (diff <= 0) return 'اليوم';
+  if (diff === 1) return 'مبارح';
+  return ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'][d.getDay()];
+}

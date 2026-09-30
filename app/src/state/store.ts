@@ -27,7 +27,14 @@ export type Child = {
   balance: number;
   today: Record<string, { state: TaskState; at?: number; by?: Parent['role'] }>;   // task id → today's state, and which parent approved it
   approved: { taskId: string; at: number; reward: number; by?: Parent['role'] }[]; // history of approvals
+  day?: string;                                          // which day `today` belongs to (YYYY-MM-DD, local)
+  late?: LateTask[];                                     // finished on an earlier day, still waiting for a parent
+  log?: DayLog[];                                        // one line per past day, newest first (last 60 days)
 };
+/** A task the child finished on an earlier day that no parent approved before midnight. It is never lost. */
+export type LateTask = { id: string; taskId: string; name: string; did: string; icon: IconName; reward: number; date: string; at?: number };
+/** What a day looked like once it closed. */
+export type DayLog = { date: string; done: string[]; planned: number; earned: number };
 export type Parent = { name: string; role: 'بابا' | 'ماما'; avatar: AvatarKey; email?: string; via?: 'apple' | 'google' | 'email' };
 export type Surprise = { key: string; title?: string; icon?: IconName; condition: 'all' | 'manual'; status: 'armed' | 'earned'; seenBy: string[] };
 
@@ -60,6 +67,9 @@ type Actions = {
   markDone(childId: string, taskId: string): void;      // the child taps "خلّصت"
   undoDone(childId: string, taskId: string): void;
   approve(childId: string, taskId: string): void;
+  approveLate(childId: string, lateId: string): void;
+  dropLate(childId: string, lateId: string): void;
+  rollover(): void;                                  // close yesterday at local midnight
   sendBack(childId: string, taskId: string): void;
   armSurprise(s: { key: string; title: string; icon: IconName }, condition: 'all' | 'manual'): void;
   seeSurprise(childId: string): void;
@@ -68,6 +78,21 @@ type Actions = {
   setMode(mode: 'parent' | 'child', childId?: string): void;
   reset(): void;
 };
+
+/** Local calendar day, so a new day starts at midnight where the family lives. */
+export const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const planned = (c: Child, date: string) => { const w = (new Date(date + 'T12:00').getDay() + 1) % 7; return c.tasks.filter((t) => t.days[w]).length; };
+
+/** Close the child's last day: log what was done, carry what still waits for approval, and start fresh. */
+function closeDay(c: Child, today: string): Child {
+  if (c.day === today) return c;
+  if (!c.day) return { ...c, day: today };
+  const done = c.tasks.filter((t) => c.today[t.id]?.state === 'done');
+  const waiting: LateTask[] = c.tasks.filter((t) => c.today[t.id]?.state === 'waiting')
+    .map((t) => ({ id: uid(), taskId: t.id, name: t.name, did: t.did, icon: t.icon, reward: t.reward, date: c.day!, at: c.today[t.id]?.at }));
+  const entry: DayLog = { date: c.day, done: done.map((t) => t.name), planned: planned(c, c.day), earned: done.reduce((a, t) => a + t.reward, 0) };
+  return { ...c, day: today, today: {}, late: [...(c.late ?? []), ...waiting], log: [entry, ...(c.log ?? []).filter((d) => d.date !== entry.date)].slice(0, 60) };
+}
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 const code = () => Array.from({ length: 6 }, () => '0123456789'[Math.floor(Math.random() * 10)]).join('');
@@ -83,12 +108,6 @@ export const templateToTask = (key: string): Task => {
   const t = TASK_TEMPLATES.find((x) => x.key === key)!;
   return { id: uid(), key: t.key, name: t.name, icon: t.icon, did: t.did, reward: t.reward, days: EVERY() };
 };
-
-/** "وافق بابا" / "وافقت ماما" */
-export const approvedBy = (by?: Parent['role']) => (by === 'ماما' ? 'وافقت ماما' : by === 'بابا' ? 'وافق بابا' : 'تم');
-/** Who the child is waiting for: one parent, or both once the other joined. */
-export const waitingFor = (p?: Parent, partnerJoined?: boolean) =>
-  partnerJoined ? `${p?.role === 'ماما' ? 'ماما أو بابا' : 'بابا أو ماما'}` : p?.role ?? 'بابا';
 
 /** What a surprise shows: its own title and icon, or the ready-made one it came from. */
 export function surpriseInfo(s?: Surprise): { icon: IconName; title: string } | undefined {
@@ -115,7 +134,7 @@ export const useFamily = create<Family & Actions>()(
       ...initial,
       setParent: (p) => set({ parent: p }),
       addChild: ({ name, age, avatar, photo }) =>
-        set((s) => ({ children: [...s.children, { id: uid(), name, age, avatar, photo, tasks: suggestedTasks(age), balance: 0, today: {}, approved: [] }] })),
+        set((s) => ({ children: [...s.children, { id: uid(), name, age, avatar, photo, tasks: suggestedTasks(age), balance: 0, today: {}, approved: [], day: dayKey(), late: [], log: [] }] })),
       removeChild: (id) => set((s) => ({ children: s.children.filter((c) => c.id !== id) })),
       addTask: (childId, t) => set((s) => mapChild(s, childId, (c) => ({ ...c, tasks: [...c.tasks, { ...t, id: uid() }] }))),
       removeTask: (childId, taskId) => set((s) => mapChild(s, childId, (c) => ({ ...c, tasks: c.tasks.filter((t) => t.id !== taskId) }))),
@@ -151,6 +170,19 @@ export const useFamily = create<Family & Actions>()(
           }
           return next;
         }),
+      approveLate: (childId, lateId) =>
+        set((s) => mapChild(s, childId, (c) => {
+          const l = c.late?.find((x) => x.id === lateId);
+          if (!l) return c;
+          const by = s.parent?.role;
+          return {
+            ...c, balance: c.balance + l.reward, late: c.late!.filter((x) => x.id !== lateId),
+            approved: [...c.approved, { taskId: l.taskId, at: Date.now(), reward: l.reward, by }],
+            log: (c.log ?? []).map((d) => (d.date === l.date ? { ...d, done: [...d.done, l.name], earned: d.earned + l.reward } : d)),
+          };
+        })),
+      dropLate: (childId, lateId) => set((s) => mapChild(s, childId, (c) => ({ ...c, late: (c.late ?? []).filter((x) => x.id !== lateId) }))),
+      rollover: () => set((s) => ({ children: s.children.map((c) => closeDay(c, dayKey())) })),
       sendBack: (childId, taskId) =>
         set((s) => mapChild(s, childId, (c) => ({ ...c, today: { ...c.today, [taskId]: { state: 'todo' } } }))),
       armSurprise: ({ key, title, icon }, condition) =>
@@ -187,7 +219,15 @@ export function seedDemoFamily() {
         i === 0
           ? { [t[0].id]: { state: 'done', at: Date.now() - 3600e3, by: 'ماما' }, [t[1].id]: { state: 'waiting', at: Date.now() - 10 * 60e3 }, [t[2].id]: { state: 'waiting', at: Date.now() - 25 * 60e3 } }
           : { [t[0].id]: { state: 'done', at: Date.now() - 3600e3, by: 'بابا' }, [t[1].id]: { state: 'done', at: Date.now() - 1800e3, by: 'ماما' }, [t[2].id]: { state: 'waiting', at: Date.now() - 5 * 60e3 } };
-      return { ...c, today, balance: i === 0 ? 112 : 26 };
+      const past = (n: number) => dayKey(new Date(Date.now() - n * 864e5));
+      const names = t.map((x) => x.name);
+      const log: DayLog[] = [1, 2, 3, 4, 5, 6].map((n) => {
+        const k = i === 0 ? [5, 6, 4, 6, 3, 6][n - 1] : [7, 5, 7, 6, 7, 4][n - 1];
+        const done = names.slice(0, Math.min(k, names.length));
+        return { date: past(n), done, planned: names.length, earned: t.filter((x) => done.includes(x.name)).reduce((a, x) => a + x.reward, 0) };
+      });
+      const late: LateTask[] = i === 0 ? [{ id: 'late1', taskId: t[3].id, name: t[3].name, did: t[3].did, icon: t[3].icon, reward: t[3].reward, date: past(1), at: Date.now() - 20 * 3600e3 }] : [];
+      return { ...c, today, balance: i === 0 ? 112 : 26, day: dayKey(), log, late };
     }),
   }));
 }
