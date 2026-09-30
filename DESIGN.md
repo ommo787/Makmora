@@ -15,6 +15,7 @@ The product follows native iOS design so it feels like an Apple app. The live re
 - **App icon:** a blue rounded square with a white jar and a blue star inside: the jar the child fills, the star the dream (`prototype/app-icon.svg`).
 - **People:** children and parents appear by photo; until a family adds photos, 3D avatars stand in.
 - **Flow (value before price):** Welcome → Account (Apple, Google, email) → About you → Children → Task setup per child (tasks, reward per task, goal) → All set (edit / approve) → Child preview ("this is what Salim sees tomorrow") → Free trial → App Store → Trial started (optional invite for the other parent).
+- **Parent home ("اليوم"):** the one job first: tasks waiting for approval, each as a sentence ("سليم رتّب سريره") with its reward, "رجّعها" and "موافقة", plus "وافق على الكل". Then each child today (progress ring, earned today, goal bar) and a family-surprise row. Floating glass tab bar: اليوم · الأولاد · الإعدادات.
 - **Deferred on purpose:** the parent passcode is asked at the first approval (with Face ID); inviting the other parent is offered after the trial starts.
 - **Money:** task rewards and goals are real amounts in the currency of the phone's region, with no picker. Saudi riyal uses the official new sign. The app keeps a ledger; parents pay children themselves. No fixed allowance in v1: every riyal comes from a task.
 - **Wording:** "مكافأة كل مهمة" (not "how much is it worth"); "هدف سليم" (something he aims for), written freely, icon picked from the words.
