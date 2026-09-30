@@ -12,7 +12,7 @@ import {
 
 export * from './family';
 
-export type Parent = { name: string; role: Role; avatar: AvatarKey; email?: string; via?: 'apple' | 'google' | 'email' };
+export type Parent = { name: string; role: Role; avatar: AvatarKey; photo?: string; email?: string; via?: 'apple' | 'google' | 'email' };
 
 /** What only this device knows: who is holding it, and where it stands with the server. */
 type Local = {
@@ -23,6 +23,7 @@ type Local = {
   familyCode: string;               // 6 digits for the children's devices
   partnerCode?: string;             // 8 letters for the other parent (from the server)
   familyId?: string;                // set once the family lives on the server
+  invite?: { code: string; role: Role };   // opened an invite link: join that family after signing in
   mode: 'parent' | 'child';         // what this device shows
   activeChildId?: string;           // on a child's device
   base: Shared;                     // the family as the server confirmed it
@@ -155,7 +156,7 @@ export const useFamily = create<Family & Actions>()(
         clearSurprise: () => emit({ type: 'clearSurprise' }),
         invitePartner: (email) => set({ invitedPartner: email }),
         setMode: (mode, childId) => set({ mode, activeChildId: childId }),
-        reset: () => set({ ...initialLocal(), ...emptyShared(), parent: undefined, invitedPartner: undefined, partnerCode: undefined, familyId: undefined, activeChildId: undefined }),
+        reset: () => set({ ...initialLocal(), ...emptyShared(), parent: undefined, invitedPartner: undefined, partnerCode: undefined, familyId: undefined, activeChildId: undefined, invite: undefined }),
         applyRemote: (rows) => {
           const s = get();
           let { base, pending, lastSeq } = s;

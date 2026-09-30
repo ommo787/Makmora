@@ -6,6 +6,7 @@ import { Share, View } from 'react-native';
 import { TRIAL_DAYS } from '@/data/catalog';
 import { deviceCurrency } from '@/services/money';
 import { signOut } from '@/services/sync';
+import { WEB_URL } from '@/services/auth';
 import { useFamily } from '@/state/store';
 import { color, space } from '@/theme/tokens';
 import { Avatar, Button, Field, Group, Row, Screen, SectionLabel, Sheet, T } from '@/ui/kit';
@@ -28,7 +29,7 @@ export default function Settings() {
 
       <SectionLabel>العيلة</SectionLabel>
       <Group>
-        <Row lead={<Avatar avatar={f.parent?.avatar ?? 'man'} size={40} />} title={<T v="headline">{f.parent?.name ?? ''}</T>} sub={`${f.parent?.role ?? ''} · إنت`} />
+        <Row lead={<Avatar avatar={f.parent?.avatar ?? 'man'} photo={f.parent?.photo} size={40} />} title={<T v="headline">{f.parent?.name ?? ''}</T>} sub={`${f.parent?.role ?? ''} · إنت`} />
         {f.invitedPartner
           ? <Row lead={<Avatar avatar={f.parent?.role === 'ماما' ? 'man' : 'woman'} size={40} />} title={f.parent?.role === 'ماما' ? 'بابا' : 'ماما'} sub={f.partnerJoined ? 'نفس صلاحياتك' : <T v="footnote" c={color.gold700}>{f.invitedPartner === 'code' ? 'بعتنا الدعوة، ناطرين ينضم' : `بعتنا دعوة لـ${f.invitedPartner}`}</T>} />
           : <Row onPress={() => setInvite(true)} lead={<Lead I={UserPlus} />} title={<T v="body" c={color.link}>{`ادعُ ${f.parent?.role === 'ماما' ? 'الأب' : 'الأم'}`}</T>} />}
@@ -55,9 +56,12 @@ export default function Settings() {
       <Sheet open={invite} onClose={() => setInvite(false)} title="دعوة">
         {f.partnerCode ? (
           <View style={{ alignItems: 'center', gap: space.m }}>
-            <T v="subhead" c={color.text2} center>{`خلّي ${f.parent?.role === 'ماما' ? 'الأب' : 'الأم'} ينزّل مكمورة ويفتح حساب، وبشاشة «عرّفنا عليك» يكبس «عندي رمز دعوة» ويكتب هالرمز. بيصير عنده نفس صلاحياتك، وما بيدفع شي.`}</T>
-            <T v="largeTitle" style={{ letterSpacing: 4, writingDirection: 'ltr' }}>{f.partnerCode}</T>
-            <Button title="شارك الرمز" style={{ alignSelf: 'stretch' }} onPress={() => { Share.share({ message: `انضم لعيلتنا على مكمورة. رمز الدعوة: ${f.partnerCode}` }).catch(() => {}); f.invitePartner('code'); }} />
+            <T v="subhead" c={color.text2} center>{`ابعت الرابط لـ${f.parent?.role === 'ماما' ? 'الأب' : 'الأم'} على واتساب. بيفتحه، وبيسجّل دخول بـ Google أو Apple، وبيصير معك بالعيلة بنفس الصلاحيات، وبدون ما يدفع شي.`}</T>
+            <Button title="شارك رابط الدعوة" style={{ alignSelf: 'stretch' }} onPress={() => {
+              const link = `${WEB_URL}/invite?code=${f.partnerCode}&as=${encodeURIComponent((f.parent?.role === 'ماما' ? 'بابا' : 'ماما'))}`;
+              Share.share({ message: `انضم لعيلتنا على مكمورة: ${link}` }).catch(() => {}); f.invitePartner('code');
+            }} />
+            <T v="footnote" c={color.text2} center>{`أو رمز الدعوة: ${f.partnerCode}`}</T>
           </View>
         ) : (
           <>

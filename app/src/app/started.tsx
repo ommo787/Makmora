@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Share, View } from 'react-native';
 
 import { TRIAL_DAYS } from '@/data/catalog';
+import { WEB_URL } from '@/services/auth';
 import { useFamily } from '@/state/store';
 import { color, space } from '@/theme/tokens';
 import { Button, Card, Field, Screen, Sheet, T } from '@/ui/kit';
@@ -34,9 +35,12 @@ export default function Started() {
       <Sheet open={open} onClose={() => setOpen(false)} title="دعوة">
         {partnerCode ? (
           <View style={{ alignItems: 'center', gap: space.m }}>
-            <T v="subhead" c={color.text2} center>{`خلّي ${other} ينزّل مكمورة ويفتح حساب، وبشاشة «عرّفنا عليك» يكبس «عندي رمز دعوة» ويكتب هالرمز.`}</T>
-            <T v="largeTitle" style={{ letterSpacing: 4, writingDirection: 'ltr' }}>{partnerCode}</T>
-            <Button title="شارك الرمز" style={{ alignSelf: 'stretch' }} onPress={() => { Share.share({ message: `انضم لعيلتنا على مكمورة. رمز الدعوة: ${partnerCode}` }).catch(() => {}); invitePartner('code'); setOpen(false); }} />
+            <T v="subhead" c={color.text2} center>{`ابعت الرابط لـ${other} على واتساب. بيفتحه، وبيسجّل دخول بـ Google أو Apple، وبيصير معك بالعيلة بنفس الصلاحيات، وبدون ما يدفع شي.`}</T>
+            <Button title="شارك رابط الدعوة" style={{ alignSelf: 'stretch' }} onPress={() => {
+              const link = `${WEB_URL}/invite?code=${partnerCode}&as=${encodeURIComponent((parent?.role === 'ماما' ? 'بابا' : 'ماما'))}`;
+              Share.share({ message: `انضم لعيلتنا على مكمورة: ${link}` }).catch(() => {}); invitePartner('code'); setOpen(false);
+            }} />
+            <T v="footnote" c={color.text2} center>{`أو رمز الدعوة: ${partnerCode}`}</T>
           </View>
         ) : <>
         <T v="subhead" c={color.text2} style={{ marginBottom: space.m }}>رح يوصله رابط لينزّل مكمورة ويفوت على نفس العيلة. بيضيف مهام وبيوافق متلك تماماً، وما بيدفع شي.</T>

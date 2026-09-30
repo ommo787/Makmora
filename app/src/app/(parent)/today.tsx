@@ -42,7 +42,7 @@ export default function Today() {
     <Screen tabs>
       <View style={st.top}>
         <View><T v="subhead" c={color.text2}>{today}</T><T v="largeTitle">اليوم</T></View>
-        <Avatar avatar={parent?.avatar ?? 'man'} size={44} />
+        <Avatar avatar={parent?.avatar ?? 'man'} photo={parent?.photo} size={44} />
       </View>
 
       <View style={st.sec}>

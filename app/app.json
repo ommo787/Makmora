@@ -53,7 +53,14 @@
           "faceIDPermission": "منستعمل Face ID لحتى ما حدا يوافق على المهام غيرك."
         }
       ],
-      "expo-audio"
+      "expo-audio",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "منستعمل صورك لحتى تحط صورتك أو صورة ولدك بالتطبيق.",
+          "cameraPermission": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

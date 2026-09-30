@@ -1,14 +1,14 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { Mail } from 'lucide-react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
-import { googleReady, signInWithApple, signInWithEmail, signInWithGoogle, type SignedIn } from '@/services/auth';
+import { currentUser, providers, signInWithApple, signInWithGoogle, type Provider, type SignedIn } from '@/services/auth';
+import { online } from '@/services/supabase';
 import { restoreFamily } from '@/services/sync';
 import { useFamily } from '@/state/store';
 import { color, space } from '@/theme/tokens';
-import { Button, Field, NavBar, Screen, T, Title } from '@/ui/kit';
+import { Button, NavBar, Screen, T, Title } from '@/ui/kit';
 
 const AppleMark = () => (
   <Svg width={18} height={18} viewBox="0 0 24 24"><Path fill="#fff" d="M16.37 1.43c0 1.14-.49 2.27-1.18 3.08-.74.9-1.99 1.57-2.99 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.57-2.27 1.21-2.98.8-.94 2.14-1.64 3.25-1.68.03.13.05.28.05.43zm4.56 15.71c-.03.07-.46 1.58-1.52 3.12-.94 1.34-1.94 2.71-3.43 2.71-1.52 0-1.9-.88-3.63-.88-1.7 0-2.3.91-3.67.91-1.38 0-2.33-1.26-3.43-2.8-1.29-1.82-2.32-4.63-2.32-7.28 0-4.28 2.8-6.55 5.55-6.55 1.45 0 2.68.95 3.6.95.87 0 2.22-1.01 3.9-1.01.61 0 2.89.06 4.37 2.19-.13.09-2.38 1.37-2.38 4.19 0 3.26 2.85 4.42 2.96 4.45z" /></Svg>
@@ -22,50 +22,48 @@ const GoogleMark = () => (
   </Svg>
 );
 
-const okEmail = (v: string) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.trim());
-
 export default function Account() {
   const { mode } = useLocalSearchParams<{ mode?: string }>();
   const login = mode === 'login';
-  const [email, setEmail] = useState(false);
-  const [mail, setMail] = useState('');
-  const [pass, setPass] = useState('');
-  const onboarded = useFamily((s) => s.onboarded);
+  const { onboarded, invite } = useFamily();
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
+  const [ready, setReady] = useState<Record<Provider, boolean>>({ google: true, apple: true });
 
-  const done = async (get: () => Promise<SignedIn | null>) => {
+  /** Signed in: an account with a family goes home, a new one tells us who they are. */
+  const proceed = async (r: SignedIn) => {
+    if (!invite && await restoreFamily()) return router.replace('/today');
+    if (login && onboarded) return router.replace('/today');
+    router.replace({ pathname: '/about', params: { name: r.name ?? '', email: r.email ?? '', via: r.via } });
+  };
+  const go = async (get: () => Promise<SignedIn | null>) => {
     setErr(''); setBusy(true);
     try {
       const r = await get();
-      if (!r) return;
-      // an account that already has a family goes straight home
-      if (await restoreFamily()) return router.replace('/today');
-      if (login && onboarded) return router.replace('/today');
-      router.push({ pathname: '/about', params: { name: r.name ?? '', email: r.email ?? '', via: r.via } });
+      if (r) await proceed(r);
     } catch (e) {
       setErr(e instanceof Error ? e.message : 'ما زبط، جرّب مرة تانية.');
     } finally {
       setBusy(false);
     }
   };
+  useEffect(() => {
+    providers().then(setReady);
+    // back from Google or Apple on the web: the session is already here
+    if (!online()) return;
+    currentUser().then((u) => { if (u) go(async () => u); });
+  }, []);
+
+  const soon = (what: string) => setErr(`الدخول بـ ${what} لسا عم نجهّزه. جرّب الطريقة التانية.`);
   return (
     <Screen footer={<T v="caption" c={color.text2} center>بالمتابعة بتوافق على الشروط وسياسة الخصوصية</T>}>
       <NavBar />
-      <Title sub={login ? 'أهلاً من جديد.' : 'بثواني، وبدون ما تتذكّر كلمة سر.'}>{login ? 'تسجيل الدخول' : 'أنشئ حسابك'}</Title>
+      <Title sub={invite ? 'سجّل دخول، وبتفوت على عيلتك مباشرة.' : login ? 'أهلاً من جديد.' : 'بثواني، وبدون كلمة سر.'}>
+        {invite ? 'انضم لعيلتك' : login ? 'تسجيل الدخول' : 'أنشئ حسابك'}
+      </Title>
       <View style={{ gap: space.s + 2, marginTop: space.xxl }}>
-        <Button kind="apple" title="متابعة مع Apple" icon={<AppleMark />} disabled={busy} onPress={() => done(signInWithApple)} />
-        {googleReady ? <Button kind="glass" title="متابعة مع Google" icon={<GoogleMark />} disabled={busy} onPress={() => done(signInWithGoogle)} /> : null}
-        {!email ? (
-          <Button kind="glass" title="متابعة بالبريد" icon={<Mail size={18} color={color.navy} />} onPress={() => setEmail(true)} />
-        ) : (
-          <View style={{ gap: space.s, marginTop: space.s }}>
-            <Field label="البريد" value={mail} onChangeText={setMail} keyboardType="email-address" autoCapitalize="none" autoComplete="email" placeholder="name@email.com" autoFocus />
-            <Field label="كلمة السر" value={pass} onChangeText={setPass} secureTextEntry autoComplete={login ? 'current-password' : 'new-password'} placeholder={login ? 'مطلوبة' : '8 أحرف على الأقل'} />
-            <Button title="متابعة" disabled={busy || !okEmail(mail) || pass.length < (login ? 1 : 8)} onPress={() => done(() => signInWithEmail(mail, pass, login))} style={{ marginTop: space.s }} />
-            {login ? <Button kind="plain" title="نسيت كلمة السر؟" /> : null}
-          </View>
-        )}
+        <Button kind="apple" title="متابعة مع Apple" icon={<AppleMark />} disabled={busy} onPress={() => (ready.apple ? go(signInWithApple) : soon('Apple'))} />
+        <Button kind="glass" title="متابعة مع Google" icon={<GoogleMark />} disabled={busy} onPress={() => (ready.google ? go(signInWithGoogle) : soon('Google'))} />
         {err ? <T v="subhead" c={color.error} center style={{ marginTop: space.s }}>{err}</T> : null}
       </View>
     </Screen>
