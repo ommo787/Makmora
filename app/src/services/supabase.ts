@@ -10,7 +10,10 @@ import { Platform } from 'react-native';
 const URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const KEY = process.env.EXPO_PUBLIC_SUPABASE_KEY;
 
-export const supabase: SupabaseClient | null = URL && KEY
+// web pages are also pre-rendered on the build machine, where there is no browser storage: no client there
+const prerender = Platform.OS === 'web' && typeof window === 'undefined';
+
+export const supabase: SupabaseClient | null = URL && KEY && !prerender
   ? createClient(URL, KEY, {
     auth: {
       storage: AsyncStorage,

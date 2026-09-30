@@ -10,6 +10,8 @@ import { outbox, useFamily, type Ev, type Role } from '@/state/store';
  * Down: new events from the other devices arrive live, and a pull on start and on return fills any gap.
  */
 let channel: RealtimeChannel | null = null;
+let live = false;                 // the live channel is open
+let poll: ReturnType<typeof setInterval> | null = null;
 let pushing = false;
 let again = false;
 
@@ -53,19 +55,26 @@ export async function push() {
 }
 
 /** Listen for the family's new events while the app is open. */
-export function connect() {
+export async function connect() {
   const { familyId } = useFamily.getState();
   if (!supabase || !familyId) return;
   if (channel) supabase.removeChannel(channel);
+  // the live channel checks who is listening with the same rules as reading: hand it this device's sign-in
+  const { data } = await supabase.auth.getSession();
+  if (data.session) await supabase.realtime.setAuth(data.session.access_token);
   channel = supabase.channel(`family:${familyId}`)
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'events', filter: `family_id=eq.${familyId}` },
       (m) => { const r = m.new as Row; useFamily.getState().applyRemote([{ seq: r.seq, ev: r.payload }]); })
-    .subscribe((status) => { if (status === 'SUBSCRIBED') { pull(); push(); } });
+    .subscribe((status) => {
+      live = status === 'SUBSCRIBED';
+      if (live) { pull(); push(); }
+    });
 }
 
 export function disconnect() {
   if (supabase && channel) supabase.removeChannel(channel);
   channel = null;
+  live = false;
 }
 
 /** Start once at launch: send on every change, catch up whenever the app comes back. */
@@ -75,7 +84,15 @@ export function startSync() {
   started = true;
   outbox.notify = () => { push(); };
   connect();
+  // a refreshed sign-in must reach the live channel too
+  supabase.auth.onAuthStateChange((_e, session) => { if (session) supabase!.realtime.setAuth(session.access_token); });
   AppState.addEventListener('change', (st) => { if (st === 'active') { pull().then(push); } });
+  // if the live channel cannot open (a weak or filtered network), check for news every few seconds instead
+  if (!poll) poll = setInterval(() => {
+    if (live || AppState.currentState !== 'active' || !useFamily.getState().familyId) return;
+    pull().then(push);
+    if (!channel) connect();
+  }, 10e3);
 }
 
 /** A parent with a fresh account: make the family on the server and move this device's family into it. */
@@ -88,7 +105,7 @@ export async function createFamily(role: Role) {
   // an account that already had a family (a second phone) joins it instead of sending this device's copy
   const { count } = await supabase.from('events').select('seq', { count: 'exact', head: true }).eq('family_id', f.id);
   s.attach({ familyId: f.id, familyCode: f.child_code, partnerCode: f.partner_code, fresh: !!count && s.familyId !== f.id });
-  connect();
+  await connect();
   await push();
 }
 
@@ -119,7 +136,7 @@ export async function joinAsChild(code: string, childId: string) {
   const s = useFamily.getState();
   s.attach({ familyId: fid as string, familyCode: code, fresh: true });
   s.setMode('child', childId);
-  connect();
+  await connect();
   await pull();
 }
 
@@ -129,7 +146,7 @@ export async function joinAsParent(code: string, role: Role) {
   if (error) throw error;
   const s = useFamily.getState();
   s.attach({ familyId: fid as string, familyCode: '', partnerCode: code.toUpperCase(), fresh: true });
-  connect();
+  await connect();
   await pull();
   // tell the family the other parent is in; read the real child code now that we are a member
   const { data: fam } = await supabase.from('families').select('child_code').eq('id', fid as string).single();
@@ -159,7 +176,7 @@ export async function restoreFamily(): Promise<boolean> {
   s.attach({ familyId: m.family_id, familyCode: f?.child_code ?? '', partnerCode: f?.partner_code, fresh: s.familyId !== m.family_id });
   if (!s.parent && m.role) s.setParent({ name: u.user.email ?? '', role: m.role, avatar: m.role === 'ماما' ? 'woman' : 'man', email: u.user.email ?? undefined, via: 'email' });
   useFamily.setState({ onboarded: true, mode: 'parent' });
-  connect();
+  await connect();
   await pull();
   return true;
 }
