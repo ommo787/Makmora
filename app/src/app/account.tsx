@@ -1,10 +1,12 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Linking, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
-import { currentUser, providers, signInWithApple, signInWithGoogle, type Provider, type SignedIn } from '@/services/auth';
+import { WEB_URL, currentUser, providers, signInWithApple, signInWithGoogle, type Provider, type SignedIn } from '@/services/auth';
 import { online } from '@/services/supabase';
+
+const SITE = WEB_URL.replace(/\/app$/, '');
 import { restoreFamily } from '@/services/sync';
 import { useFamily } from '@/state/store';
 import { color, space } from '@/theme/tokens';
@@ -56,7 +58,14 @@ export default function Account() {
 
   const soon = (what: string) => setErr(`الدخول بـ ${what} لسا عم نجهّزه. جرّب الطريقة التانية.`);
   return (
-    <Screen footer={<T v="caption" c={color.text2} center>بالمتابعة بتوافق على الشروط وسياسة الخصوصية</T>}>
+    <Screen footer={
+      <T v="caption" c={color.text2} center>
+        {'بالمتابعة بتوافق على '}
+        <T v="caption" c={color.link} onPress={() => Linking.openURL(`${SITE}/terms.html`)}>الشروط</T>
+        {' و'}
+        <T v="caption" c={color.link} onPress={() => Linking.openURL(`${SITE}/privacy.html`)}>سياسة الخصوصية</T>
+      </T>
+    }>
       <NavBar />
       <Title sub={invite ? 'سجّل دخول، وبتفوت على عيلتك مباشرة.' : login ? 'أهلاً من جديد.' : 'بثواني، وبدون كلمة سر.'}>
         {invite ? 'انضم لعيلتك' : login ? 'تسجيل الدخول' : 'أنشئ حسابك'}

@@ -17,9 +17,9 @@ import { color, font, GUTTER, radius, shadow, space, type } from '@/theme/tokens
 
 /* ---------- text ---------- */
 type Variant = keyof typeof type;
-export function T({ v = 'body', c = color.text, center, style, children, numberOfLines }:
-  { v?: Variant; c?: string; center?: boolean; style?: StyleProp<TextStyle>; children: ReactNode; numberOfLines?: number }) {
-  return <Text numberOfLines={numberOfLines} style={[type[v], { color: c }, center && { textAlign: 'center' }, style]}>{children}</Text>;
+export function T({ v = 'body', c = color.text, center, style, children, numberOfLines, onPress }:
+  { v?: Variant; c?: string; center?: boolean; style?: StyleProp<TextStyle>; children: ReactNode; numberOfLines?: number; onPress?: () => void }) {
+  return <Text numberOfLines={numberOfLines} onPress={onPress} suppressHighlighting style={[type[v], { color: c }, center && { textAlign: 'center' }, style]}>{children}</Text>;
 }
 
 /* ---------- screen scaffolding ---------- */

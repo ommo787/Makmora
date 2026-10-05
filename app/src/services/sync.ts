@@ -190,3 +190,12 @@ export async function ensureFamily() {
   if (!data.session || data.session.user.is_anonymous) return;
   try { await createFamily(s.parent.role); } catch { /* try again next launch */ }
 }
+
+/** Delete this parent's account (and the family, if no other parent is left). */
+export async function deleteAccount() {
+  if (supabase) {
+    const { error } = await supabase.rpc('delete_my_account');
+    if (error) throw error;
+  }
+  await signOut();
+}

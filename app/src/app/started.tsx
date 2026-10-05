@@ -25,8 +25,8 @@ export default function Started() {
         <Card style={{ marginTop: space.xxl, flexDirection: 'row', alignItems: 'center', gap: space.m, alignSelf: 'stretch', backgroundColor: color.mist }}>
           <View style={{ width: 44, height: 44, borderRadius: 12, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center' }}><HandHeart size={22} color={color.gold} /></View>
           <View style={{ flex: 1 }}>
-            <T v="headline">{`بدك ${other} يتابع معك؟`}</T>
-            <T v="footnote" c={color.text2}>نفس صلاحياتك، ومن موبايله. ببلاش ضمن اشتراكك.</T>
+            <T v="headline">{other === 'الأم' ? 'بدك الأم تتابع معك؟' : 'بدك الأب يتابع معك؟'}</T>
+            <T v="footnote" c={color.text2}>{other === 'الأم' ? 'نفس صلاحياتك، ومن موبايلها. ببلاش ضمن اشتراكك.' : 'نفس صلاحياتك، ومن موبايله. ببلاش ضمن اشتراكك.'}</T>
           </View>
           {invitedPartner ? <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}><Check size={14} color={color.success} strokeWidth={3} /><T v="footnote" c={color.successText}>انبعتت</T></View>
             : <Button small kind="tinted" title="دعوة" onPress={() => setOpen(true)} />}
@@ -35,7 +35,7 @@ export default function Started() {
       <Sheet open={open} onClose={() => setOpen(false)} title="دعوة">
         {partnerCode ? (
           <View style={{ alignItems: 'center', gap: space.m }}>
-            <T v="subhead" c={color.text2} center>{`ابعت الرابط لـ${other} على واتساب. بيفتحه، وبيسجّل دخول بـ Google أو Apple، وبيصير معك بالعيلة بنفس الصلاحيات، وبدون ما يدفع شي.`}</T>
+            <T v="subhead" c={color.text2} center>{other === 'الأم' ? 'ابعت الرابط للأم على واتساب. بتفتحه، وبتسجّل دخول بـ Google أو Apple، وبتصير معك بالعيلة بنفس الصلاحيات، وبدون ما تدفع شي.' : 'ابعتي الرابط للأب على واتساب. بيفتحه، وبيسجّل دخول بـ Google أو Apple، وبيصير معك بالعيلة بنفس الصلاحيات، وبدون ما يدفع شي.'}</T>
             <Button title="شارك رابط الدعوة" style={{ alignSelf: 'stretch' }} onPress={() => {
               const link = `${WEB_URL}/invite?code=${partnerCode}&as=${encodeURIComponent((parent?.role === 'ماما' ? 'بابا' : 'ماما'))}`;
               Share.share({ message: `انضم لعيلتنا على مكمورة: ${link}` }).catch(() => {}); invitePartner('code'); setOpen(false);

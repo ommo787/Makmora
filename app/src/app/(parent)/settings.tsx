@@ -1,11 +1,11 @@
 import { router } from 'expo-router';
-import { ChevronLeft, CreditCard, Globe, LogOut, Smartphone, UserPlus } from 'lucide-react-native';
+import { ChevronLeft, CreditCard, FileText, Globe, LogOut, ShieldCheck, Smartphone, Trash2, UserPlus } from 'lucide-react-native';
 import { useState } from 'react';
-import { Share, View } from 'react-native';
+import { Linking, Share, View } from 'react-native';
 
 import { TRIAL_DAYS } from '@/data/catalog';
 import { deviceCurrency } from '@/services/money';
-import { signOut } from '@/services/sync';
+import { deleteAccount, signOut } from '@/services/sync';
 import { WEB_URL } from '@/services/auth';
 import { useFamily } from '@/state/store';
 import { color, space } from '@/theme/tokens';
@@ -19,6 +19,8 @@ export default function Settings() {
   const f = useFamily();
   const [invite, setInvite] = useState(false);
   const [childPick, setChildPick] = useState(false);
+  const [del, setDel] = useState(false);
+  const [delErr, setDelErr] = useState('');
   const [mail, setMail] = useState('');
   const cur = deviceCurrency();
   const trialLeft = f.subscription.startedAt ? Math.max(0, TRIAL_DAYS - Math.floor((Date.now() - f.subscription.startedAt) / 864e5)) : TRIAL_DAYS;
@@ -50,13 +52,38 @@ export default function Settings() {
         <Row lead={<Lead I={Globe} />} title="العملة" sub="حسب منطقة جهازك" end={<T v="headline">{cur.code}</T>} />
       </Group>
 
+      <SectionLabel>عن مكمورة</SectionLabel>
+      <Group>
+        <Row lead={<Lead I={ShieldCheck} />} title="سياسة الخصوصية" end={<ChevronLeft size={18} color={color.text3} />} onPress={() => Linking.openURL(`${WEB_URL.replace(/\/app$/, '')}/privacy.html`)} />
+        <Row lead={<Lead I={FileText} />} title="شروط الاستخدام" end={<ChevronLeft size={18} color={color.text3} />} onPress={() => Linking.openURL(`${WEB_URL.replace(/\/app$/, '')}/terms.html`)} />
+      </Group>
+
       <Button kind="danger" title="تسجيل الخروج" icon={<LogOut size={18} color={color.error} />} style={{ marginTop: space.xxl }} onPress={async () => { await signOut(); router.replace('/welcome'); }} />
+      <Button kind="plain" title="حذف الحساب" style={{ marginTop: space.s }} onPress={() => setDel(true)} />
+
+      <Sheet open={del} onClose={() => setDel(false)} title="حذف الحساب">
+        <View style={{ alignItems: 'center', gap: space.s }}>
+          <View style={{ width: 56, height: 56, borderRadius: 16, backgroundColor: color.errorBg, alignItems: 'center', justifyContent: 'center' }}><Trash2 size={26} color={color.error} /></View>
+          <T v="title3" center>متأكد بدك تحذف حسابك؟</T>
+          <T v="subhead" c={color.text2} center>
+            {f.partnerJoined ? 'رح ينحذف حسابك، والعيلة بتضل عند الطرف التاني.' : 'رح ينحذف حسابك والعيلة كلها: الأولاد والمهام والمكمورة. ما فيك ترجع عنها.'}
+          </T>
+          {delErr ? <T v="subhead" c={color.error} center>{delErr}</T> : null}
+        </View>
+        <Button kind="danger" title="احذف حسابي" style={{ marginTop: space.xl }} onPress={async () => {
+          setDelErr('');
+          try { await deleteAccount(); } catch { setDelErr('ما زبط الحذف، تأكد من الإنترنت وجرّب مرة تانية.'); return; }
+          setDel(false);
+          router.replace('/welcome');
+        }} />
+        <Button kind="plain" title="لا، خلّيه" onPress={() => setDel(false)} />
+      </Sheet>
       <View style={{ height: 110 }} />
 
       <Sheet open={invite} onClose={() => setInvite(false)} title="دعوة">
         {f.partnerCode ? (
           <View style={{ alignItems: 'center', gap: space.m }}>
-            <T v="subhead" c={color.text2} center>{`ابعت الرابط لـ${f.parent?.role === 'ماما' ? 'الأب' : 'الأم'} على واتساب. بيفتحه، وبيسجّل دخول بـ Google أو Apple، وبيصير معك بالعيلة بنفس الصلاحيات، وبدون ما يدفع شي.`}</T>
+            <T v="subhead" c={color.text2} center>{f.parent?.role === 'ماما' ? 'ابعتي الرابط للأب على واتساب. بيفتحه، وبيسجّل دخول بـ Google أو Apple، وبيصير معك بالعيلة بنفس الصلاحيات، وبدون ما يدفع شي.' : 'ابعت الرابط للأم على واتساب. بتفتحه، وبتسجّل دخول بـ Google أو Apple، وبتصير معك بالعيلة بنفس الصلاحيات، وبدون ما تدفع شي.'}</T>
             <Button title="شارك رابط الدعوة" style={{ alignSelf: 'stretch' }} onPress={() => {
               const link = `${WEB_URL}/invite?code=${f.partnerCode}&as=${encodeURIComponent((f.parent?.role === 'ماما' ? 'بابا' : 'ماما'))}`;
               Share.share({ message: `انضم لعيلتنا على مكمورة: ${link}` }).catch(() => {}); f.invitePartner('code');

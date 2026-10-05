@@ -30,6 +30,7 @@ export const color = {
   successBg: '#E8F7EF',
   successText: '#0E7A50',
   error: '#D64545',
+  errorBg: '#FDECEC',
   errorText: '#A92A2E',
   scrim: 'rgba(11,26,50,0.35)',
 } as const;
