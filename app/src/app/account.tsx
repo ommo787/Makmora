@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Linking, View } from 'react-native';
+import { Linking, Platform, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 import { WEB_URL, currentUser, providers, signInWithApple, signInWithGoogle, type Provider, type SignedIn } from '@/services/auth';
@@ -30,7 +30,7 @@ export default function Account() {
   const { onboarded, invite } = useFamily();
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
-  const [ready, setReady] = useState<Record<Provider, boolean>>({ google: true, apple: true });
+  const [ready, setReady] = useState<Record<Provider, boolean>>({ google: true, apple: Platform.OS === 'ios' });
 
   /** Signed in: an account with a family goes home, a new one tells us who they are. */
   const proceed = async (r: SignedIn) => {
@@ -71,7 +71,7 @@ export default function Account() {
         {invite ? 'انضم لعيلتك' : login ? 'تسجيل الدخول' : 'أنشئ حسابك'}
       </Title>
       <View style={{ gap: space.s + 2, marginTop: space.xxl }}>
-        <Button kind="apple" title="متابعة مع Apple" icon={<AppleMark />} disabled={busy} onPress={() => (ready.apple ? go(signInWithApple) : soon('Apple'))} />
+        {ready.apple ? <Button kind="apple" title="متابعة مع Apple" icon={<AppleMark />} disabled={busy} onPress={() => go(signInWithApple)} /> : null}
         <Button kind="glass" title="متابعة مع Google" icon={<GoogleMark />} disabled={busy} onPress={() => (ready.google ? go(signInWithGoogle) : soon('Google'))} />
         {err ? <T v="subhead" c={color.error} center style={{ marginTop: space.s }}>{err}</T> : null}
       </View>
