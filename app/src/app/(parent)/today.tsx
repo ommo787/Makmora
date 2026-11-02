@@ -62,7 +62,7 @@ export default function Today() {
                   <View style={st.mini}><Glyph name={icon} size={24} /></View>
                 </View>
                 <View style={{ flex: 1 }}><T v="headline">{`${c.name} ${did}`}</T>
-                  {late ? <T v="footnote" c={color.gold700}>{dayName(late.date)}</T> : <T v="footnote" c={color.text2}>{ago(at)}</T>}</View>
+                  {late ? <T v="footnote" c={color.goldText}>{dayName(late.date)}</T> : <T v="footnote" c={color.text2}>{ago(at)}</T>}</View>
                 <Money n={reward} v="headline" />
               </View>
               <View style={{ flexDirection: 'row', gap: space.s }}>
@@ -83,7 +83,7 @@ export default function Today() {
       )}
 
       {sur && surprise?.status === 'earned' ? (
-        <Card style={{ marginTop: space.xl, backgroundColor: color.navy, gap: space.m }}>
+        <Card style={{ marginTop: space.xl, backgroundColor: color.deepBlue, gap: space.m }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m }}>
             <Glyph name={sur.icon} size={52} tone="gold" />
             <View style={{ flex: 1 }}><T v="footnote" c={color.gold}>مفاجأة العيلة جاهزة</T><T v="title3" c={color.white}>{sur.title}</T></View>
@@ -95,7 +95,7 @@ export default function Today() {
       <View style={st.sec}><T v="title3">الأولاد اليوم</T></View>
       <Card style={{ padding: 0 }}>
         {children.map((c, i) => (
-          <Pressable key={c.id} onPress={() => router.push(`/kid/${c.id}`)} style={({ pressed }) => [st.kid, i > 0 && st.hair, pressed && { backgroundColor: color.navy50 }]}>
+          <Pressable key={c.id} onPress={() => router.push(`/kid/${c.id}`)} style={({ pressed }) => [st.kid, i > 0 && st.hair, pressed && { backgroundColor: color.mist }]}>
             <Ring child={c} />
             <View style={{ flex: 1, gap: 2 }}>
               <T v="headline">{c.name}</T>
@@ -136,7 +136,7 @@ function Ring({ child }: { child: Child }) {
   const done = doneCount(child), n = child.tasks.length || 1;
   const full = done === n;
   return (
-    <View style={{ width: 58, height: 58, borderRadius: 29, borderWidth: 3, borderColor: full ? color.success : done ? color.gold : color.navy100, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ width: 58, height: 58, borderRadius: 29, borderWidth: 3, borderColor: full ? color.success : done ? color.gold : color.border, alignItems: 'center', justifyContent: 'center' }}>
       <Avatar avatar={child.avatar} photo={child.photo} size={46} />
     </View>
   );

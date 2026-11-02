@@ -12,7 +12,7 @@ const TabButton = forwardRef<View, TabProps>(function TabButton({ label, Icon, i
   const c = isFocused ? color.navy : color.text3;
   return (
     <Pressable ref={ref} {...props} style={st.tab} accessibilityRole="tab" accessibilityState={{ selected: isFocused }}>
-      <View style={[st.pill, isFocused && { backgroundColor: color.gold100 }]}><Icon size={22} color={c} strokeWidth={isFocused ? 2.4 : 2} /></View>
+      <View style={[st.pill, isFocused && { backgroundColor: color.sand }]}><Icon size={22} color={c} strokeWidth={isFocused ? 2.4 : 2} /></View>
       <T v="caption" c={c}>{label}</T>
     </Pressable>
   );

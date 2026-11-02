@@ -22,7 +22,7 @@ function Jar({ pct, size = 200 }: { pct: number; size?: number }) {
     <Svg width={size} height={size} viewBox="16 14 72 72">
       <Defs><ClipPath id="jar"><Path d={BODY} /></ClipPath></Defs>
       <Rect x={37} y={21} width={30} height={8} rx={3.5} fill={color.navy} />
-      <Path d={BODY} fill={color.navy50} stroke={color.navy} strokeWidth={2.4} />
+      <Path d={BODY} fill={color.mist} stroke={color.navy} strokeWidth={2.4} />
       <G clipPath="url(#jar)">
         <ARect x={20} y={y} width={70} height={60} fill={color.gold} />
       </G>

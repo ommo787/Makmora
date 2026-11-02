@@ -55,7 +55,7 @@ export default function Tasks() {
                 {on ? <View style={st.tick}><Check size={12} color={color.navy} strokeWidth={3.4} /></View> : null}
                 <Glyph name={t.icon} size={48} />
                 <T v="caption" center numberOfLines={1} style={{ fontSize: 13 }}>{t.name}</T>
-                <T v="caption" c={color.gold700} style={{ fontSize: 11, opacity: on ? 1 : 0 }}>انضافت</T>
+                <T v="caption" c={color.goldText} style={{ fontSize: 11, opacity: on ? 1 : 0 }}>انضافت</T>
               </Pressable>
             );
           })}
@@ -63,7 +63,7 @@ export default function Tasks() {
         <T v="footnote" c={color.text2} style={{ marginTop: space.l, marginBottom: space.s, marginHorizontal: space.s }}>أو اكتب مهمة جديدة</T>
         <Field value={draft} onChangeText={setDraft} placeholder="مثلاً: إطعام القطة" lead={<Glyph name={draft.trim() ? iconForTask(draft) : 'sparkles'} size={34} />} />
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: space.s, marginHorizontal: space.s }}>
-          <Sparkles size={13} color={color.gold700} /><T v="caption" c={color.text2}>بنختار الأيقونة حسب الاسم</T>
+          <Sparkles size={13} color={color.goldText} /><T v="caption" c={color.text2}>بنختار الأيقونة حسب الاسم</T>
         </View>
         <Button title={draft.trim() ? `إضافة «${draft.trim()}»` : 'إضافة المهمة'} disabled={!draft.trim()} onPress={addOwn} style={{ marginTop: space.l }} />
       </Sheet>
@@ -71,10 +71,10 @@ export default function Tasks() {
   );
 }
 const st = StyleSheet.create({
-  del: { width: 30, height: 30, borderRadius: 15, backgroundColor: color.navy50, alignItems: 'center', justifyContent: 'center' },
-  plus: { width: 40, height: 40, borderRadius: 11, backgroundColor: color.navy50, alignItems: 'center', justifyContent: 'center' },
+  del: { width: 30, height: 30, borderRadius: 15, backgroundColor: color.mist, alignItems: 'center', justifyContent: 'center' },
+  plus: { width: 40, height: 40, borderRadius: 11, backgroundColor: color.mist, alignItems: 'center', justifyContent: 'center' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.s },
   tile: { width: '31.5%', alignItems: 'center', gap: 6, paddingTop: space.m, paddingBottom: space.s, borderRadius: radius.card, backgroundColor: color.white, borderWidth: 2, borderColor: 'transparent', ...shadow.e1 },
-  tileOn: { borderColor: color.gold, backgroundColor: color.gold50 },
+  tileOn: { borderColor: color.gold, backgroundColor: color.sand },
   tick: { position: 'absolute', top: 8, start: 8, width: 20, height: 20, borderRadius: 10, backgroundColor: color.gold, alignItems: 'center', justifyContent: 'center', zIndex: 1 },
 });

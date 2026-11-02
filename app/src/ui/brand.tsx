@@ -1,6 +1,5 @@
-import { useId } from 'react';
 import { View } from 'react-native';
-import Svg, { Defs, LinearGradient, Path, Rect, Stop } from 'react-native-svg';
+import Svg, { Path, Rect } from 'react-native-svg';
 
 import type { Child } from '@/state/store';
 import { color, radius, space } from '@/theme/tokens';
@@ -8,17 +7,9 @@ import { Avatar, T } from '@/ui/kit';
 
 /** Makmoura app icon in Salimfy colours: a white jar on navy, with a gold star inside. */
 export function AppIcon({ size = 96 }: { size?: number }) {
-  // each icon needs its own gradient id: screens stay mounted underneath each other, and a shared id breaks on the web
-  const id = `ig${useId().replace(/[^a-zA-Z0-9]/g, '')}`;
   return (
     <Svg width={size} height={size} viewBox="0 0 104 104">
-      <Defs>
-        <LinearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-          <Stop offset="0" stopColor="#1D3A66" />
-          <Stop offset="1" stopColor={color.navy} />
-        </LinearGradient>
-      </Defs>
-      <Rect width={104} height={104} rx={24} fill={`url(#${id})`} />
+      <Rect width={104} height={104} rx={24} fill={color.deepBlue} />
       <Rect x={37} y={21} width={30} height={8} rx={3.5} fill="#fff" />
       <Path d="M35 32h34v3c0 3.2 9 5.5 9 14v21a11 11 0 0 1-11 11H37a11 11 0 0 1-11-11V49c0-8.5 9-10.8 9-14z" fill="#fff" />
       <Path d="m52 47.5 3.6 7.3 8 1.2-5.8 5.6 1.4 8-7.2-3.8-7.2 3.8 1.4-8-5.8-5.6 8-1.2z" fill={color.gold} stroke={color.gold} strokeWidth={2} strokeLinejoin="round" />
@@ -32,11 +23,11 @@ export function FromSalimfy() {
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
       <T v="footnote" c={color.text2}>من</T>
       <View style={{ flexDirection: 'row', alignItems: 'center', direction: 'ltr' }}>
-        <Svg width={22} height={12} viewBox="0 0 46 24">
-          <Path d="M12 0a12 12 0 1 1 0 24a12 12 0 1 1 0-24z" fill={color.navy} />
-          <Path d="M31 2.3a9.7 9.7 0 1 1 0 19.4a9.7 9.7 0 1 1 0-19.4z" fill="none" stroke={color.gold} strokeWidth={3.6} />
+        <Svg width={32} height={18} viewBox="0 0 43 24">
+          <Path d="M12 0a12 12 0 1 1 0 24a12 12 0 1 1 0-24z" fill={color.deepBlue} />
+          <Path d="M31 1.8a10.2 10.2 0 1 1 0 20.4a10.2 10.2 0 1 1 0-20.4z" fill="none" stroke={color.gold} strokeWidth={3.6} />
         </Svg>
-        <T v="footnote" c={color.navy} style={{ fontFamily: 'IBMPlexSansArabic_600SemiBold', marginStart: 4 }}>Salimfy</T>
+        <T v="footnote" c={color.deepBlue} style={{ fontFamily: 'Urbanist_700Bold', fontSize: 18, lineHeight: 22, marginStart: 5 }}>Salimfy</T>
       </View>
     </View>
   );

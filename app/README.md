@@ -1,6 +1,6 @@
 # مكمورة (Makmoura), the app
 
-The real iOS and Android app, built with Expo (React Native) and expo-router. Arabic first, right to left, in the Salimfy identity (Deep Navy #0B1A32 and Warm Gold #ECAC4E, IBM Plex Sans Arabic).
+The real iOS and Android app, built with Expo (React Native) and expo-router. Arabic first, right to left, in the Salimfy identity, Edition 3.0 (Deep Blue #1D3A66, Salimfy Gold #ECAC4E, Alexandria and Urbanist).
 
 ## Run it
 

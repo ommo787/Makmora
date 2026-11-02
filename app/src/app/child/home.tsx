@@ -28,7 +28,7 @@ export default function ChildHome() {
       <View style={{ marginTop: space.l }}>
         <ChildView child={child} onGoal={() => router.push('/child/jar')} headerEnd={
           <Pressable accessibilityRole="button" accessibilityLabel="لوحة الأهل" onPress={toParents}
-            style={({ pressed }) => [{ flexDirection: 'row', alignItems: 'center', gap: 6, height: 36, paddingHorizontal: 14, borderRadius: 18, backgroundColor: color.navy50 }, pressed && { opacity: 0.7 }]}>
+            style={({ pressed }) => [{ flexDirection: 'row', alignItems: 'center', gap: 6, height: 36, paddingHorizontal: 14, borderRadius: 18, backgroundColor: color.mist }, pressed && { opacity: 0.7 }]}>
             <Lock size={14} color={color.navy} strokeWidth={2.4} /><T v="footnote" c={color.navy}>للأهل</T>
           </Pressable>
         } onTask={(id, state) => {
@@ -37,9 +37,9 @@ export default function ChildHome() {
         }} />
       </View>
       {sur && surprise?.status === 'earned' && !reveal ? (
-        <View style={{ marginTop: space.xl, backgroundColor: color.gold50, borderRadius: radius.card, padding: space.l, flexDirection: 'row', alignItems: 'center', gap: space.m }}>
+        <View style={{ marginTop: space.xl, backgroundColor: color.sand, borderRadius: radius.card, padding: space.l, flexDirection: 'row', alignItems: 'center', gap: space.m }}>
           <Glyph name={sur.icon} size={52} tone="gold" />
-          <View style={{ flex: 1 }}><T v="footnote" c={color.gold700}>مفاجأة اليوم</T><T v="title3">{sur.title}</T><T v="footnote" c={color.text2}>أنجزناها سوا</T></View>
+          <View style={{ flex: 1 }}><T v="footnote" c={color.goldText}>مفاجأة اليوم</T><T v="title3">{sur.title}</T><T v="footnote" c={color.text2}>أنجزناها سوا</T></View>
         </View>
       ) : null}
 
@@ -51,7 +51,7 @@ export default function ChildHome() {
       ) : null}
 
       <Modal visible={reveal} transparent animationType="fade">
-        <View style={{ flex: 1, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center', padding: space.xxl, gap: space.m }}>
+        <View style={{ flex: 1, backgroundColor: color.deepBlue, alignItems: 'center', justifyContent: 'center', padding: space.xxl, gap: space.m }}>
           <View style={{ width: 160, height: 160, borderRadius: 80, backgroundColor: 'rgba(236,172,78,0.18)', alignItems: 'center', justifyContent: 'center' }}>
             {sur ? <Glyph name={sur.icon} size={110} tone="gold" /> : null}
           </View>

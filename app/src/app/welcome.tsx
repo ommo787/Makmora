@@ -28,7 +28,7 @@ export default function Welcome() {
       <View style={{ gap: space.xl, marginTop: 44, paddingHorizontal: space.s }}>
         {FEATURES.map(({ I, t, d }) => (
           <View key={t} style={{ flexDirection: 'row', alignItems: 'center', gap: space.l }}>
-            <View style={{ width: 46, height: 46, borderRadius: 13, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ width: 46, height: 46, borderRadius: 13, backgroundColor: color.deepBlue, alignItems: 'center', justifyContent: 'center' }}>
               <I size={24} color={color.gold} strokeWidth={2.2} />
             </View>
             <View style={{ flex: 1 }}>

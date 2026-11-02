@@ -7,7 +7,7 @@ import { color, radius, space } from '@/theme/tokens';
 import { Button, Glyph, T } from '@/ui/kit';
 import type { IconName } from '@/ui/icons';
 
-const COLORS = [color.gold, color.gold300, color.white, color.navy300];
+const COLORS = [color.gold, color.white, color.navy300];
 const PIECES = 26;
 
 /** Gold confetti falling once, behind the message. Skipped when the phone asks for less motion. */
@@ -76,7 +76,7 @@ export function Celebrate({ open, icon, title, sub, badge, button, onClose }:
 }
 
 const st = StyleSheet.create({
-  bg: { flex: 1, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center', padding: space.xxl, gap: space.m, overflow: 'hidden' },
+  bg: { flex: 1, backgroundColor: color.deepBlue, alignItems: 'center', justifyContent: 'center', padding: space.xxl, gap: space.m, overflow: 'hidden' },
   halo: { width: 168, height: 168, borderRadius: 84, backgroundColor: 'rgba(236,172,78,0.18)', alignItems: 'center', justifyContent: 'center' },
   badge: { backgroundColor: color.white, borderRadius: radius.card, paddingHorizontal: space.xl, paddingVertical: space.m, marginTop: space.s },
 });

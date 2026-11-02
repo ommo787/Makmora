@@ -1,6 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { Check, Hourglass, Pencil } from 'lucide-react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, View } from 'react-native';
 
 import { useFamily } from '@/state/store';
@@ -26,7 +25,7 @@ export default function Kid() {
         <T v="footnote" c={color.text2}>{years(c.age)}</T>
       </View>
       {c.goal ? (
-        <LinearGradient colors={['#1D3A66', color.navy, '#060F1F']} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} style={st.goal}>
+        <View style={st.goal}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m }}>
             <Glyph name={c.goal.icon} size={64} tone="gold" />
             <View style={{ flex: 1 }}>
@@ -50,7 +49,7 @@ export default function Kid() {
           {c.balance >= c.goal.amount ? (
             <Button kind="primary" title={`${gx(c, 'اشتريناله', 'اشترينالها')} ${c.goal.name}`} style={{ marginTop: space.l }} onPress={() => redeem(c.id)} />
           ) : null}
-        </LinearGradient>
+        </View>
       ) : (
         <Card style={{ marginTop: space.xl, gap: space.m, alignItems: 'center' }}>
           <Glyph name="gift" size={56} tone="soft" />
@@ -66,7 +65,7 @@ export default function Kid() {
           const s = c.today[t.id]?.state ?? 'todo';
           return (
             <Row key={t.id} lead={<Glyph name={t.icon} />} title={t.name} sub={s === 'done' ? <T v="footnote" c={color.successText}>تمّت</T> : daysLabel(t.days)}
-              end={s === 'done' ? <Check size={20} color={color.success} strokeWidth={3} /> : s === 'waiting' ? <Hourglass size={18} color={color.gold700} /> : <Money n={t.reward} v="subhead" c={color.text2} />} />
+              end={s === 'done' ? <Check size={20} color={color.success} strokeWidth={3} /> : s === 'waiting' ? <Hourglass size={18} color={color.goldText} /> : <Money n={t.reward} v="subhead" c={color.text2} />} />
           );
         })}
       </Group>
@@ -91,5 +90,5 @@ export default function Kid() {
 }
 
 const st = StyleSheet.create({
-  goal: { marginTop: space.xl, borderRadius: 26, padding: space.l, ...shadow.e2 },
+  goal: { marginTop: space.xl, borderRadius: 26, backgroundColor: color.deepBlue, padding: space.l, ...shadow.e2 },
 });

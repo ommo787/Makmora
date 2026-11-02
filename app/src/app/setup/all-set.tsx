@@ -41,7 +41,7 @@ export default function AllSet() {
                 </View>
               ))}
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m, backgroundColor: color.gold50, borderRadius: 16, padding: space.m }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m, backgroundColor: color.sand, borderRadius: 16, padding: space.m }}>
               <Glyph name={c.goal?.icon ?? 'gift'} size={36} tone="gold" />
               <View style={{ flex: 1 }}>
                 <T v="headline">{c.goal ? `هدفه: ${c.goal.name}` : 'لسا ما في هدف'}</T>

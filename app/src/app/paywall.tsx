@@ -46,7 +46,7 @@ export default function Paywall() {
         {STEPS.map(({ I, t, d }, i) => (
           <View key={t} style={{ flexDirection: 'row', gap: space.m, alignItems: 'flex-start' }}>
             <View style={{ alignItems: 'center' }}>
-              <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: i === 0 ? color.gold : color.navy, alignItems: 'center', justifyContent: 'center' }}>
+              <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: i === 0 ? color.gold : color.deepBlue, alignItems: 'center', justifyContent: 'center' }}>
                 <I size={20} color={i === 0 ? color.navy : color.white} strokeWidth={2.4} />
               </View>
             </View>
@@ -54,8 +54,8 @@ export default function Paywall() {
           </View>
         ))}
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m, marginTop: space.xxl, padding: space.l, borderRadius: radius.card, backgroundColor: color.navy50 }}>
-        <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center' }}><Users size={20} color={color.gold} strokeWidth={2.4} /></View>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m, marginTop: space.xxl, padding: space.l, borderRadius: radius.card, backgroundColor: color.mist }}>
+        <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: color.deepBlue, alignItems: 'center', justifyContent: 'center' }}><Users size={20} color={color.gold} strokeWidth={2.4} /></View>
         <View style={{ flex: 1 }}>
           <T v="headline">اشتراك واحد للعيلة كلها</T>
           <T v="subhead" c={color.text2}>بابا وماما وكل الأولاد، بدون ولا دفعة زيادة.</T>
@@ -66,11 +66,11 @@ export default function Paywall() {
           const on = plan === p;
           return (
             <Pressable key={p} onPress={() => setPlan(p)} accessibilityRole="radio" accessibilityState={{ selected: on }}
-              style={{ flex: 1, borderRadius: radius.card, padding: space.l, backgroundColor: on ? color.gold50 : color.mist, borderWidth: 2, borderColor: on ? color.gold : 'transparent', ...(on ? shadow.e1 : {}) }}>
-              {p === 'year' ? <View style={{ position: 'absolute', top: -11, end: 12, backgroundColor: color.navy, borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 2 }}><T v="caption" c={color.gold}>وفّر 33%</T></View> : null}
+              style={{ flex: 1, borderRadius: radius.card, padding: space.l, backgroundColor: on ? color.sand : color.mist, borderWidth: 2, borderColor: on ? color.gold : 'transparent', ...(on ? shadow.e1 : {}) }}>
+              {p === 'year' ? <View style={{ position: 'absolute', top: -11, end: 12, backgroundColor: color.deepBlue, borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 2 }}><T v="caption" c={color.gold}>وفّر 33%</T></View> : null}
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <T v="headline">{p === 'year' ? 'سنوي' : 'شهري'}</T>
-                <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: on ? color.navy : 'transparent', borderWidth: on ? 0 : 1.5, borderColor: color.text3, alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: on ? color.deepBlue : 'transparent', borderWidth: on ? 0 : 1.5, borderColor: color.text3, alignItems: 'center', justifyContent: 'center' }}>
                   {on ? <Check size={13} color={color.gold} strokeWidth={3.4} /> : null}
                 </View>
               </View>

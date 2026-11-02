@@ -34,5 +34,5 @@ export function ToastHost() {
   );
 }
 const st = StyleSheet.create({
-  box: { flexDirection: 'row', alignItems: 'center', gap: space.s, backgroundColor: color.navy, paddingHorizontal: space.l, paddingVertical: space.s + 2, borderRadius: radius.pill, ...shadow.e3 },
+  box: { flexDirection: 'row', alignItems: 'center', gap: space.s, backgroundColor: color.deepBlue, paddingHorizontal: space.l, paddingVertical: space.s + 2, borderRadius: radius.pill, ...shadow.e3 },
 });

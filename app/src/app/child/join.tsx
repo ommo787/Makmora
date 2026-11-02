@@ -41,8 +41,8 @@ export default function Join() {
     <Screen>
       <NavBar />
       <Title sub="بابا أو ماما بيلاقوه بالإعدادات، تحت «أجهزة الأولاد».">اكتب رمز العيلة</Title>
-      <TextInput value={code} onChangeText={(t) => setCode(t.replace(/\D/g, '').slice(0, 6))} keyboardType="number-pad" autoFocus placeholder="000000" placeholderTextColor={color.navy100}
-        style={{ marginTop: space.xxl, fontFamily: font.bold, fontSize: 40, letterSpacing: 10, textAlign: 'center', backgroundColor: color.white, borderRadius: radius.card, paddingVertical: space.l, color: color.navy, writingDirection: 'ltr' }} />
+      <TextInput value={code} onChangeText={(t) => setCode(t.replace(/\D/g, '').slice(0, 6))} keyboardType="number-pad" autoFocus placeholder="000000" placeholderTextColor={color.border}
+        style={{ marginTop: space.xxl, fontFamily: font.medium, fontSize: 40, letterSpacing: 10, textAlign: 'center', backgroundColor: color.white, borderRadius: radius.card, paddingVertical: space.l, color: color.navy, writingDirection: 'ltr' }} />
       {ok && children.length ? (
         <View style={{ marginTop: space.xxl }}>
           <T v="title3" style={{ marginBottom: space.m }}>مين إنت؟</T>

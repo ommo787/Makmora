@@ -39,7 +39,7 @@ export default function Rewards() {
             <View style={{ flexDirection: 'row', gap: 5 }}>
               {WEEKDAYS.map((d, j) => (
                 <Pressable key={d} onPress={() => { const n = [...cur.days]; n[j] = !n[j]; if (n.some(Boolean)) updateTask(child.id, cur.id, { days: n }); }}
-                  style={{ flex: 1, height: 46, borderRadius: radius.tile, alignItems: 'center', justifyContent: 'center', backgroundColor: cur.days[j] ? color.navy : color.white }}>
+                  style={{ flex: 1, height: 46, borderRadius: radius.tile, alignItems: 'center', justifyContent: 'center', backgroundColor: cur.days[j] ? color.deepBlue : color.white }}>
                   <T v="caption" c={cur.days[j] ? color.white : color.text}>{d}</T>
                 </Pressable>
               ))}

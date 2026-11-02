@@ -60,8 +60,8 @@ export default function About() {
 
       {online() && !pending ? (
         <Pressable onPress={() => setJoin(true)} accessibilityRole="button"
-          style={({ pressed }) => [{ flexDirection: 'row', alignItems: 'center', gap: space.m, marginTop: space.l, padding: space.l, borderRadius: radius.card, backgroundColor: color.gold50, borderWidth: 1, borderColor: color.gold300 }, pressed && { opacity: 0.85 }]}>
-          <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center' }}><HandHeart size={20} color={color.gold} /></View>
+          style={({ pressed }) => [{ flexDirection: 'row', alignItems: 'center', gap: space.m, marginTop: space.l, padding: space.l, borderRadius: radius.card, backgroundColor: color.sand, borderWidth: 1, borderColor: color.gold }, pressed && { opacity: 0.85 }]}>
+          <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: color.deepBlue, alignItems: 'center', justifyContent: 'center' }}><HandHeart size={20} color={color.gold} /></View>
           <View style={{ flex: 1 }}>
             <T v="headline">زوجك أو زوجتك عمل العيلة قبلك؟</T>
             <T v="footnote" c={color.text2}>اكبس هون وانضم لعيلتكم، بدل ما تعمل وحدة جديدة.</T>

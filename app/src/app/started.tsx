@@ -23,7 +23,7 @@ export default function Started() {
         <T v="largeTitle" center style={{ marginTop: space.l }}>تجربتك بلّشت!</T>
         <T v="callout" c={color.text2} center>{`عندك ${TRIAL_DAYS} يوم مجاناً، ومنذكّرك قبل ما تخلص بيومين.`}</T>
         <Card style={{ marginTop: space.xxl, flexDirection: 'row', alignItems: 'center', gap: space.m, alignSelf: 'stretch', backgroundColor: color.mist }}>
-          <View style={{ width: 44, height: 44, borderRadius: 12, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center' }}><HandHeart size={22} color={color.gold} /></View>
+          <View style={{ width: 44, height: 44, borderRadius: 12, backgroundColor: color.deepBlue, alignItems: 'center', justifyContent: 'center' }}><HandHeart size={22} color={color.gold} /></View>
           <View style={{ flex: 1 }}>
             <T v="headline">{other === 'الأم' ? 'بدك الأم تتابع معك؟' : 'بدك الأب يتابع معك؟'}</T>
             <T v="footnote" c={color.text2}>{other === 'الأم' ? 'نفس صلاحياتك، ومن موبايلها. ببلاش ضمن اشتراكك.' : 'نفس صلاحياتك، ومن موبايله. ببلاش ضمن اشتراكك.'}</T>

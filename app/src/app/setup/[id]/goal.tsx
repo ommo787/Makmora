@@ -30,7 +30,7 @@ export default function Goal() {
       <Field value={g?.name ?? ''} onChangeText={setName} placeholder="مثلاً: بلاي ستيشن، دراجة، رحلة" style={{ marginTop: space.xl }}
         lead={<Glyph name={g?.icon ?? 'gift'} size={36} tone={named ? 'gold' : 'navy'} />} />
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: space.s, marginHorizontal: space.l }}>
-        <Sparkles size={13} color={color.gold700} /><T v="caption" c={color.text2}>بنختار الأيقونة حسب الاسم</T>
+        <Sparkles size={13} color={color.goldText} /><T v="caption" c={color.text2}>بنختار الأيقونة حسب الاسم</T>
       </View>
       {named && g ? (
         <Card style={{ marginTop: space.xl, alignItems: 'center', gap: space.s, paddingVertical: space.xl }}>
@@ -39,7 +39,7 @@ export default function Goal() {
             <Pressable accessibilityLabel="أقل" onPress={() => setAmount(g.amount - 10)} style={round}><T v="title">−</T></Pressable>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
               <TextInput value={fmt(g.amount)} keyboardType="decimal-pad" onChangeText={(t) => { const n = parseFloat(t); setAmount(isNaN(n) ? 1 : n); }}
-              style={{ fontFamily: font.bold, fontSize: 44, color: color.text, width: 96, minWidth: 0, textAlign: 'center' }} />
+              style={{ fontFamily: font.medium, fontSize: 44, color: color.text, width: 96, minWidth: 0, textAlign: 'center' }} />
               {deviceCurrency().code === 'SAR' ? <RiyalSign size={30} /> : <T v="title">{deviceCurrency().symbol}</T>}
             </View>
             <Pressable accessibilityLabel="أكتر" onPress={() => setAmount(g.amount + 10)} style={round}><T v="title">+</T></Pressable>
@@ -50,4 +50,4 @@ export default function Goal() {
     </Screen>
   );
 }
-const round = { width: 46, height: 46, borderRadius: 23, backgroundColor: color.navy50, alignItems: 'center' as const, justifyContent: 'center' as const };
+const round = { width: 46, height: 46, borderRadius: 23, backgroundColor: color.mist, alignItems: 'center' as const, justifyContent: 'center' as const };

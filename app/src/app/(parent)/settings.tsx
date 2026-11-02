@@ -12,7 +12,7 @@ import { color, space } from '@/theme/tokens';
 import { Avatar, Button, Field, Group, Row, Screen, SectionLabel, Sheet, T } from '@/ui/kit';
 
 const Lead = ({ I }: { I: typeof CreditCard }) => (
-  <View style={{ width: 34, height: 34, borderRadius: 9, backgroundColor: color.navy, alignItems: 'center', justifyContent: 'center' }}><I size={18} color={color.gold} strokeWidth={2.2} /></View>
+  <View style={{ width: 34, height: 34, borderRadius: 9, backgroundColor: color.deepBlue, alignItems: 'center', justifyContent: 'center' }}><I size={18} color={color.gold} strokeWidth={2.2} /></View>
 );
 
 export default function Settings() {
@@ -33,7 +33,7 @@ export default function Settings() {
       <Group>
         <Row lead={<Avatar avatar={f.parent?.avatar ?? 'man'} photo={f.parent?.photo} size={40} />} title={<T v="headline">{f.parent?.name ?? ''}</T>} sub={`${f.parent?.role ?? ''} · إنت`} />
         {f.invitedPartner
-          ? <Row lead={<Avatar avatar={f.parent?.role === 'ماما' ? 'man' : 'woman'} size={40} />} title={f.parent?.role === 'ماما' ? 'بابا' : 'ماما'} sub={f.partnerJoined ? 'نفس صلاحياتك' : <T v="footnote" c={color.gold700}>{f.invitedPartner === 'code' ? 'بعتنا الدعوة، ناطرين ينضم' : `بعتنا دعوة لـ${f.invitedPartner}`}</T>} />
+          ? <Row lead={<Avatar avatar={f.parent?.role === 'ماما' ? 'man' : 'woman'} size={40} />} title={f.parent?.role === 'ماما' ? 'بابا' : 'ماما'} sub={f.partnerJoined ? 'نفس صلاحياتك' : <T v="footnote" c={color.goldText}>{f.invitedPartner === 'code' ? 'بعتنا الدعوة، ناطرين ينضم' : `بعتنا دعوة لـ${f.invitedPartner}`}</T>} />
           : <Row onPress={() => setInvite(true)} lead={<Lead I={UserPlus} />} title={<T v="body" c={color.link}>{`ادعُ ${f.parent?.role === 'ماما' ? 'الأب' : 'الأم'}`}</T>} />}
         <Row onPress={() => router.push('/kids')} lead={<Lead I={UserPlus} />} title="الأولاد" sub={f.children.map((c) => c.name).join('، ')} end={<ChevronLeft size={18} color={color.text3} />} />
       </Group>

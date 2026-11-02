@@ -1,6 +1,5 @@
-import {
-  IBMPlexSansArabic_400Regular, IBMPlexSansArabic_500Medium, IBMPlexSansArabic_600SemiBold, IBMPlexSansArabic_700Bold, useFonts,
-} from '@expo-google-fonts/ibm-plex-sans-arabic';
+import { Alexandria_300Light, Alexandria_400Regular, Alexandria_500Medium, useFonts } from '@expo-google-fonts/alexandria';
+import { Urbanist_700Bold } from '@expo-google-fonts/urbanist';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -22,7 +21,7 @@ if (Platform.OS !== 'web' && !I18nManager.isRTL) {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded] = useFonts({ IBMPlexSansArabic_400Regular, IBMPlexSansArabic_500Medium, IBMPlexSansArabic_600SemiBold, IBMPlexSansArabic_700Bold });
+  const [loaded] = useFonts({ Alexandria_300Light, Alexandria_400Regular, Alexandria_500Medium, Urbanist_700Bold });
   useEffect(() => { initPurchases(); }, []);
   // the family's server, when it is set up: listen for the other devices and send this one's changes
   useEffect(() => {

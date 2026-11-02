@@ -1,59 +1,53 @@
 /**
- * Makmoura design tokens, from the Salimfy Brand Guidelines 1.0.
- * Navy is structure and text, gold is the one focal accent (primary action, money, goals).
+ * Makmoura design tokens, from the Salimfy Brand Guidelines 3.0.
+ * Deep Blue is the structure, Navy is text and depth, gold is the one focal accent (primary action, money, goals).
  * Never gold text on white and never white text on gold.
  */
 export const color = {
+  deepBlue: '#1D3A66',
   navy: '#0B1A32',
-  navy800: '#1A2941',
-  navy700: '#2A3952',
   navy500: '#56657E',
   navy300: '#A7B1C3',
-  navy100: '#E6EAF1',
-  navy50: '#F3F5F9',
 
   gold: '#ECAC4E',
-  gold300: '#F2C882',
-  gold100: '#FBEFD8',
-  gold50: '#FDF8EE',
-  gold700: '#94611B',
+  sand: '#F1E6D4',
+  goldText: '#7A5A2B',
 
   white: '#FFFFFF',
   mist: '#F5F6F8',
   border: '#DEE1E7',
   text: '#0B1A32',
-  text2: '#5C636E',
-  text3: '#A0A6B0',
-  link: '#1D52AE',
+  text2: '#56657E',
+  text3: '#A7B1C3',
+  link: '#1F5F95',
 
-  success: '#1F9D6B',
-  successBg: '#E8F7EF',
-  successText: '#0E7A50',
-  error: '#D64545',
-  errorBg: '#FDECEC',
-  errorText: '#A92A2E',
+  success: '#2E9C8F',
+  successBg: '#E3F2EF',
+  successText: '#1E6B62',
+  error: '#A8432C',
+  errorBg: '#FBE7E2',
+  errorText: '#A8432C',
   scrim: 'rgba(11,26,50,0.35)',
 } as const;
 
 export const font = {
-  regular: 'IBMPlexSansArabic_400Regular',
-  medium: 'IBMPlexSansArabic_500Medium',
-  semibold: 'IBMPlexSansArabic_600SemiBold',
-  bold: 'IBMPlexSansArabic_700Bold',
+  light: 'Alexandria_300Light',
+  regular: 'Alexandria_400Regular',
+  medium: 'Alexandria_500Medium',
 } as const;
 
-/** Type scale (Arabic: brand sizes, a little more line height, no negative tracking). */
+/** Type scale (Alexandria: headlines Medium, subtitles Regular, body Light, no negative tracking). */
 export const type = {
-  hero: { fontFamily: font.bold, fontSize: 52, lineHeight: 64 },
-  largeTitle: { fontFamily: font.bold, fontSize: 32, lineHeight: 44 },
-  title: { fontFamily: font.bold, fontSize: 24, lineHeight: 34 },
-  title3: { fontFamily: font.semibold, fontSize: 20, lineHeight: 30 },
-  headline: { fontFamily: font.semibold, fontSize: 17, lineHeight: 26 },
-  body: { fontFamily: font.regular, fontSize: 17, lineHeight: 27 },
-  callout: { fontFamily: font.regular, fontSize: 16, lineHeight: 25 },
-  subhead: { fontFamily: font.regular, fontSize: 15, lineHeight: 23 },
+  hero: { fontFamily: font.medium, fontSize: 52, lineHeight: 64 },
+  largeTitle: { fontFamily: font.medium, fontSize: 32, lineHeight: 44 },
+  title: { fontFamily: font.medium, fontSize: 24, lineHeight: 34 },
+  title3: { fontFamily: font.medium, fontSize: 20, lineHeight: 30 },
+  headline: { fontFamily: font.medium, fontSize: 17, lineHeight: 26 },
+  body: { fontFamily: font.light, fontSize: 17, lineHeight: 27 },
+  callout: { fontFamily: font.light, fontSize: 16, lineHeight: 25 },
+  subhead: { fontFamily: font.light, fontSize: 15, lineHeight: 23 },
   footnote: { fontFamily: font.regular, fontSize: 13, lineHeight: 20 },
-  caption: { fontFamily: font.medium, fontSize: 12, lineHeight: 17 },
+  caption: { fontFamily: font.regular, fontSize: 12, lineHeight: 17 },
 } as const;
 
 /** 8-pt spacing. */

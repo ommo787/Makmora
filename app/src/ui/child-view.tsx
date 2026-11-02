@@ -1,4 +1,3 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import { Check, ChevronLeft, Hourglass, Star } from 'lucide-react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { useEffect, useRef, type ReactNode } from 'react';
@@ -35,7 +34,7 @@ export function ChildView({ child, preview, onTask, headerEnd, onGoal }: { child
       {g ? (
         <Pressable disabled={!onGoal} onPress={() => { tap(); onGoal?.(); }} accessibilityRole="button" accessibilityLabel="مكمورتي"
           style={({ pressed }) => pressed && { transform: [{ scale: 0.98 }] }}>
-        <LinearGradient colors={['#1D3A66', color.navy, '#060F1F']} start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }} style={st.goal}>
+        <View style={st.goal}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.m }}>
             <Glyph name={g.icon} size={48} tone="gold" />
             <View style={{ flex: 1 }}>
@@ -55,7 +54,7 @@ export function ChildView({ child, preview, onTask, headerEnd, onGoal }: { child
           <T v="footnote" c={color.navy300} style={{ marginTop: space.s }}>
             {pct >= 1 ? 'وصلت لهدفك!' : `باقي ${Math.max(0, Math.ceil(g.amount - child.balance))}، ${gx(child, 'كمّل!', 'كمّلي!')}`}
           </T>
-        </LinearGradient>
+        </View>
         </Pressable>
       ) : null}
 
@@ -94,7 +93,7 @@ function TaskTile({ name, icon, reward, state, onPress }:
         ) : null}
         <View style={{ opacity: state === 'done' ? 0.45 : 1 }}><Glyph name={icon} size={64} /></View>
         <T v="headline" center numberOfLines={1} c={state === 'done' ? color.text2 : color.text}>{name}</T>
-        {state === 'waiting' ? <T v="caption" c={color.gold700}>بانتظار الموافقة</T>
+        {state === 'waiting' ? <T v="caption" c={color.goldText}>بانتظار الموافقة</T>
           : state === 'done' ? <T v="caption" c={color.successText}>تمّت</T>
           : <Money n={reward} v="caption" c={color.text2} />}
       </Animated.View>
@@ -103,12 +102,12 @@ function TaskTile({ name, icon, reward, state, onPress }:
 }
 
 const st = StyleSheet.create({
-  goal: { borderRadius: 26, padding: space.l, ...shadow.e2 },
+  goal: { borderRadius: 26, backgroundColor: color.deepBlue, padding: space.l, ...shadow.e2 },
   more: { flexDirection: 'row', alignItems: 'center', gap: 2, alignSelf: 'flex-start' },
   week: { flexDirection: 'row', justifyContent: 'space-between', backgroundColor: color.white, borderRadius: radius.card, padding: space.m, borderWidth: 1, borderColor: color.border },
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: space.m },
   tile: { alignItems: 'center', gap: space.s, paddingTop: space.l, paddingBottom: space.m, borderRadius: radius.card + 4, backgroundColor: color.white, borderWidth: 2, borderColor: color.border, minHeight: 150 },
-  wait: { backgroundColor: color.gold50, borderColor: color.gold },
+  wait: { backgroundColor: color.sand, borderColor: color.gold },
   done: { backgroundColor: color.successBg, borderColor: 'transparent' },
   badge: { position: 'absolute', top: 10, start: 10, width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
 });
@@ -120,7 +119,7 @@ export function DayRing({ done, planned, size = 36, today }: { done: number; pla
   if (p >= 1) return <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: color.gold, alignItems: 'center', justifyContent: 'center' }}><Star size={size * 0.5} color={color.navy} fill={color.navy} /></View>;
   return (
     <Svg width={size} height={size} style={{ transform: [{ rotate: '-90deg' }] }}>
-      <Circle cx={size / 2} cy={size / 2} r={r} stroke={today ? color.navy300 : color.navy100} strokeWidth={4} fill="none" strokeDasharray={today ? '3 4' : undefined} />
+      <Circle cx={size / 2} cy={size / 2} r={r} stroke={today ? color.navy300 : color.border} strokeWidth={4} fill="none" strokeDasharray={today ? '3 4' : undefined} />
       {p > 0 ? <Circle cx={size / 2} cy={size / 2} r={r} stroke={color.gold} strokeWidth={4} fill="none" strokeLinecap="round" strokeDasharray={`${len * p} ${len}`} /> : null}
     </Svg>
   );

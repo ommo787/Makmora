@@ -48,7 +48,7 @@ export default function Children() {
         <View style={{ flexDirection: 'row', gap: space.s, marginTop: space.l }}>
           {GENDERS.map((g) => (
             <Pressable key={g.key} accessibilityRole="radio" accessibilityState={{ selected: look === g.key }} onPress={() => setLook(g.key)}
-              style={{ flex: 1, height: 48, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: look === g.key ? color.navy : color.white, borderWidth: 1, borderColor: look === g.key ? color.navy : color.border }}>
+              style={{ flex: 1, height: 48, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: look === g.key ? color.deepBlue : color.white, borderWidth: 1, borderColor: look === g.key ? color.deepBlue : color.border }}>
               <T v="headline" c={look === g.key ? color.white : color.text}>{g.label}</T>
             </Pressable>
           ))}
@@ -57,7 +57,7 @@ export default function Children() {
         <T v="footnote" c={color.text2} style={{ marginTop: space.l, marginBottom: space.s, marginHorizontal: space.l }}>العمر</T>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space.s, paddingVertical: 2 }}>
           {Array.from({ length: 13 }, (_, i) => i + 3).map((a) => (
-            <Pressable key={a} onPress={() => setAge(a)} style={{ width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', backgroundColor: age === a ? color.navy : color.white }}>
+            <Pressable key={a} onPress={() => setAge(a)} style={{ width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', backgroundColor: age === a ? color.deepBlue : color.white }}>
               <T v="headline" c={age === a ? color.white : color.text}>{a}</T>
             </Pressable>
           ))}
@@ -67,5 +67,5 @@ export default function Children() {
     </Screen>
   );
 }
-const del = { width: 30, height: 30, borderRadius: 15, backgroundColor: color.navy50, alignItems: 'center' as const, justifyContent: 'center' as const };
-const plus = { width: 44, height: 44, borderRadius: radius.pill, backgroundColor: color.navy50, alignItems: 'center' as const, justifyContent: 'center' as const };
+const del = { width: 30, height: 30, borderRadius: 15, backgroundColor: color.mist, alignItems: 'center' as const, justifyContent: 'center' as const };
+const plus = { width: 44, height: 44, borderRadius: radius.pill, backgroundColor: color.mist, alignItems: 'center' as const, justifyContent: 'center' as const };

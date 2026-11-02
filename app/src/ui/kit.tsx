@@ -1,4 +1,3 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { ChevronRight, X } from 'lucide-react-native';
 import { type ReactNode, useEffect, useRef } from 'react';
@@ -78,8 +77,8 @@ export function Button({ title, onPress, kind = 'primary', icon, disabled, small
 }
 const btn: Record<BtnKind, { box: ViewStyle; text: string }> = {
   primary: { box: { backgroundColor: color.gold, ...shadow.e2 }, text: color.navy },
-  secondary: { box: { backgroundColor: color.navy }, text: color.white },
-  tinted: { box: { backgroundColor: color.navy50 }, text: color.navy },
+  secondary: { box: { backgroundColor: color.deepBlue }, text: color.mist },
+  tinted: { box: { backgroundColor: color.mist }, text: color.navy },
   glass: { box: { backgroundColor: color.white, borderWidth: 1, borderColor: color.border }, text: color.navy },
   plain: { box: { backgroundColor: 'transparent', height: 44 }, text: color.link },
   apple: { box: { backgroundColor: '#000' }, text: color.white },
@@ -116,23 +115,23 @@ export function Row({ lead, title, sub, end, onPress, minHeight = 60 }:
       {end}
     </View>
   );
-  return onPress ? <Pressable onPress={() => { tap(); onPress(); }} style={({ pressed }) => pressed && { backgroundColor: color.navy50 }}>{inner}</Pressable> : inner;
+  return onPress ? <Pressable onPress={() => { tap(); onPress(); }} style={({ pressed }) => pressed && { backgroundColor: color.mist }}>{inner}</Pressable> : inner;
 }
 
-/** App-style icon tile: navy with a white glyph (same recipe as the app icon). */
+/** App-style icon tile: Deep Blue with a white glyph (same recipe as the app icon). */
 export function Glyph({ name, size = 40, tone = 'navy' }: { name: IconName; size?: number; tone?: 'navy' | 'gold' | 'soft' }) {
-  const g = tone === 'gold' ? [color.gold300, color.gold] as const : tone === 'soft' ? [color.navy50, color.navy100] as const : [color.navy700, color.navy] as const;
+  const bg = tone === 'gold' ? color.gold : tone === 'soft' ? color.mist : color.deepBlue;
   const fg = tone === 'navy' ? color.white : color.navy;
   return (
-    <LinearGradient colors={g} style={{ width: size, height: size, borderRadius: size * 0.28, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ backgroundColor: bg, width: size, height: size, borderRadius: size * 0.28, alignItems: 'center', justifyContent: 'center' }}>
       <Icon name={name} size={size * 0.56} color={fg} strokeWidth={2.2} />
-    </LinearGradient>
+    </View>
   );
 }
 
 export function Avatar({ avatar, photo, size = 44, ring }: { avatar?: AvatarKey; photo?: string; size?: number; ring?: string }) {
   return (
-    <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: color.navy50, overflow: 'hidden', alignItems: 'center', justifyContent: 'flex-end', borderWidth: ring ? 2 : 0, borderColor: ring }}>
+    <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: color.mist, overflow: 'hidden', alignItems: 'center', justifyContent: 'flex-end', borderWidth: ring ? 2 : 0, borderColor: ring }}>
       {photo ? <Image source={{ uri: photo }} style={{ width: size, height: size }} />
         : avatar ? <Image source={AVATARS[avatar]} style={{ width: size * 0.96, height: size * 0.96 }} resizeMode="contain" /> : null}
     </View>
@@ -160,7 +159,7 @@ export function Money({ n, v = 'headline', c = color.text }: { n: number; v?: Va
   );
 }
 
-export function Progress({ value, height = 8, track = color.navy100, fill = color.gold }: { value: number; height?: number; track?: string; fill?: string }) {
+export function Progress({ value, height = 8, track = color.border, fill = color.gold }: { value: number; height?: number; track?: string; fill?: string }) {
   const w = useRef(new Animated.Value(0)).current;
   useEffect(() => { Animated.timing(w, { toValue: Math.max(0, Math.min(1, value)), duration: 700, useNativeDriver: false }).start(); }, [value, w]);
   return (
@@ -217,17 +216,17 @@ const s = StyleSheet.create({
   round: { width: 44, height: 44, borderRadius: 22, backgroundColor: color.white, alignItems: 'center', justifyContent: 'center', ...shadow.e1, borderWidth: StyleSheet.hairlineWidth, borderColor: color.border },
   btn: { height: 54, borderRadius: radius.pill, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: space.s, paddingHorizontal: space.xl },
   btnSmall: { height: 40, paddingHorizontal: space.l },
-  btnOff: { backgroundColor: color.navy100, shadowOpacity: 0, elevation: 0, borderWidth: 0 },
+  btnOff: { backgroundColor: color.border, shadowOpacity: 0, elevation: 0, borderWidth: 0 },
   card: { backgroundColor: color.white, borderRadius: radius.card, padding: space.l, ...shadow.e1 },
   hair: { height: StyleSheet.hairlineWidth, backgroundColor: color.border },
   row: { flexDirection: 'row', alignItems: 'center', gap: space.m, paddingHorizontal: space.l, paddingVertical: space.s },
   field: { flexDirection: 'row', alignItems: 'center', gap: space.m, backgroundColor: color.white, borderRadius: radius.card, paddingHorizontal: space.l, minHeight: 54 },
-  stepper: { flexDirection: 'row', alignItems: 'center', backgroundColor: color.navy50, borderRadius: radius.pill, height: 38 },
+  stepper: { flexDirection: 'row', alignItems: 'center', backgroundColor: color.mist, borderRadius: radius.pill, height: 38 },
   stepBtn: { width: 40, height: 38, alignItems: 'center', justifyContent: 'center' },
   sheet: { backgroundColor: color.mist, borderTopLeftRadius: radius.sheet, borderTopRightRadius: radius.sheet, paddingHorizontal: GUTTER, paddingTop: space.s, maxHeight: '90%' },
-  grab: { alignSelf: 'center', width: 40, height: 5, borderRadius: 3, backgroundColor: color.navy100, marginBottom: space.s },
+  grab: { alignSelf: 'center', width: 40, height: 5, borderRadius: 3, backgroundColor: color.border, marginBottom: space.s },
   sheetBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 48, marginBottom: space.s },
-  x: { width: 32, height: 32, borderRadius: 16, backgroundColor: color.navy50, alignItems: 'center', justifyContent: 'center' },
+  x: { width: 32, height: 32, borderRadius: 16, backgroundColor: color.mist, alignItems: 'center', justifyContent: 'center' },
 });
 
 export { font };
