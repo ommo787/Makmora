@@ -1,20 +1,31 @@
 <!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>حذف الحساب · مكمورة</title><style>
-:root{--bg:#FFFFFF;--fg:#0B1A32;--muted:#5C636E;--line:#DEE1E7;--gold:#ECAC4E}
-@media (prefers-color-scheme:dark){:root{--bg:#0B1A32;--fg:#FFFFFF;--muted:#A7B1C3;--line:#2A3952}}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:Alexandria,"Geeza Pro",Tahoma,system-ui,sans-serif;line-height:1.8;padding-inline:20px;padding-block:40px 64px}
-main{max-width:720px;margin-inline:auto}
-h1,h2,b{font-weight:500}h1{font-size:30px;line-height:1.3;margin:0 0 4px}h2{font-size:20px;margin:32px 0 6px}
-p,li{color:var(--fg)}.muted{color:var(--muted);font-size:14px}
-hr{border:0;border-top:1px solid var(--line);margin:48px 0}
-.en{direction:ltr;text-align:left;font-family:Urbanist,system-ui,sans-serif}
-a{color:#1F5F95}
+:root{--bg:#F5F6F8;--card:#FFFFFF;--fg:#0B1A32;--muted:#56657E;--line:#DEE1E7;--link:#1F5F95;--label:#B97B28;--deep:#1D3A66;--gold:#ECAC4E;--mark:#1D3A66;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0B1A32;--card:#13243F;--fg:#F5F6F8;--muted:#A7B1C3;--line:#24385A;--link:#7DB9E8;--label:#ECAC4E;--mark:#F5F6F8;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Alexandria,"Geeza Pro",Tahoma,system-ui,sans-serif;font-weight:300;line-height:1.85}
+.top{background:var(--deep);padding:18px 20px}
+.top a{max-width:720px;margin-inline:auto;display:flex;align-items:center;gap:10px;color:#F5F6F8;text-decoration:none;font-weight:500;font-size:18px}
+.top svg{width:34px;height:34px;border-radius:9px;flex:none}
+main{max-width:720px;margin:32px auto 0;padding-inline:20px}
+section{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px 24px}
+section+section{margin-top:20px}
+h1,h2,b{font-weight:500}
+h1{font-size:28px;line-height:1.35;margin:0 0 4px;text-wrap:balance}
+h2{font-size:19px;line-height:1.5;margin:28px 0 4px}
+p,li{color:var(--fg)}ul,ol{padding-inline-start:22px}
+.muted{color:var(--muted);font-size:14px;margin-top:0}
+.en{direction:ltr;text-align:left;font-family:Urbanist,system-ui,sans-serif;font-weight:400}
+.en b,.en h1,.en h2{font-weight:700}
+a{color:var(--link)}a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.by{max-width:720px;margin:32px auto 0;padding:0 20px 48px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:14px}
+.by span.logo{display:inline-flex;align-items:center;gap:6px;direction:ltr;font-family:Urbanist,sans-serif;font-weight:700;font-size:18px;color:var(--mark)}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500&family=Urbanist:wght@400;500;700&display=swap"></head><body><main>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500&family=Urbanist:wght@400;500;700&display=swap"></head><body><header class="top"><a href="app/"><svg viewBox="0 0 104 104" aria-hidden="true"><rect width="104" height="104" fill="#1D3A66"/><rect x="37" y="21" width="30" height="8" rx="3.5" fill="#fff"/><path d="M35 32h34v3c0 3.2 9 5.5 9 14v21a11 11 0 0 1-11 11H37a11 11 0 0 1-11-11V49c0-8.5 9-10.8 9-14z" fill="#fff"/><path d="m52 47.5 3.6 7.3 8 1.2-5.8 5.6 1.4 8-7.2-3.8-7.2 3.8 1.4-8-5.8-5.6 8-1.2z" fill="#ECAC4E" stroke="#ECAC4E" stroke-width="2" stroke-linejoin="round"/></svg><span>مكمورة</span></a></header><main><section>
 <h1>حذف حسابك في مكمورة</h1><p class="muted">مكمورة، من Salimfy</p>
 <h2>من التطبيق (الأسرع)</h2><ol><li>افتح مكمورة وسجّل دخول.</li><li>روح على <b>الإعدادات</b>.</li><li>اكبس <b>حذف الحساب</b>، بعدين <b>احذف حسابي</b>.</li></ol>
 <h2>شو بينحذف</h2><ul><li>حسابك وبياناتك.</li><li>إذا كنت الأب أو الأم الوحيد بالعيلة: العيلة كلها، يعني الأولاد والمهام والمكافآت والصور.</li><li>إذا في أب أو أم تاني بالعيلة: بينحذف حسابك بس، والعيلة بتضل عنده.</li></ul>
-<h2>بدون التطبيق</h2><p>ابعتلنا من نفس البريد المربوط بحسابك على [بريد التواصل]، ومنحذفه خلال 30 يوم.</p><hr><section class="en" lang="en" dir="ltr">
+<h2>بدون التطبيق</h2><p>ابعتلنا من نفس البريد المربوط بحسابك على [بريد التواصل]، ومنحذفه خلال 30 يوم.</p></section><section class="en" lang="en" dir="ltr">
 <h1>Delete your Makmoura account</h1><p class="muted">Makmoura, by Salimfy</p>
 <h2>In the app (fastest)</h2><ol><li>Open Makmoura and sign in.</li><li>Go to <b>Settings</b>.</li><li>Tap <b>Delete account</b>, then confirm.</li></ol>
 <h2>What is deleted</h2><ul><li>Your account and your data.</li><li>If you are the family's only parent: the whole family, including children, tasks, rewards and photos.</li><li>If another parent is in the family: only your account; the family stays with them.</li></ul>
-<h2>Without the app</h2><p>Email [contact email] from the address linked to your account, and we will delete it within 30 days.</p></section></main></body></html>
+<h2>Without the app</h2><p>Email [contact email] from the address linked to your account, and we will delete it within 30 days.</p></section></main><footer class="by">من <span class="logo"><svg width="32" height="18" viewBox="0 0 43 24" aria-hidden="true"><path d="M12 0a12 12 0 1 1 0 24a12 12 0 1 1 0-24z" fill="currentColor"/><path d="M31 1.8a10.2 10.2 0 1 1 0 20.4a10.2 10.2 0 1 1 0-20.4z" fill="none" stroke="#ECAC4E" stroke-width="3.6"/></svg>Salimfy</span></footer></body></html>
